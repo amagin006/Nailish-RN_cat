@@ -12,6 +12,7 @@
     "noEmit": true,
     "target": "esnext",
     "noImplicitAny": false,
+    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
       "test/*": ["./test/*"],

@@ -4,11 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { firebaseAuth } from '~/config/Firebase';
 
+import { RootStackParamList, SplashStackParamList } from '~/navigationRoute/types';
+
 // Screens
 import Splash from '~/Splash';
+import Login from '~/screens/Login/Login';
 
-const RootStackNav = createStackNavigator();
-const SplashNav = createStackNavigator();
+const RootStackNav = createStackNavigator<RootStackParamList>();
+const SplashNav = createStackNavigator<SplashStackParamList>();
 
 const RootNavigator = () => {
   // redux
@@ -54,11 +57,11 @@ const RootNavigator = () => {
         ...TransitionPresets.SlideFromRightIOS,
         animationEnabled: false,
       })}>
-      {/* {userToken ? (
+      {userToken ? (
         <RootStackNav.Screen name="BottomNav" component={BottomTabScreens} />
       ) : (
         <RootStackNav.Screen name="LoginNav" component={Login} options={{ headerShown: false }} />
-      )} */}
+      )}
     </RootStackNav.Navigator>
   );
 };
