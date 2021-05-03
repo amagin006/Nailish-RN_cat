@@ -11,7 +11,12 @@
     "moduleResolution": "node",
     "noEmit": true,
     "target": "esnext",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "~/*": ["./src/*"],
+      "test/*": ["./test/*"],
+      "~package/*": ["../package.json"]
+    }
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }
