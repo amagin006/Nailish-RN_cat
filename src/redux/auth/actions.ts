@@ -13,7 +13,7 @@ import {
   GOOGLE_AUTH_ANDROID_CLIENT_ID,
   GOOGLE_IOS_STANDALONE_CLIENT_ID,
   GOOGLE_ANDROID_STANDALONE_CLIENT_ID,
-} from 'react-native-dotenv';
+} from '@env';
 import { userSet, userUnSet } from '~/redux/user/actions';
 
 import Firebase, { firebaseAuth } from '../../config/Firebase';

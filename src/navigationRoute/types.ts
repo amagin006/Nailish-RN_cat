@@ -6,3 +6,9 @@ export type RootStackParamList = {
 export type SplashStackParamList = {
   Splash: undefined;
 };
+
+export type BottomTabNavParamList = {
+  CustomerListHome: undefined;
+  CalenderHome: undefined;
+  SettingHome: undefined;
+};

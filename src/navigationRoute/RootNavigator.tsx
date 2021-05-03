@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { useSelector, useDispatch } from 'react-redux';
-
 import { firebaseAuth } from '~/config/Firebase';
 
+// Redux
+import { useAppSelector, useAppDispatch } from '~/redux/hooks';
+import { userSet, userUnSet } from '~/redux/user/actions';
+
+// type
 import { RootStackParamList, SplashStackParamList } from '~/navigationRoute/types';
 
 // Screens
 import Splash from '~/Splash';
 import Login from '~/screens/Login/Login';
+import { BottomTabScreens } from '~/navigationRoute/BottomTabScreens';
 
 const RootStackNav = createStackNavigator<RootStackParamList>();
 const SplashNav = createStackNavigator<SplashStackParamList>();
 
 const RootNavigator = () => {
   // redux
-  const dispatch = useDispatch();
-  const userToken = useSelector(state => state.user.uid);
+  const dispatch = useAppDispatch();
+  const userToken = useAppSelector(state => state.user.uid);
 
   const [splash, setSplash] = useState(true);
 

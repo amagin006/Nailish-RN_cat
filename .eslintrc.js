@@ -3,8 +3,8 @@ module.exports = {
     es6: true,
     node: true,
   },
-  parser: 'babel-eslint',
-  plugins: ['react', 'prettier'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['jest', 'react', 'react-native', '@typescript-eslint', 'module-resolver'],
   parserOptions: {
     version: 2018,
     sourceType: 'module',
@@ -15,8 +15,9 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
-    'prettier/react',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'prettier/@typescript-eslint',
   ],
   rules: {
     'prettier/prettier': 'error',

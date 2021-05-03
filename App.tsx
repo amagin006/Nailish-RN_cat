@@ -4,8 +4,8 @@ import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from '~/navigationRoute/NavigationService';
 
-import store from '~/redux/storeConfig';
-import RootNavigator from '~/RootNavigator';
+import store from '~/redux/store';
+import RootNavigator from '~/navigationRoute/RootNavigator';
 
 export default function App() {
   return (
