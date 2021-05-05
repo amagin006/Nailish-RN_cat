@@ -8,10 +8,20 @@ import {
   FAILED_CONFIRM,
 } from '~/redux/auth/types';
 
-const initialState = {
+export interface AuthState {
+  isLogin?: boolean;
+  isLoadingLogin?: boolean;
+  isCreateFailed?: boolean;
+  createFailedMessage?: string;
+  loginFailedMessage?: string;
+}
+
+const initialState: AuthState = {
   isLogin: false,
   isLoadingLogin: false,
   isCreateFailed: false,
+  createFailedMessage: '',
+  loginFailedMessage: '',
 };
 
 const reducer = (state = initialState, action) => {

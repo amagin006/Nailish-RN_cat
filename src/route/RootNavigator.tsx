@@ -7,12 +7,12 @@ import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 import { userSet, userUnSet } from '~/redux/user/actions';
 
 // type
-import { RootStackParamList, SplashStackParamList } from '~/navigationRoute/types';
+import { RootStackParamList, SplashStackParamList } from '~/route/types';
 
 // Screens
 import Splash from '~/Splash';
 import Login from '~/screens/Login/Login';
-import { BottomTabScreens } from '~/navigationRoute/BottomTabScreens';
+import { BottomTabScreens } from '~/route/BottomTabScreens';
 
 const RootStackNav = createStackNavigator<RootStackParamList>();
 const SplashNav = createStackNavigator<SplashStackParamList>();
