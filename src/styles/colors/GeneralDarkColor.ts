@@ -16,4 +16,12 @@ export const GeneralDarkColor = {
   Indicator: {
     Primary: '#9c9c9c',
   },
+  TextInput: {
+    Primary: '#cccccc',
+    Error: '#d61d00',
+  },
+  Modal: {
+    BaseBackground: 'rgba(0, 0, 0, 0.4)',
+    BaseInner: '#ffffff',
+  },
 };

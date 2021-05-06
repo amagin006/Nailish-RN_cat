@@ -11,6 +11,7 @@ module.exports = function (api) {
           alias: {
             '~': './src',
             '~package': './package.json',
+            '~assets': './assets',
             test: './test',
             underscore: 'lodash',
           },

@@ -15,7 +15,11 @@ export interface TextAtomProps extends Partial<Text> {
   onLongPress?: () => void;
 }
 
-const TextAtom: React.FC<TextAtomProps> = props => {
+export const TextAtom: React.FC<TextAtomProps> = props => {
+  if (!props.children) {
+    return <></>;
+  }
+
   return (
     <View style={props.containerStyle}>
       <Text style={[styles.defaultTextStyles, props.style]}>{props.children}</Text>
@@ -29,5 +33,3 @@ const styles = StyleSheet.create({
     color: AppGeneralColor.TextColor.Primary,
   },
 });
-
-export default TextAtom;

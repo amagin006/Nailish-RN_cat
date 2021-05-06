@@ -1,33 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-} from 'react-native';
+import { View, StyleSheet, Image, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 
 // util
-import { Ionicons } from '@expo/vector-icons';
 import { firebaseAuth } from '~/config/Firebase';
 
 // component
 import { RoundButton } from '~/components/button/button';
 import { userLoginWithPass, googleLogin, createUser, failedConfirm } from '~/redux/auth/actions';
-import TextAtom from '~/components/atoms/TextAtom';
-import { generalTextStyles } from '~/styles/TextStyle';
+import { TextAtom } from '~/components/atoms';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { ActivityIndicatorAtom } from '~/components/atoms/ActivityIndicatorAtom';
+import { FaliedConfirmModal, ForgetModal } from './components/Modals';
+import { TextInputAtom } from '~/components/atoms/TextInputAtom';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [forgetEmail, setForgetEmail] = useState<string>('');
   const [password, setPassward] = useState<string>('');
-  const [isPasswordInVisible, setIsPasswordInVisible] = useState<boolean>(true);
   const [emailPassError, setEmaiPassError] = useState<boolean>(false);
   const [forgetEmailError, setForgetEmailError] = useState<boolean>(false);
   const [isSignup, setIsSignup] = useState<boolean>(false);
@@ -41,7 +31,7 @@ const Login: React.FC = () => {
   const reduxState = useAppSelector(state => state);
 
   useEffect(() => {
-    const { auth, user } = reduxState;
+    const { auth } = reduxState;
 
     if (auth.createFailedMessage) {
       setCreateFailedMessage(auth.createFailedMessage);
@@ -94,8 +84,12 @@ const Login: React.FC = () => {
     setForgetEmail('');
   };
 
-  const borderColor =
-    emailPassError || forgetEmailError ? { borderColor: '#d61d00' } : { borderColor: '#ccc' };
+  const _onForgetModal = () => {
+    setIsForgetModalVisible(false);
+    setIsSendSuccess(false);
+  };
+
+  const isError = forgetEmailError || emailPassError;
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -104,97 +98,26 @@ const Login: React.FC = () => {
       ) : (
         <>
           {isForgetModalVisible ? (
-            <Modal
-              animationType="fade"
-              transparent={true}
+            <ForgetModal
               visible={isForgetModalVisible}
-              onRequestClose={() => setIsForgetModalVisible(false)}>
-              <View style={styles.modalBack}>
-                <View style={styles.modalInner}>
-                  {isSendLoading ? (
-                    <ActivityIndicatorAtom />
-                  ) : isSendSuccess ? (
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                      <TextAtom
-                        containerStyle={{ marginBottom: 60 }}
-                        style={styles.modalEmailSendText}>
-                        An email has been sent to the address you have provided.{'\n'}Please check
-                        your email
-                      </TextAtom>
-                      <RoundButton
-                        onPress={() => {
-                          setIsForgetModalVisible(false);
-                          setIsSendSuccess(false);
-                        }}
-                        style={styles.greenButton}
-                        text={'OK'}
-                      />
-                    </View>
-                  ) : (
-                    <>
-                      <TextAtom style={styles.modalTitleText}>Reset your password</TextAtom>
-                      <TextAtom style={styles.resetPassDiscText}>
-                        Enter the email you use for Nailish, and we&apos;ll help you create a new
-                        password.
-                      </TextAtom>
-                      <View style={styles.modalInnerbox}>
-                        <View>
-                          {forgetEmailError ? (
-                            <TextAtom style={styles.errorText}>Email is invalid.</TextAtom>
-                          ) : (
-                            <View style={styles.space} />
-                          )}
-                          <View style={[styles.inputTextBox, borderColor]}>
-                            <TextInput
-                              style={styles.textInput}
-                              value={forgetEmail}
-                              onChangeText={text => setForgetEmail(text)}
-                              placeholder={'Enter your email'}
-                              onFocus={() => setForgetEmailError(false)}
-                              autoCapitalize={'none'}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                      <View style={styles.modalButtonBox}>
-                        <RoundButton
-                          onPress={_onResetPassword}
-                          style={styles.greenButton}
-                          text={'Send'}
-                        />
-                        <RoundButton
-                          onPress={_onResetCancel}
-                          style={styles.pinkButton}
-                          text={'Cancel'}
-                        />
-                      </View>
-                    </>
-                  )}
-                </View>
-              </View>
-            </Modal>
+              onRequestClose={() => setIsForgetModalVisible(false)}
+              onPressOk={_onForgetModal}
+              onChangeText={text => setForgetEmail(text)}
+              onFocusInput={() => setForgetEmailError(false)}
+              onPressSend={_onResetPassword}
+              onPressCancel={_onResetCancel}
+              isLoading={isSendLoading}
+              isSendSuccess={isSendSuccess}
+              forgetEmailError={forgetEmailError}
+              error={isError}
+            />
           ) : createFailedMessage || loginFailedMessage ? (
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={createFailedMessage || loginFailedMessage ? true : false}
-              onRequestClose={() => dispatch(failedConfirm())}>
-              <View style={styles.modalBack}>
-                <View style={[styles.modalInner, { justifyContent: 'space-around' }]}>
-                  <View>
-                    <TextAtom style={styles.createFaliedText}>
-                      {createFailedMessage || loginFailedMessage}
-                    </TextAtom>
-                    <TextAtom style={styles.createFaliedText}>Please try again</TextAtom>
-                  </View>
-                  <RoundButton
-                    onPress={() => dispatch(failedConfirm())}
-                    style={styles.greenButton}
-                    text={'OK'}
-                  />
-                </View>
-              </View>
-            </Modal>
+            <FaliedConfirmModal
+              visible={!!createFailedMessage || !!loginFailedMessage}
+              onRequestClose={() => dispatch(failedConfirm())}
+              modalInnerStyle={{ justifyContent: 'space-around' }}
+              onPressOk={() => dispatch(failedConfirm())}
+            />
           ) : null}
           <Image
             style={styles.logoImage}
@@ -207,34 +130,25 @@ const Login: React.FC = () => {
             ) : (
               <View style={styles.space} />
             )}
-            <View style={[styles.inputTextBox, borderColor]}>
-              <TextInput
-                style={styles.textInput}
-                value={email}
-                onChangeText={text => setEmail(text)}
-                placeholder={'Enter your email'}
-                onFocus={() => setEmaiPassError(false)}
-                autoCapitalize={'none'}
-              />
-            </View>
-            <View style={[styles.inputTextBox, borderColor]}>
-              <TextInput
-                style={styles.textInput}
-                value={password}
-                onChangeText={text => setPassward(text)}
-                placeholder={'Enter your password'}
-                onFocus={() => setEmaiPassError(false)}
-                secureTextEntry={isPasswordInVisible}
-                autoCapitalize={'none'}
-              />
-              <TouchableOpacity onPress={() => setIsPasswordInVisible(!isPasswordInVisible)}>
-                <Ionicons
-                  style={styles.eyeIcon}
-                  name={isPasswordInVisible ? 'md-eye-off' : 'md-eye'}
-                  size={26}
-                />
-              </TouchableOpacity>
-            </View>
+            <TextInputAtom
+              containerStyle={styles.inputTextBox}
+              value={email}
+              onChangeText={text => setEmail(text)}
+              placeholder={'Enter your email'}
+              onFocus={() => setEmaiPassError(false)}
+              autoCapitalize={'none'}
+              error={isError}
+            />
+            <TextInputAtom
+              containerStyle={styles.inputTextBox}
+              value={password}
+              onChangeText={text => setPassward(text)}
+              placeholder={'Enter your password'}
+              onFocus={() => setEmaiPassError(false)}
+              autoCapitalize={'none'}
+              error={isError}
+              isPassword={true}
+            />
             {isSignup ? (
               <RoundButton
                 onPress={_onCreateUser}
@@ -260,7 +174,7 @@ const Login: React.FC = () => {
               <Image
                 style={styles.googleImage}
                 resizeMode={'contain'}
-                source={require('../../../assets/images/google_signin_btn.png')}
+                source={require('~assets/images/google_signin_btn.png')}
               />
             </TouchableOpacity>
             <View style={styles.signUpBox}>
@@ -297,18 +211,8 @@ const styles = StyleSheet.create({
     marginTop: '18%',
   },
   inputTextBox: {
-    borderWidth: 1,
     paddingHorizontal: 10,
-    paddingVertical: Platform.OS === 'ios' ? 5 : 0,
-    borderRadius: 8,
     marginBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textInput: {
-    flex: 1,
-    paddingVertical: 8,
   },
   errorText: {
     color: '#d61d00',
@@ -318,35 +222,15 @@ const styles = StyleSheet.create({
   space: {
     marginBottom: Platform.OS === 'ios' ? 25 : 27,
   },
-  eyeIcon: {
-    paddingTop: 3,
-  },
   forgetButton: {
     alignSelf: 'center',
     marginBottom: 6,
-    borderBottomColor: '#424242',
+    borderBottomColor: AppGeneralColor.TextColor.Primary,
     borderBottomWidth: 1,
   },
   forgetText: {
-    color: '#424242',
+    color: AppGeneralColor.TextColor.Primary,
     paddingBottom: 3,
-  },
-  signButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#96CEB4',
-    marginTop: 10,
-    borderRadius: 18,
-    marginHorizontal: 20,
-  },
-  createButton: {
-    backgroundColor: '#2482bd',
-  },
-  singButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingVertical: 10,
   },
   border: {
     marginVertical: 20,
@@ -377,54 +261,8 @@ const styles = StyleSheet.create({
   signUpButtonText: {
     color: '#344dd9',
   },
-  modalBack: {
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalInner: {
-    backgroundColor: '#fff',
-    width: '90%',
-    height: '60%',
-    paddingHorizontal: '5%',
-    borderRadius: 20,
-  },
-  modalTitleText: {
-    fontSize: 26,
-    // color: commonStyles.baseTextColor,
-    marginVertical: 30,
-  },
-  modalInnerbox: {
-    flex: 1,
-    justifyContent: 'space-around',
-  },
-  resetPassDiscText: {
-    // color: commonStyles.baseTextColor,
-  },
-  modalButtonBox: {
-    marginBottom: 40,
-  },
-  modalCancelButton: {
-    backgroundColor: '#ff9999',
-    marginTop: 20,
-  },
-  createFaliedText: {
-    fontSize: 18,
-    marginBottom: 10,
-    // color: commonStyles.baseTextColor,
-    textAlign: 'center',
-  },
-  modalEmailSendText: {
-    ...generalTextStyles.regularNormalText,
-    color: AppGeneralColor.TextColor.Primary,
-    marginBottom: 60,
-  },
   greenButton: {
     backgroundColor: AppGeneralColor.Palette.BaseGreen,
-  },
-  pinkButton: {
-    backgroundColor: AppGeneralColor.Palette.BasePink,
   },
   blueButton: {
     backgroundColor: AppGeneralColor.Palette.BaseBlue,
