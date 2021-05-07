@@ -4,10 +4,14 @@ export const GeneralDarkColor = {
     Secondary: '',
     White: '#ffffff',
     Black: '#000000',
+    SecondaryBlack: '#1D1D1D',
 
     BaseGreen: '#96CEB4',
     BasePink: '#ff9999',
+    SecondalyPink: '#D9534F',
     BaseBlue: '#2482bd',
+
+    BorderGray: '#D9D9D9',
   },
   TextColor: {
     Primary: '#636363',

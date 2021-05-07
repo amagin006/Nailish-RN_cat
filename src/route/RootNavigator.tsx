@@ -12,7 +12,7 @@ import { RootStackParamList, SplashStackParamList } from '~/route/types';
 // Screens
 import Splash from '~/Splash';
 import Login from '~/screens/Login/Login';
-import { BottomTabScreens } from '~/route/BottomTabScreens';
+import { MainStackScreens } from '~/route/MainStackScreens';
 
 const RootStackNav = createStackNavigator<RootStackParamList>();
 const SplashNav = createStackNavigator<SplashStackParamList>();
@@ -60,9 +60,10 @@ const RootNavigator = () => {
         gestureEnabled: true,
         ...TransitionPresets.SlideFromRightIOS,
         animationEnabled: false,
+        headerShown: false,
       })}>
       {userToken ? (
-        <RootStackNav.Screen name="BottomNav" component={BottomTabScreens} />
+        <RootStackNav.Screen name="MainNav" component={MainStackScreens} />
       ) : (
         <RootStackNav.Screen name="LoginNav" component={Login} options={{ headerShown: false }} />
       )}
