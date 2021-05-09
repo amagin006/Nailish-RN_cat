@@ -22,12 +22,31 @@ interface TextInputAtomProps extends Partial<TextInputProps> {
   onFocus?: () => void;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   error?: boolean;
-
-  // password
-  isPassword?: boolean;
 }
 
 export const TextInputAtom: React.FC<TextInputAtomProps> = props => {
+  const borderColor = props.error
+    ? AppGeneralColor.TextInput.Error
+    : AppGeneralColor.TextInput.Primary;
+  return (
+    <View style={[props.containerStyle, styles.inputTextBox, { borderColor: borderColor }]}>
+      <TextInput
+        style={[props.style, styles.textInput]}
+        value={props.value}
+        onChangeText={props.onChangeText}
+        placeholder={props.placeholder}
+        onFocus={props.onFocus}
+        autoCapitalize={props.autoCapitalize || 'none'}
+      />
+    </View>
+  );
+};
+
+interface PasswordTextInputProps extends TextInputAtomProps {
+  isPassword?: boolean;
+}
+
+export const PasswordTextInput: React.FC<PasswordTextInputProps> = props => {
   const [isHide, setIsHide] = useState<boolean>(false);
 
   const borderColor = props.error

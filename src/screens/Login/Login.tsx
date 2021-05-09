@@ -8,11 +8,10 @@ import { firebaseAuth } from '~/config/Firebase';
 // component
 import { RoundButton } from '~/components/button/button';
 import { userLoginWithPass, googleLogin, createUser, failedConfirm } from '~/redux/auth/actions';
-import { TextAtom } from '~/components/atoms';
+import { TextAtom, TextInputAtom, PasswordTextInput } from '~/components/atoms';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { ActivityIndicatorAtom } from '~/components/atoms/ActivityIndicatorAtom';
 import { FaliedConfirmModal, ForgetModal } from './components/Modals';
-import { TextInputAtom } from '~/components/atoms/TextInputAtom';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -139,7 +138,7 @@ const Login: React.FC = () => {
               autoCapitalize={'none'}
               error={isError}
             />
-            <TextInputAtom
+            <PasswordTextInput
               containerStyle={styles.inputTextBox}
               value={password}
               onChangeText={text => setPassward(text)}
