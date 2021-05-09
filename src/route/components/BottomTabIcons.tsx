@@ -1,6 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Foundation, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+
+// Atom
+import { TextAtom } from '~/components/atoms/TextAtom';
+
+// style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 
@@ -43,12 +49,13 @@ export const CustomBottomIcons = ({ state, descriptors, navigation }) => {
         const tabIcon = tabIconCreate(route, tintColor);
 
         return (
-          <View
+          <SafeAreaView
             style={{
               flex: 1,
               borderTopColor: AppGeneralColor.Palette.BorderGray,
               borderTopWidth: 1,
-            }}>
+            }}
+            edges={['bottom', 'right', 'left']}>
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
@@ -56,9 +63,9 @@ export const CustomBottomIcons = ({ state, descriptors, navigation }) => {
               testID={options.tabBarTestID}
               onPress={onPress}>
               <View style={{ alignItems: 'center' }}>{tabIcon}</View>
-              <Text style={[styles.bottomTabText, { color: tintColor }]}>{label}</Text>
+              <TextAtom style={[styles.bottomTabText, { color: tintColor }]}>{label}</TextAtom>
             </TouchableOpacity>
-          </View>
+          </SafeAreaView>
         );
       })}
     </View>

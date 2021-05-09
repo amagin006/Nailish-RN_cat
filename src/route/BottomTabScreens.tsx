@@ -50,7 +50,7 @@ export const CustomerListStack = () => {
       <CustomerListStackNav.Screen
         name="CustomerListHome"
         component={CustomerListHome}
-        options={{ title: 'Customer' }}
+        options={{ title: 'Customer', headerTitleStyle: { textAlign: 'center' } }}
       />
     </CustomerListStackNav.Navigator>
   );
@@ -64,7 +64,7 @@ export const CalenderStack = () => {
       <CalenderStackNav.Screen
         name="CalenderHome"
         component={CalenderHome}
-        options={{ title: 'Calender' }}
+        options={{ title: 'Calender', headerTitleStyle: { textAlign: 'center' } }}
       />
     </CalenderStackNav.Navigator>
   );
@@ -78,7 +78,7 @@ export const SettingStack = () => {
       <SettingStackNav.Screen
         name="SettingHome"
         component={SettingHome}
-        options={{ title: 'Setting' }}
+        options={{ title: 'Setting', headerTitleStyle: { textAlign: 'center' } }}
       />
     </SettingStackNav.Navigator>
   );
