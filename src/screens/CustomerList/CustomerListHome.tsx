@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Text,
   StyleSheet,
   ScrollView,
   RefreshControl,
@@ -15,26 +14,14 @@ import { TextAtom } from '~/components/atoms/TextAtom';
 
 import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 
+import CustomerModel from '~/modules/customer/services/cusomerModels';
+
 import { customerLoad } from '~/redux/customer/actions';
 import { db } from '../../config/Firebase';
 
 interface ICustomerListItem {
   initial?: string;
-  data: ICustomer[];
-}
-
-interface ICustomer {
-  id: string;
-  firstLetter?: string;
-  firstName?: string;
-  lastName?: string;
-  profileImg?: string;
-  instagram?: string;
-  mail?: string;
-  birthday?: string;
-  memo?: string;
-  mobile?: string;
-  twitter?: string;
+  data: CustomerModel[];
 }
 
 const CustomerListHome = ({ navigation }) => {
@@ -57,21 +44,21 @@ const CustomerListHome = ({ navigation }) => {
           .get();
         data.forEach(doc => {
           const id = doc.id;
-          const customerData: ICustomer = { id, ...doc.data() };
+          const newCustomer = new CustomerModel({ id, ...doc.data() });
 
           if (newCustomerList.length === 0) {
-            newCustomerList.push({ initial: customerData.firstLetter, data: [customerData] });
+            newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
           } else {
             let findRow;
             newCustomerList.map(row => {
-              if (row.initial === customerData.firstLetter) {
-                row?.data && row.data.push(customerData);
+              if (row.initial === newCustomer.firstLetter) {
+                row?.data && row.data.push(newCustomer);
                 findRow = true;
                 return;
               }
             });
             !findRow &&
-              newCustomerList.push({ initial: customerData.firstLetter, data: [customerData] });
+              newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
           }
         });
         console.log('newCustomerLIst', newCustomerList);

@@ -55,7 +55,8 @@ export const CustomBottomIcons = ({ state, descriptors, navigation }) => {
               borderTopColor: AppGeneralColor.Palette.BorderGray,
               borderTopWidth: 1,
             }}
-            edges={['bottom', 'right', 'left']}>
+            edges={['bottom', 'right', 'left']}
+            key={`${route.name}`}>
             <TouchableOpacity
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
