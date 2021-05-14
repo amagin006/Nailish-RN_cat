@@ -12,6 +12,11 @@ export const GeneralNormalColor = {
     BaseBlue: '#2482bd',
 
     BorderGray: '#D9D9D9',
+
+    Alert: '#f52020',
+  },
+  Navigation: {
+    HeaderBackground: '#D9534F',
   },
   TextColor: {
     Primary: '#636363',

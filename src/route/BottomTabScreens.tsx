@@ -15,6 +15,7 @@ import CustomerListHome from '~/screens/CustomerList/CustomerListHome';
 import CalenderHome from '~/screens/Calender/CalenderHome';
 import SettingHome from '~/screens/Setting/SettingHome';
 import { CustomBottomIcons } from './components/BottomTabIcons';
+import { AppGeneralColor } from '~/styles/ColorStyle';
 
 const BottomTab = createBottomTabNavigator<BottomTabNavParamList>();
 
@@ -46,11 +47,21 @@ export const BottomTabScreens: React.FC = () => {
 const CustomerListStackNav = createStackNavigator<CustomerListStackNavParamsList>();
 export const CustomerListStack = () => {
   return (
-    <CustomerListStackNav.Navigator>
+    <CustomerListStackNav.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: AppGeneralColor.Navigation.HeaderBackground,
+        },
+        headerTitleStyle: {
+          color: '#fff',
+          textAlign: 'center',
+        },
+        headerTintColor: '#fff',
+      }}>
       <CustomerListStackNav.Screen
         name="CustomerListHome"
         component={CustomerListHome}
-        options={{ title: 'Customer', headerTitleStyle: { textAlign: 'center' } }}
+        options={{ title: 'Customer' }}
       />
     </CustomerListStackNav.Navigator>
   );
@@ -60,11 +71,20 @@ export const CustomerListStack = () => {
 const CalenderStackNav = createStackNavigator<CalenderStackNavParamsList>();
 export const CalenderStack = () => {
   return (
-    <CalenderStackNav.Navigator>
+    <CalenderStackNav.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: AppGeneralColor.Navigation.HeaderBackground,
+        },
+        headerTitleStyle: {
+          color: '#fff',
+        },
+        headerTintColor: '#fff',
+      }}>
       <CalenderStackNav.Screen
         name="CalenderHome"
         component={CalenderHome}
-        options={{ title: 'Calender', headerTitleStyle: { textAlign: 'center' } }}
+        options={{ title: 'Calender' }}
       />
     </CalenderStackNav.Navigator>
   );
@@ -74,11 +94,20 @@ export const CalenderStack = () => {
 const SettingStackNav = createStackNavigator<SettingStackNavParamsList>();
 export const SettingStack = () => {
   return (
-    <SettingStackNav.Navigator>
+    <SettingStackNav.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: AppGeneralColor.Navigation.HeaderBackground,
+        },
+        headerTitleStyle: {
+          color: '#fff',
+        },
+        headerTintColor: '#fff',
+      }}>
       <SettingStackNav.Screen
         name="SettingHome"
         component={SettingHome}
-        options={{ title: 'Setting', headerTitleStyle: { textAlign: 'center' } }}
+        options={{ title: 'Setting' }}
       />
     </SettingStackNav.Navigator>
   );

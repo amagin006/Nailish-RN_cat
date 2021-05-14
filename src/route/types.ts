@@ -1,4 +1,5 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
+import CustomerModel from '~/modules/customer/services/cusomerModels';
 
 export type RootStackParamList = {
   MainNav: NavigatorScreenParams<MainStackNavParamList>;
@@ -17,6 +18,7 @@ export type BottomTabNavParamList = {
 
 export type MainStackNavParamList = {
   BottomNav: NavigatorScreenParams<BottomTabNavParamList>;
+  CustomerEdit: { item: CustomerModel };
 };
 
 export type CustomerListStackNavParamsList = {
