@@ -1,11 +1,8 @@
 import { AnyAction } from 'redux';
 import { USER_SET, USER_UN_SET } from '~/redux/user/types';
+import { UserInterface } from '~/redux/user/types';
 
-interface IUserState {
-  uid: string | null;
-}
-
-const initialState: IUserState = {
+const initialState: UserInterface = {
   uid: null,
 };
 

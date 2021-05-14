@@ -9,68 +9,35 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
 import { TextAtom } from '~/components/atoms/TextAtom';
 
-import { useAppSelector, useAppDispatch } from '~/redux/hooks';
+import { useAppSelector } from '~/redux/hooks';
+
+import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
 
 import CustomerModel from '~/modules/customer/services/cusomerModels';
-
-import { customerLoad } from '~/redux/customer/actions';
-import { db } from '../../config/Firebase';
+import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 
 interface ICustomerListItem {
   initial?: string;
   data: CustomerModel[];
 }
 
+const customerListPresenter = CustomerListFactory.getCustomerListRepository();
+
 const CustomerListHome = ({ navigation }) => {
   const [customerList, setCustomerList] = useState<ICustomerListItem[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const user = useAppSelector(state => state.user);
-  const customer = useAppSelector(state => state.customer);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function getCustomerList() {
-      try {
-        let newCustomerList: ICustomerListItem[] = [];
-        const data = await db
-          .collection('users')
-          .doc(`${user.uid}`)
-          .collection('customer')
-          .orderBy('firstName')
-          .get();
-        data.forEach(doc => {
-          const id = doc.id;
-          const newCustomer = new CustomerModel({ id, ...doc.data() });
-
-          if (newCustomerList.length === 0) {
-            newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
-          } else {
-            let findRow;
-            newCustomerList.map(row => {
-              if (row.initial === newCustomer.firstLetter) {
-                row?.data && row.data.push(newCustomer);
-                findRow = true;
-                return;
-              }
-            });
-            !findRow &&
-              newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
-          }
-        });
-        console.log('newCustomerLIst', newCustomerList);
-        setCustomerList(newCustomerList);
-        setIsRefreshing(false);
-      } catch (err) {
-        console.log('Error firebase: ', err);
-      }
+      const newCustomerList = await customerListPresenter.getCustomerList(user);
+      setCustomerList(newCustomerList);
+      setIsRefreshing(false);
     }
     getCustomerList();
-    // dispatch(customerLoad(false));
-    // }, [user, customer.isFetching]);
   }, [user, isRefreshing]);
 
   const _itemSeparator = () => <View style={styles.separator} />;
@@ -137,9 +104,7 @@ const CustomerListHome = ({ navigation }) => {
           </View>
         </ScrollView>
       )}
-      <TouchableOpacity style={styles.addButton} onPress={_onAddButton}>
-        <FontAwesome style={styles.addIcon} name={'plus'} />
-      </TouchableOpacity>
+      <ListAddFloatButton onPress={_onAddButton} />
     </View>
   );
 };
@@ -180,22 +145,6 @@ const styles = StyleSheet.create({
   lastVisit: {
     color: '#BCC5D3',
     fontSize: 12,
-  },
-  addButton: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
-    width: 50,
-    height: 50,
-    paddingTop: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    backgroundColor: '#D9534F',
-  },
-  addIcon: {
-    fontSize: 36,
-    color: '#fff',
   },
   noListWrap: {
     flex: 1,
