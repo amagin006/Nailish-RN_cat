@@ -24,7 +24,7 @@ export default class CustomerListPresenter
   /**
    * get customerList
    */
-  public getCustomerList = async (user: UserInterface) => {
+  public getCustomerList = async user => {
     try {
       let newCustomerList: ICustomerListItem[] = [];
       const data = await this.CustomerListRepository.fetchCustomerList(user);
@@ -53,4 +53,26 @@ export default class CustomerListPresenter
       return [];
     }
   };
+
+  /**
+   * upLoadPhoto
+   */
+  public async upLoadPhoto(user, customerId, imageUrl) {
+    const downloadURL = await this.CustomerListRepository.upLoadPhoto(user, customerId, imageUrl);
+    return downloadURL;
+  }
+
+  /**
+   * updateCustomer
+   */
+  public async updateCustomer(user, updateCustomer, customerRefId) {
+    await this.CustomerListRepository.updateCustomer(user, updateCustomer, customerRefId);
+  }
+
+  /**
+   * deleteCustomer
+   */
+  public async deleteCustomer(user, customerId) {
+    return await this.CustomerListRepository.deleteCustomer(user, customerId);
+  }
 }

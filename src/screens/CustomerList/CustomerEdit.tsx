@@ -14,7 +14,6 @@ import {
 import { Foundation } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
@@ -22,18 +21,22 @@ import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 
 import { RoundButton } from '../../components/button/button';
 import { customerLoad } from '../../redux/customer/actions';
-import firebase, { db } from '../../config/Firebase';
+import { db } from '../../config/Firebase';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import { MainStackNavParamList } from '~/route/types';
+import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 
 interface CustomerEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
   route: RouteProp<MainStackNavParamList, 'CustomerEdit'>;
 }
 
+const customerListPresenter = CustomerListFactory.getCustomerListRepository();
+
 const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const { navigation } = props;
+  const [isNewCustomer, setIsNewCustomer] = useState<boolean>(true);
   const [firstName, setFirstName] = useState<string | undefined>();
   const [lastName, setLastName] = useState<string | undefined>('');
   const [mobile, setMobile] = useState<string | undefined>('');
@@ -43,7 +46,6 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const [birthday, setBirthDay] = useState<string | undefined>('');
   const [memo, setMemo] = useState<string | undefined>('');
   const [imageUrl, setImageUrl] = useState<string | undefined>('');
-  const [progress, setProgress] = useState<number | undefined>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [customer, setCustomer] = useState<CustomerModel | undefined>();
 
@@ -51,7 +53,6 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // const customer = props.navigation.getParam('item');
     const customer = props.route.params?.item;
     if (customer) {
       setFirstName(customer.firstName);
@@ -64,6 +65,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       setMemo(customer.memo);
       setImageUrl(customer.profileImg);
       setCustomer(customer);
+      setIsNewCustomer(false);
     }
   }, []);
 
@@ -77,7 +79,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, firstName, lastName, mobile, mail, instagram, twitter, birthday, memo, imageUrl]);
 
   const _onPressUser = () => {
     _getPermissionCameraRoll();
@@ -125,67 +127,16 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   };
 
   const _deleteCustomer = async () => {
-    if (!customer?.id) {
-      console.log('Error delete customer is undifined');
-      return;
+    const isSuccess = await customerListPresenter.deleteCustomer(user, customer?.id);
+    if (!isSuccess) {
+      Alert.alert('Sorry, something goes wrong. try again');
     }
-    try {
-      await db
-        .collection('users')
-        .doc(`${user.uid}`)
-        .collection('customer')
-        .doc(`${customer.id}`)
-        .delete();
-      console.log('Document successfully deleted! customerId', customer.id);
-      navigation.popToTop();
-    } catch (err) {
-      console.log('Error delete customer: ', err);
-    }
+    navigation.popToTop();
   };
 
-  const _upLoadPhoto = async customerId => {
-    // import ImageResizer from 'react-native-image-resizer';
-    // todo: it's better to resize before upload image
+  const _upLoadPhoto = async (customerId): Promise<string> => {
     setIsLoading(true);
-    const metadata = {
-      contentType: 'image/jpeg',
-    };
-    const storage = firebase.storage();
-    if (!imageUrl) {
-      console.log('Error imageUri is undifined', imageUrl);
-      return;
-    }
-    const imgURI = imageUrl;
-    let blob;
-    let downloadURL;
-    try {
-      const response = await fetch(imgURI);
-      console.log('responese', response);
-      blob = await response.blob();
-    } catch (err) {
-      console.log('Error to blob: ', err);
-    }
-    const uploadRef = storage.ref('user').child(`${user.uid}/customers/${customerId}/profile_img`);
-    const uploadTask = uploadRef.put(blob, metadata);
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(progress);
-        console.log('progress');
-      },
-      err => {
-        console.log('Error upload: ', err);
-      },
-      () => {
-        uploadTask.snapshot.ref.getDownloadURL().then(URL => {
-          // uploadCustomerData(downloadURL);
-          console.log('File available at', URL);
-          downloadURL = URL;
-        });
-      },
-    );
-    return downloadURL;
+    return await customerListPresenter.upLoadPhoto(user, customerId, imageUrl);
   };
 
   async function uploadCustomerData() {
@@ -219,22 +170,14 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       updateCustomer.profileImg = await _upLoadPhoto(res.id);
     }
 
-    if (imageUrl && !imageUrl.indexOf('https://')) {
-      console.log('not imageURL https://');
-      updateCustomer.profileImg = await _upLoadPhoto(customer?.id);
-    }
+    // if (imageUrl && !imageUrl.indexOf('https://')) {
+    //   console.log('not imageURL https://');
+    //   updateCustomer.profileImg = await _upLoadPhoto(customer?.id);
+    // }
+    console.log('updateCustomer------->>>', updateCustomer);
 
-    // It doesn't wait  => I have to figure out way to update after upload image
-    const customerRef = db
-      .collection('users')
-      .doc(`${user.uid}`)
-      .collection('customer')
-      .doc(`${res.id}`);
-    try {
-      await customerRef.update(updateCustomer);
-    } catch (err) {
-      console.log('Error update image', err);
-    }
+    // update customer
+    await customerListPresenter.updateCustomer(user, updateCustomer, res.id);
 
     dispatch(customerLoad(true));
     props.navigation.pop();
@@ -370,7 +313,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
           placeholder="something..."
         />
       </View>
-      {customer && (
+      {!isNewCustomer && (
         <View style={styles.deleteButton}>
           <RoundButton onPress={_onDelete} text={'Delete customer'} style={styles.roundButton} />
         </View>
@@ -444,7 +387,7 @@ const styles = StyleSheet.create({
   },
   memo: {
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 100,
     paddingHorizontal: '4%',
   },
   memoTextInput: {

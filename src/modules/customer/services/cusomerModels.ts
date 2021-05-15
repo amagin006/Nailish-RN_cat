@@ -4,16 +4,16 @@ import BaseModel from '~/modules/bases/models/BaseModel';
  */
 export default class CustomerModel extends BaseModel {
   public id: string = '';
-  public firstLetter?: string;
-  public firstName?: string;
-  public lastName?: string;
-  public profileImg?: string;
-  public instagram?: string;
-  public mail?: string;
-  public birthday?: string;
-  public memo?: string;
-  public mobile?: string;
-  public twitter?: string;
+  public firstLetter: string = '';
+  public firstName: string = '';
+  public lastName: string = '';
+  public profileImg: string = '';
+  public instagram: string = '';
+  public mail: string = '';
+  public birthday: string = '';
+  public memo: string = '';
+  public mobile: string = '';
+  public twitter: string = '';
 
   /**
    * has already set user or not
@@ -37,7 +37,20 @@ export default class CustomerModel extends BaseModel {
    *
    * @param init
    */
-  public set(init?: Partial<CustomerModel>) {
+  public set = (init?: Partial<CustomerModel>) => {
     Object.assign(this, init);
-  }
+  };
+}
+
+export interface ICustomer {
+  firstLetter: string;
+  firstName?: string;
+  lastName?: string;
+  birthday?: string;
+  mobile?: string;
+  mail?: string;
+  instagram?: string;
+  twitter?: string;
+  memo?: string;
+  profileImg?: string;
 }
