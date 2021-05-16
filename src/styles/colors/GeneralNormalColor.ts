@@ -17,6 +17,7 @@ export const GeneralNormalColor = {
   },
   Navigation: {
     HeaderBackground: '#D9534F',
+    HeaderTextPrimary: '#ffffff',
   },
   TextColor: {
     Primary: '#636363',

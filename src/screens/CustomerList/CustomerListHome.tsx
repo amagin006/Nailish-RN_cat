@@ -18,6 +18,7 @@ import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
 
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
+import { BioIcon } from '~/components/photoIcon/BioIcon';
 
 interface ICustomerListItem {
   initial?: string;
@@ -58,13 +59,13 @@ const CustomerListHome = ({ navigation }) => {
   const _keyExtractor = item => item.id;
 
   const _onPressCard = item => {
-    navigation.navigate('ReportList', item);
+    navigation.navigate('ReportList', { customer: item });
   };
 
   const _renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.card} onPress={() => _onPressCard(item)}>
-        <Image source={{ uri: `${item.profileImg}` }} style={styles.userIcon} />
+        <BioIcon image={item.profileImg} />
         <View>
           <TextAtom style={styles.name}>{`${item.firstName} ${item.lastName}`}</TextAtom>
           <TextAtom style={styles.lastVisit}>{`${item.lastVisit}`}</TextAtom>
@@ -147,12 +148,6 @@ const styles = StyleSheet.create({
   separator: {
     backgroundColor: '#E2E8ED',
     height: 1,
-  },
-  userIcon: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 10,
   },
   name: {
     color: '#4C5264',

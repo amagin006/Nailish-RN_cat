@@ -39,6 +39,10 @@ export default class CustomerListRepository
       console.log('Error imageUri or customerId is invalid', imageUrl);
       throw new Error('Error upLoadPhoto on CustomerListRepository');
     }
+    if (!imageUrl.indexOf('https://')) {
+      console.log('no imageURL file://');
+      return new Promise<string>(resolve => resolve(''));
+    }
     const imgURI = imageUrl;
     let blob;
     try {
@@ -94,6 +98,7 @@ export default class CustomerListRepository
    * deleteCustomer
    */
   public async deleteCustomer(user, customerId) {
+    console.log('customerId', customerId);
     if (!customerId) {
       console.log('Error delete customer is undifined');
       return false;
