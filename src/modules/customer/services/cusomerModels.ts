@@ -14,6 +14,7 @@ export default class CustomerModel extends BaseModel {
   public memo: string = '';
   public mobile: string = '';
   public twitter: string = '';
+  public lastVist: string = '';
 
   /**
    * has already set user or not

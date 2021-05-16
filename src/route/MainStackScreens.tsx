@@ -1,9 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { MainStackNavParamList } from '~/route/types';
 import { BottomTabScreens } from '~/route/BottomTabScreens';
 
-import { MainStackNavParamList } from '~/route/types';
+// component
 import CustomerEdit from '~/screens/CustomerList/CustomerEdit';
+import ReportList from '~/screens/CustomerList/ReportList';
+
+// style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
 const MainStackNav = createStackNavigator<MainStackNavParamList>();
@@ -25,7 +29,20 @@ export const MainStackScreens = () => {
         component={BottomTabScreens}
         options={{ headerShown: false }}
       />
-      <MainStackNav.Screen name="CustomerEdit" component={CustomerEdit} />
+      <MainStackNav.Screen
+        name="CustomerEdit"
+        component={CustomerEdit}
+        options={{
+          title: 'Add Customer',
+        }}
+      />
+      <MainStackNav.Screen
+        name="ReportList"
+        component={ReportList}
+        options={{
+          title: 'Edit Report',
+        }}
+      />
     </MainStackNav.Navigator>
   );
 };

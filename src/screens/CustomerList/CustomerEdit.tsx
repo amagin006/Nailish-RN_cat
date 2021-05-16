@@ -3,13 +3,15 @@ import { View, Image, Text, TouchableOpacity, StyleSheet, TextInput, Alert } fro
 import { Foundation } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as ImagePicker from 'expo-image-picker';
+
+// navigaiton
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { MainStackNavParamList } from '~/route/types';
 
 // Redux
 import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 import { addCustomerToList } from '../../redux/customer/actions';
-import { MainStackNavParamList } from '~/route/types';
 
 // components
 import { RoundButton } from '../../components/button/button';
@@ -20,6 +22,7 @@ import { db } from '../../config/Firebase';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 import { AppGeneralColor } from '~/styles/ColorStyle';
+import { GeneralNavStyles } from '~/styles/ViewStyle';
 
 interface CustomerEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
@@ -47,7 +50,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const customer = props.route.params?.item;
+    const customer = props.route.params?.customer;
     if (customer) {
       setFirstName(customer.firstName);
       setLastName(customer.lastName);
@@ -67,8 +70,8 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
     navigation.setOptions({
       headerRight: () => {
         return (
-          <TouchableOpacity onPress={_onSavePress} style={styles.headerRightSave}>
-            <Text style={styles.headerRightText}>Save</Text>
+          <TouchableOpacity onPress={_onSavePress} style={GeneralNavStyles.headerRight}>
+            <Text style={GeneralNavStyles.headerRightText}>Save</Text>
           </TouchableOpacity>
         );
       },
@@ -109,7 +112,6 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       Alert.alert('Please enter first Name');
       return;
     }
-    // _upLoadPhoto();
     uploadCustomerData();
   };
 
@@ -167,10 +169,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       dispatch(addCustomerToList(newCustomerModel));
     } else {
       // update customer
-      if (imageUrl && imageUrl.indexOf('https://')) {
-        console.log('no imageURL file://');
-        updateCustomer.profileImg = await _upLoadPhoto(customer.id);
-      }
+      updateCustomer.profileImg = await _upLoadPhoto(customer.id);
       updateCustomer.id = customer.id;
       await customerListPresenter.updateCustomer(userRedux, updateCustomer, customer.id);
     }
@@ -305,13 +304,6 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
 };
 
 const styles = StyleSheet.create({
-  headerRightSave: {
-    marginRight: 20,
-  },
-  headerRightText: {
-    color: '#fff',
-    fontSize: 16,
-  },
   userIconHeader: {
     justifyContent: 'center',
     alignItems: 'center',

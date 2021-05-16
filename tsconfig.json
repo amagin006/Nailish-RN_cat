@@ -15,7 +15,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "assets/*": ["./assets/*"],
+      "~assets/*": ["./assets/*"],
       "test/*": ["./test/*"],
       "~package/*": ["../package.json"]
     }
