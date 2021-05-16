@@ -1,17 +1,18 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   SectionList,
   View,
   TouchableOpacity,
   Image,
   StyleSheet,
-  ScrollView,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 import { TextAtom } from '~/components/atoms/TextAtom';
 
-import { useAppSelector } from '~/redux/hooks';
+import { useAppDispatch, useAppSelector } from '~/redux/hooks';
+import { saveCustomerList } from '~/redux/customer/actions';
 
 import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
 
@@ -29,16 +30,29 @@ const CustomerListHome = ({ navigation }) => {
   const [customerList, setCustomerList] = useState<ICustomerListItem[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const user = useAppSelector(state => state.user);
+  const userRedux = useAppSelector(state => state.user);
+  const customerRedux = useAppSelector(state => state.customer);
+  const dispatch = useAppDispatch();
+
+  // Initialized
+  useEffect(() => {
+    getCustomerList();
+  }, [userRedux]);
 
   useEffect(() => {
-    async function getCustomerList() {
-      const newCustomerList = await customerListPresenter.getCustomerList(user);
-      setCustomerList(newCustomerList);
-      setIsRefreshing(false);
-    }
-    getCustomerList();
-  }, [user, isRefreshing]);
+    setCustomerList(customerRedux?.customerList);
+  }, [customerRedux?.customerList]);
+
+  /**
+   * to get customerList from firebase
+   */
+  const getCustomerList = useCallback(async () => {
+    const newCustomerList = await customerListPresenter.getCustomerList(userRedux);
+    setCustomerList(newCustomerList);
+
+    dispatch(saveCustomerList(newCustomerList));
+    setIsRefreshing(false);
+  }, []);
 
   const _itemSeparator = () => <View style={styles.separator} />;
   const _keyExtractor = item => item.id;
@@ -72,38 +86,41 @@ const CustomerListHome = ({ navigation }) => {
   };
 
   const _onRefresh = async () => {
+    getCustomerList();
     setIsRefreshing(true);
+  };
+
+  const _emptyListShow = () => {
+    if (customerList.length <= 0) {
+      return (
+        <View style={styles.noListWrap}>
+          <View style={styles.noListImagebox}>
+            <Image
+              source={require('../../../assets/images/cat_1.png')}
+              style={styles.noListImage}
+            />
+          </View>
+          <TextAtom style={styles.noListTextBold}>There is no customer yet.</TextAtom>
+          <TextAtom style={styles.noListText}>
+            Please tap &quot;+&quot; button below to add your customer
+          </TextAtom>
+        </View>
+      );
+    }
+    return null;
   };
 
   return (
     <View style={styles.sectionList}>
-      {customerList.length > 0 ? (
-        <SectionList
-          sections={customerList}
-          keyExtractor={_keyExtractor}
-          renderSectionHeader={_renderSectionHeader}
-          renderItem={_renderItem}
-          ItemSeparatorComponent={_itemSeparator}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={_onRefresh} />}
-        />
-      ) : (
-        <ScrollView
-          contentContainerStyle={{ flex: 1 }}
-          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={_onRefresh} />}>
-          <View style={styles.noListWrap}>
-            <View style={styles.noListImagebox}>
-              <Image
-                source={require('../../../assets/images/cat_1.png')}
-                style={styles.noListImage}
-              />
-            </View>
-            <TextAtom style={styles.noListTextBold}>There is no customer yet.</TextAtom>
-            <TextAtom style={styles.noListText}>
-              Please tap &quot;+&quot; button below to add your customer
-            </TextAtom>
-          </View>
-        </ScrollView>
-      )}
+      <SectionList
+        sections={customerList}
+        keyExtractor={_keyExtractor}
+        renderSectionHeader={_renderSectionHeader}
+        renderItem={_renderItem}
+        ItemSeparatorComponent={_itemSeparator}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={_onRefresh} />}
+        ListFooterComponent={_emptyListShow}
+      />
       <ListAddFloatButton onPress={_onAddButton} />
     </View>
   );
@@ -147,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   noListWrap: {
-    flex: 1,
+    height: Dimensions.get('screen').height - 110,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: '10%',
@@ -155,7 +172,6 @@ const styles = StyleSheet.create({
   noListImagebox: {
     width: 200,
     height: 200,
-    marginTop: -200,
     alignItems: 'center',
     justifyContent: 'center',
   },

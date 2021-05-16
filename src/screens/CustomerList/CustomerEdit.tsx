@@ -1,31 +1,25 @@
-/* eslint-disable react/display-name */
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Alert,
-  ActivityIndicator,
-  Modal,
-} from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { Foundation } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 
-import { RoundButton } from '../../components/button/button';
-import { customerLoad } from '../../redux/customer/actions';
-import { db } from '../../config/Firebase';
-import { AppGeneralColor } from '~/styles/ColorStyle';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+// Redux
+import { useAppSelector, useAppDispatch } from '~/redux/hooks';
+import { addCustomerToList } from '../../redux/customer/actions';
 import { MainStackNavParamList } from '~/route/types';
+
+// components
+import { RoundButton } from '../../components/button/button';
+import { LoadingIndicator } from '~/components/loadingIndicator/LoadingIndicator';
+
+// util, style
+import { db } from '../../config/Firebase';
+import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
+import { AppGeneralColor } from '~/styles/ColorStyle';
 
 interface CustomerEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
@@ -49,7 +43,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [customer, setCustomer] = useState<CustomerModel | undefined>();
 
-  const user = useAppSelector(state => state.user);
+  const userRedux = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -127,7 +121,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   };
 
   const _deleteCustomer = async () => {
-    const isSuccess = await customerListPresenter.deleteCustomer(user, customer?.id);
+    const isSuccess = await customerListPresenter.deleteCustomer(userRedux, customer?.id);
     if (!isSuccess) {
       Alert.alert('Sorry, something goes wrong. try again');
     }
@@ -136,12 +130,13 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
 
   const _upLoadPhoto = async (customerId): Promise<string> => {
     setIsLoading(true);
-    return await customerListPresenter.upLoadPhoto(user, customerId, imageUrl);
+    return await customerListPresenter.upLoadPhoto(userRedux, customerId, imageUrl);
   };
 
   async function uploadCustomerData() {
     const firstLetter = firstName ? firstName.slice(0, 1) : '#';
     let updateCustomer = {
+      id: '',
       firstLetter,
       firstName,
       lastName,
@@ -160,45 +155,32 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       try {
         res = await db
           .collection('users')
-          .doc(`${user.uid}`)
+          .doc(`${userRedux.uid}`)
           .collection('customer')
           .add(updateCustomer);
-        console.log('res.id', res.id);
       } catch (err) {
         console.log('Error firebase: ', err);
       }
+      updateCustomer.id = res.id;
       updateCustomer.profileImg = await _upLoadPhoto(res.id);
+      const newCustomerModel = new CustomerModel(updateCustomer);
+      dispatch(addCustomerToList(newCustomerModel));
+    } else {
+      // update customer
+      if (imageUrl && imageUrl.indexOf('https://')) {
+        console.log('no imageURL file://');
+        updateCustomer.profileImg = await _upLoadPhoto(customer.id);
+      }
+      updateCustomer.id = customer.id;
+      await customerListPresenter.updateCustomer(userRedux, updateCustomer, customer.id);
     }
-
-    // if (imageUrl && !imageUrl.indexOf('https://')) {
-    //   console.log('not imageURL https://');
-    //   updateCustomer.profileImg = await _upLoadPhoto(customer?.id);
-    // }
-    console.log('updateCustomer------->>>', updateCustomer);
-
-    // update customer
-    await customerListPresenter.updateCustomer(user, updateCustomer, res.id);
-
-    dispatch(customerLoad(true));
     props.navigation.pop();
-    setIsLoading(true);
   }
 
   return (
     <KeyboardAwareScrollView extraScrollHeight={20} enableOnAndroid={true}>
-      {isLoading && (
-        <Modal animationType="fade" transparent={true} visible={isLoading}>
-          <View
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.2)',
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <ActivityIndicator size={'large'} color={'#'} />
-          </View>
-        </Modal>
-      )}
+      {isLoading && <LoadingIndicator isLoading={isLoading} />}
+
       <View style={styles.userIconHeader}>
         <TouchableOpacity onPress={_onPressUser}>
           <Image

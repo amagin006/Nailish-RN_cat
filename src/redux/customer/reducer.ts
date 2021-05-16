@@ -1,15 +1,75 @@
-import { CUSTOMERLIST_LOADING } from '~/redux/customer/types';
+import CustomerModel from '~/modules/customer/services/cusomerModels';
+import {
+  SAVE_CUSTOMERLIST,
+  ADD_CUSTOMER_TO_LIST,
+  DELETE_CUSTOMER,
+  ICustomerStore,
+} from '~/redux/customer/types';
 
-const initialState = {
-  isFetching: false,
+const initialState: ICustomerStore = {
+  customerList: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case CUSTOMERLIST_LOADING:
+    case SAVE_CUSTOMERLIST:
       return {
-        isFetching: action.payload,
+        ...state,
+        customerList: action.payload,
       };
+    case ADD_CUSTOMER_TO_LIST:
+      const customer: CustomerModel = action.payload;
+      console.log('typeof==CustomerModel=>>', customer instanceof CustomerModel);
+      console.log('state.customerList>>', state.customerList);
+      if (!customer || !(customer instanceof CustomerModel)) return;
+
+      let row = state.customerList.find(row => row.initial === customer.firstLetter);
+      let newCustomerList: ICustomerStore = state;
+
+      if (row) {
+        // if there is a name row
+        if (Array.isArray(row.data)) {
+          row.data.push(customer);
+        } else {
+          row.data = [customer];
+        }
+
+        row.data.sort((a, b) => {
+          const nameA = a.firstName.toLowerCase();
+          const nameB = b.firstName.toLowerCase();
+          return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+        });
+
+        newCustomerList.customerList = state.customerList.map(listRow => {
+          if (listRow.initial === row?.initial) {
+            return row!;
+          }
+          return listRow;
+        });
+      } else {
+        // add New customer row
+        row = {
+          initial: customer.firstLetter,
+          data: [customer],
+        };
+        state.customerList.push(row);
+        state.customerList.sort((a, b) => {
+          const rowAInitial = a.initial || '#';
+          const rowBInitial = b.initial || '#';
+          return rowAInitial > rowBInitial ? 1 : rowAInitial < rowBInitial ? -1 : 0;
+        });
+        newCustomerList = { ...state };
+      }
+
+      return {
+        ...newCustomerList,
+      };
+
+    case DELETE_CUSTOMER:
+    // return {
+    //   ...state,
+    //   customerList:
+    // }
     default:
       return state;
   }

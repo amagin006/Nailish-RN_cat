@@ -1,9 +1,22 @@
-import { CUSTOMERLIST_LOADING } from '~/redux/customer/types';
+import { SAVE_CUSTOMERLIST, ADD_CUSTOMER_TO_LIST, DELETE_CUSTOMER } from '~/redux/customer/types';
 
-export const customerLoad = isFetching => {
-  // console.log('cutomerLoad', isFetching);
+export const saveCustomerList = customerList => {
   return {
-    type: CUSTOMERLIST_LOADING,
-    payload: isFetching,
+    type: SAVE_CUSTOMERLIST,
+    payload: customerList,
+  };
+};
+
+export const addCustomerToList = customer => {
+  return {
+    type: ADD_CUSTOMER_TO_LIST,
+    payload: customer,
+  };
+};
+
+export const deleteCustomer = customer => {
+  return {
+    type: DELETE_CUSTOMER,
+    payload: customer,
   };
 };

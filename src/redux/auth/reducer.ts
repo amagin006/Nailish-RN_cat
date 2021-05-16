@@ -6,15 +6,8 @@ import {
   LOGIN_FAILED,
   LOGOUT_SUCCESS,
   FAILED_CONFIRM,
+  AuthState,
 } from '~/redux/auth/types';
-
-export interface AuthState {
-  isLogin?: boolean;
-  isLoadingLogin?: boolean;
-  isCreateFailed?: boolean;
-  createFailedMessage?: string;
-  loginFailedMessage?: string;
-}
 
 const initialState: AuthState = {
   isLogin: false,

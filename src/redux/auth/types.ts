@@ -6,3 +6,11 @@ export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 export const FAILED_CONFIRM = 'FAILED_CONFIRM';
+
+export interface AuthState {
+  isLogin?: boolean;
+  isLoadingLogin?: boolean;
+  isCreateFailed?: boolean;
+  createFailedMessage?: string;
+  loginFailedMessage?: string;
+}

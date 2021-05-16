@@ -6,8 +6,6 @@ import {
 } from '~/modules/customerList/CustomerListInterfaces';
 
 import CustomerModel from '~/modules/customer/services/cusomerModels';
-import { UserInterface } from '~/redux/user/types';
-import { db } from '~/config/Firebase';
 
 export default class CustomerListPresenter
   extends BasePresenter
