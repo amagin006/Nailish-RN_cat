@@ -47,7 +47,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const [customer, setCustomer] = useState<CustomerModel | undefined>();
 
   const userRedux = useAppSelector(state => state.user);
-  const selectedCustmer = useAppSelector(state => state.customer?.selectedCustomer);
+  const selectedCustmer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

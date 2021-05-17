@@ -20,6 +20,7 @@ export type MainStackNavParamList = {
   BottomNav: NavigatorScreenParams<BottomTabNavParamList>;
   CustomerEdit: undefined;
   ReportList: undefined;
+  ReportDetail: { appointItem: any };
 };
 
 export type CustomerListStackNavParamsList = {

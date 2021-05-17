@@ -9,6 +9,7 @@ import ReportList from '~/screens/CustomerList/ReportList';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
+import ReportDetail from '~/screens/CustomerList/ReportDetail';
 
 const MainStackNav = createStackNavigator<MainStackNavParamList>();
 export const MainStackScreens = () => {
@@ -41,6 +42,13 @@ export const MainStackScreens = () => {
         component={ReportList}
         options={{
           title: 'Edit Report',
+        }}
+      />
+      <MainStackNav.Screen
+        name="ReportDetail"
+        component={ReportDetail}
+        options={{
+          title: 'Report Detail',
         }}
       />
     </MainStackNav.Navigator>

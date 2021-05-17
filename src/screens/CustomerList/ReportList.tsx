@@ -19,13 +19,14 @@ import { GeneralNavStyles } from '~/styles/ViewStyle';
 import SnsButtons from '~/components/button/snsButtons';
 import { BioIcon } from '~/components/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
+import CustomerModel from '~/modules/customer/services/cusomerModels';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
 }
 
 const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
-  const customer = useAppSelector(state => state.customer?.selectedCustomer);
+  const customer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -51,9 +52,9 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   const _keyExtractor = item => item.id;
 
-  const _onPressCard = (user, item) => {
-    // console.log('onPressCard', item);
-    // navigation.navigate('ReportDetail', { user, item });
+  const _onPressCard = item => {
+    console.log('onPressCard', item);
+    navigation.navigate('ReportDetail', { appointItem: item.item });
   };
 
   const _renderItem = item => {
@@ -61,9 +62,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
     const startTime = dayjs(item.item.appointmentStart).format('HH:mm');
     const endTime = dayjs(item.item.appointmentEnd).format('HH:mm');
     return (
-      <TouchableOpacity
-        onPress={() => _onPressCard(FAKE_DATA.user, item)}
-        style={styles.reportCardWrapper}>
+      <TouchableOpacity onPress={() => _onPressCard(item)} style={styles.reportCardWrapper}>
         <Image style={styles.cardImage} source={{ uri: `${item.item.photo[0].url}` }} />
         <View style={styles.textWrapper}>
           <Text style={styles.dateText}>{date}</Text>
