@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -13,20 +13,20 @@ import { FontAwesome } from '@expo/vector-icons';
 
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
 import { MainStackNavParamList } from '~/route/types';
 
 import { GeneralNavStyles } from '~/styles/ViewStyle';
 import SnsButtons from '~/components/button/snsButtons';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
 import { BioIcon } from '~/components/photoIcon/BioIcon';
+import { useAppSelector } from '~/redux/hooks';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
-  route: RouteProp<MainStackNavParamList, 'CustomerEdit'>;
 }
 
-const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
+const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
+  const customer = useAppSelector(state => state.customer?.selectedCustomer);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Edit Report',
@@ -40,15 +40,13 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
     });
   }, [navigation]);
 
-  const customer: CustomerModel = route.params.customer;
-
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
     // navigation.navigate('ReportEdit');
   };
 
   const _onEdit = () => {
-    navigation.navigate('CustomerEdit', { customer: customer });
+    navigation.navigate('CustomerEdit');
   };
 
   const _keyExtractor = item => item.id;

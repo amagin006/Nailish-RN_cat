@@ -1,4 +1,17 @@
-import { SAVE_CUSTOMERLIST, ADD_CUSTOMER_TO_LIST, DELETE_CUSTOMER } from '~/redux/customer/types';
+import CustomerModel from '~/modules/customer/services/cusomerModels';
+import {
+  SELECTED_CUSTOMER,
+  SAVE_CUSTOMERLIST,
+  ADD_CUSTOMER_TO_LIST,
+  DELETE_CUSTOMER,
+} from '~/redux/customer/types';
+
+export const selectedCustomer = (customer?: CustomerModel) => {
+  return {
+    type: SELECTED_CUSTOMER,
+    payload: customer,
+  };
+};
 
 export const saveCustomerList = customerList => {
   return {

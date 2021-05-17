@@ -81,12 +81,12 @@ export default class CustomerListRepository
   /**
    * updateCustomer
    */
-  public async updateCustomer(user, updateCustomer, customerRefId) {
+  public async updateCustomer(user, updateCustomer) {
     const customerRef = db
       .collection('users')
       .doc(`${user.uid}`)
       .collection('customer')
-      .doc(`${customerRefId}`);
+      .doc(`${updateCustomer.id}`);
     try {
       await customerRef.update(updateCustomer);
     } catch (err) {

@@ -1,5 +1,6 @@
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import {
+  SELECTED_CUSTOMER,
   SAVE_CUSTOMERLIST,
   ADD_CUSTOMER_TO_LIST,
   DELETE_CUSTOMER,
@@ -8,10 +9,16 @@ import {
 
 const initialState: ICustomerStore = {
   customerList: [],
+  selectedCustomer: undefined,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SELECTED_CUSTOMER:
+      return {
+        ...state,
+        selectedCustomer: action.payload,
+      };
     case SAVE_CUSTOMERLIST:
       return {
         ...state,
@@ -19,8 +26,6 @@ const reducer = (state = initialState, action) => {
       };
     case ADD_CUSTOMER_TO_LIST:
       const customer: CustomerModel = action.payload;
-      console.log('typeof==CustomerModel=>>', customer instanceof CustomerModel);
-      console.log('state.customerList>>', state.customerList);
       if (!customer || !(customer instanceof CustomerModel)) return;
 
       let row = state.customerList.find(row => row.initial === customer.firstLetter);

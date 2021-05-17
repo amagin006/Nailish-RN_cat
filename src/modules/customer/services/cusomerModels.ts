@@ -14,7 +14,7 @@ export default class CustomerModel extends BaseModel {
   public memo: string = '';
   public mobile: string = '';
   public twitter: string = '';
-  public lastVist: string = '';
+  public lastVisit: string = '';
 
   /**
    * has already set user or not
@@ -44,6 +44,7 @@ export default class CustomerModel extends BaseModel {
 }
 
 export interface ICustomer {
+  id: string;
   firstLetter: string;
   firstName?: string;
   lastName?: string;
@@ -54,4 +55,5 @@ export interface ICustomer {
   twitter?: string;
   memo?: string;
   profileImg?: string;
+  lastVisit?: string;
 }

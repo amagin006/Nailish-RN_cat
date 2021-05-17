@@ -63,8 +63,8 @@ export default class CustomerListPresenter
   /**
    * updateCustomer
    */
-  public async updateCustomer(user, updateCustomer, customerRefId) {
-    await this.CustomerListRepository.updateCustomer(user, updateCustomer, customerRefId);
+  public async updateCustomer(user, updateCustomer) {
+    await this.CustomerListRepository.updateCustomer(user, updateCustomer);
   }
 
   /**

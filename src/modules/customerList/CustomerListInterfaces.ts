@@ -7,7 +7,7 @@ import '@firebase/firestore';
 export interface CustomerListPresenterInterface {
   getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
   upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
-  updateCustomer(user: UserInterface, customer: ICustomer, customerRefId: string): Promise<void>;
+  updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
 }
 
@@ -16,7 +16,7 @@ export interface CustomerListRepositoryInterface {
     user: UserInterface,
   ): Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>;
   upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
-  updateCustomer(user: UserInterface, customer: ICustomer, customerRefId: string): Promise<void>;
+  updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
 }
 

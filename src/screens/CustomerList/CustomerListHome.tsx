@@ -12,7 +12,7 @@ import {
 import { TextAtom } from '~/components/atoms/TextAtom';
 
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
-import { saveCustomerList } from '~/redux/customer/actions';
+import { saveCustomerList, selectedCustomer } from '~/redux/customer/actions';
 
 import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
 
@@ -58,11 +58,12 @@ const CustomerListHome = ({ navigation }) => {
   const _itemSeparator = () => <View style={styles.separator} />;
   const _keyExtractor = item => item.id;
 
-  const _onPressCard = item => {
-    navigation.navigate('ReportList', { customer: item });
+  const _onPressCard = (item: CustomerModel) => {
+    dispatch(selectedCustomer(item));
+    navigation.navigate('ReportList');
   };
 
-  const _renderItem = ({ item }) => {
+  const _renderItem = ({ item }: { item: CustomerModel }) => {
     return (
       <TouchableOpacity style={styles.card} onPress={() => _onPressCard(item)}>
         <BioIcon image={item.profileImg} />
@@ -83,6 +84,7 @@ const CustomerListHome = ({ navigation }) => {
   };
 
   const _onAddButton = () => {
+    dispatch(selectedCustomer());
     navigation.navigate('CustomerEdit');
   };
 

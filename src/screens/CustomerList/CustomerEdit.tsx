@@ -47,10 +47,11 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const [customer, setCustomer] = useState<CustomerModel | undefined>();
 
   const userRedux = useAppSelector(state => state.user);
+  const selectedCustmer = useAppSelector(state => state.customer?.selectedCustomer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const customer = props.route.params?.customer;
+    const customer = selectedCustmer;
     if (customer) {
       setFirstName(customer.firstName);
       setLastName(customer.lastName);
@@ -160,8 +161,12 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
           .doc(`${userRedux.uid}`)
           .collection('customer')
           .add(updateCustomer);
+        console.log('res.id', res.id);
       } catch (err) {
+        props.navigation.pop();
+        Alert.alert('Sorry, falied adding new customer. please try again.');
         console.log('Error firebase: ', err);
+        throw Error('Failed adding new customer');
       }
       updateCustomer.id = res.id;
       updateCustomer.profileImg = await _upLoadPhoto(res.id);
@@ -171,8 +176,8 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       // update customer
       updateCustomer.profileImg = await _upLoadPhoto(customer.id);
       updateCustomer.id = customer.id;
-      await customerListPresenter.updateCustomer(userRedux, updateCustomer, customer.id);
     }
+    await customerListPresenter.updateCustomer(userRedux, updateCustomer);
     props.navigation.pop();
   }
 
