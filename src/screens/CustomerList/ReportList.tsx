@@ -43,7 +43,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
-    // navigation.navigate('ReportEdit');
+    navigation.navigate('ReportEdit');
   };
 
   const _onEdit = () => {

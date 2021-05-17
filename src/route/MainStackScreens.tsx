@@ -6,6 +6,7 @@ import { BottomTabScreens } from '~/route/BottomTabScreens';
 // component
 import CustomerEdit from '~/screens/CustomerList/CustomerEdit';
 import ReportList from '~/screens/CustomerList/ReportList';
+import ReportEdit from '~/screens/CustomerList/ReportEdit';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -41,7 +42,7 @@ export const MainStackScreens = () => {
         name="ReportList"
         component={ReportList}
         options={{
-          title: 'Edit Report',
+          title: 'Report List',
         }}
       />
       <MainStackNav.Screen
@@ -49,6 +50,13 @@ export const MainStackScreens = () => {
         component={ReportDetail}
         options={{
           title: 'Report Detail',
+        }}
+      />
+      <MainStackNav.Screen
+        name="ReportEdit"
+        component={ReportEdit}
+        options={{
+          title: 'Edit Report',
         }}
       />
     </MainStackNav.Navigator>

@@ -21,6 +21,7 @@ export type MainStackNavParamList = {
   CustomerEdit: undefined;
   ReportList: undefined;
   ReportDetail: { appointItem: any };
+  ReportEdit: undefined;
 };
 
 export type CustomerListStackNavParamsList = {

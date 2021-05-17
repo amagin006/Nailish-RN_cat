@@ -1,17 +1,17 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface ListAddFloatButtonProps {
   style?: ViewStyle | ViewStyle[];
-  iconStyle?: ViewStyle | ViewStyle[];
+  iconStyle?: TextStyle | TextStyle[];
   onPress: () => void;
 }
 
 export const ListAddFloatButton: React.FC<ListAddFloatButtonProps> = props => {
   return (
     <TouchableOpacity style={[styles.addButton, props.style]} onPress={props.onPress}>
-      <FontAwesome style={[styles.addIcon, props.style]} name={'plus'} />
+      <FontAwesome style={[styles.addIcon, props.iconStyle]} name={'plus'} />
     </TouchableOpacity>
   );
 };
