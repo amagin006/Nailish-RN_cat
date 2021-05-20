@@ -38,8 +38,6 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const { appointItem } = route.params;
   const selectedCustomer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
 
-  console.log('selectedCustomer', selectedCustomer);
-  console.log('appointItem', appointItem);
   const date = dayjs(appointItem.appointmentStart).format('YYYY/MM/DD');
   const startTime = dayjs(appointItem.appointmentStart).format('HH:mm');
   const endTime = dayjs(appointItem.appointmentEnd).format('HH:mm');

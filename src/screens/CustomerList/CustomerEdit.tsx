@@ -11,7 +11,7 @@ import { MainStackNavParamList } from '~/route/types';
 
 // Redux
 import { useAppSelector, useAppDispatch } from '~/redux/hooks';
-import { addCustomerToList } from '../../redux/customer/actions';
+import { addCustomerToList, deleteCustomer } from '../../redux/customer/actions';
 
 // components
 import { RoundButton } from '../../components/button/button';
@@ -128,6 +128,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
     if (!isSuccess) {
       Alert.alert('Sorry, something goes wrong. try again');
     }
+    dispatch(deleteCustomer(customer));
     navigation.popToTop();
   };
 

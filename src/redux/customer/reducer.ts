@@ -25,18 +25,18 @@ const reducer = (state = initialState, action) => {
         customerList: action.payload,
       };
     case ADD_CUSTOMER_TO_LIST:
-      const customer: CustomerModel = action.payload;
-      if (!customer || !(customer instanceof CustomerModel)) return;
+      const addCustomer: CustomerModel = action.payload;
+      if (!addCustomer || !(addCustomer instanceof CustomerModel)) return;
 
-      let row = state.customerList.find(row => row.initial === customer.firstLetter);
+      let row = state.customerList.find(row => row.initial === addCustomer.firstLetter);
       let newCustomerList: ICustomerStore = state;
 
       if (row) {
         // if there is a name row
         if (Array.isArray(row.data)) {
-          row.data.push(customer);
+          row.data.push(addCustomer);
         } else {
-          row.data = [customer];
+          row.data = [addCustomer];
         }
 
         row.data.sort((a, b) => {
@@ -54,8 +54,8 @@ const reducer = (state = initialState, action) => {
       } else {
         // add New customer row
         row = {
-          initial: customer.firstLetter,
-          data: [customer],
+          initial: addCustomer.firstLetter,
+          data: [addCustomer],
         };
         state.customerList.push(row);
         state.customerList.sort((a, b) => {
@@ -71,10 +71,22 @@ const reducer = (state = initialState, action) => {
       };
 
     case DELETE_CUSTOMER:
-    // return {
-    //   ...state,
-    //   customerList:
-    // }
+      const deleteCustomer: CustomerModel = action.payload;
+      const deleteRow = state.customerList.map(row => {
+        let newData = row.data;
+        if (row.initial === deleteCustomer.firstLetter) {
+          newData = row.data.filter(item => item.id !== deleteCustomer.id);
+        }
+        return {
+          initial: row.initial,
+          data: newData,
+        };
+      });
+
+      return {
+        ...state,
+        customerList: deleteRow,
+      };
     default:
       return state;
   }
