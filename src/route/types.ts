@@ -22,6 +22,8 @@ export type MainStackNavParamList = {
   ReportList: undefined;
   ReportDetail: { appointItem: any };
   ReportEdit: undefined;
+
+  EditAppointment: { item: any } | undefined;
 };
 
 export type CustomerListStackNavParamsList = {
@@ -29,7 +31,7 @@ export type CustomerListStackNavParamsList = {
 };
 
 export type CalenderStackNavParamsList = {
-  CalenderHome: undefined;
+  CalenderHome: { onSavePress: () => void };
 };
 
 export type SettingStackNavParamsList = {

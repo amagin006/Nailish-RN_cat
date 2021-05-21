@@ -34,4 +34,8 @@ export const GeneralNormalColor = {
     BaseBackground: 'rgba(0, 0, 0, 0.4)',
     BaseInner: '#ffffff',
   },
+
+  Calender: {
+    listSeparator: '#e6e6e6',
+  },
 };

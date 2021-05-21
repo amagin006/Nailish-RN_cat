@@ -11,6 +11,7 @@ import ReportEdit from '~/screens/CustomerList/ReportEdit';
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import ReportDetail from '~/screens/CustomerList/ReportDetail';
+import EditAppointment from '~/screens/Calender/EditAppointment';
 
 const MainStackNav = createStackNavigator<MainStackNavParamList>();
 export const MainStackScreens = () => {
@@ -31,6 +32,8 @@ export const MainStackScreens = () => {
         component={BottomTabScreens}
         options={{ headerShown: false }}
       />
+
+      {/* --------- CustomerList ---------- */}
       <MainStackNav.Screen
         name="CustomerEdit"
         component={CustomerEdit}
@@ -59,6 +62,18 @@ export const MainStackScreens = () => {
           title: 'Edit Report',
         }}
       />
+      {/* --------- CustomerList ---------- */}
+
+      {/* --------- Calender ---------- */}
+      <MainStackNav.Screen
+        name="EditAppointment"
+        component={EditAppointment}
+        options={{
+          title: 'Edit Appointment',
+        }}
+      />
+
+      {/* --------- Calender ---------- */}
     </MainStackNav.Navigator>
   );
 };

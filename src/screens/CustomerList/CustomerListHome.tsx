@@ -10,11 +10,24 @@ import {
 } from 'react-native';
 import { TextAtom } from '~/components/atoms/TextAtom';
 
+// navigation
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  MainStackNavParamList,
+  BottomTabNavParamList,
+  CustomerListStackNavParamsList,
+} from '~/route/types';
+
+// redux
 import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { saveCustomerList, selectedCustomer } from '~/redux/customer/actions';
 
+// component
 import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
 
+// util
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 import { BioIcon } from '~/components/photoIcon/BioIcon';
@@ -26,7 +39,19 @@ interface ICustomerListItem {
 
 const customerListPresenter = CustomerListFactory.getCustomerListRepository();
 
-const CustomerListHome = ({ navigation }) => {
+type CustomerListNavProps = CompositeNavigationProp<
+  StackNavigationProp<MainStackNavParamList, 'BottomNav'>,
+  CompositeNavigationProp<
+    BottomTabNavigationProp<BottomTabNavParamList, 'CustomerList'>,
+    StackNavigationProp<CustomerListStackNavParamsList, 'CustomerListHome'>
+  >
+>;
+
+interface CustomerListHomeProps {
+  navigation: CustomerListNavProps;
+}
+
+const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
   const [customerList, setCustomerList] = useState<ICustomerListItem[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
