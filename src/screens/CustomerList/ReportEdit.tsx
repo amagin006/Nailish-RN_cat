@@ -131,12 +131,12 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             <Text style={GeneralViewStyle.leftColumn}>End Time</Text>
             <TextInput style={styles.textInput} />
           </View>
+          <ReportMenuList menuList={FAKE_MENU} />
           <RoundButton
             onPress={_onPressSelectMenu}
             text={'Select Menu'}
             style={styles.selectButton}
           />
-          <ReportMenuList menuList={FAKE_MENU} />
           <View style={styles.columnWrapper}>
             <Text style={GeneralViewStyle.leftColumn}>Tips</Text>
             <View style={styles.tips}>

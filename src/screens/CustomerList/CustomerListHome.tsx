@@ -31,6 +31,7 @@ import { ListAddFloatButton } from '~/components/molecules/button/ListAddFloatBu
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 import { BioIcon } from '~/components/molecules/photoIcon/BioIcon';
+import { ActivityIndicatorAtom } from '~/components/atoms';
 
 interface ICustomerListItem {
   initial?: string;
@@ -52,8 +53,9 @@ interface CustomerListHomeProps {
 }
 
 const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
+  const [isInitial, setIsInitial] = useState<boolean>(true);
   const [customerList, setCustomerList] = useState<ICustomerListItem[]>([]);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const userRedux = useAppSelector(state => state.user);
   const customerRedux = useAppSelector(state => state.customer);
@@ -61,8 +63,10 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
 
   // Initialized
   useEffect(() => {
-    getCustomerList();
-  }, [userRedux]);
+    getCustomerList().then(() => {
+      setIsInitial(false);
+    });
+  }, []);
 
   useEffect(() => {
     setCustomerList(customerRedux?.customerList);
@@ -122,10 +126,7 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
       return (
         <View style={styles.noListWrap}>
           <View style={styles.noListImagebox}>
-            <Image
-              source={require('../../../assets/images/cat_1.png')}
-              style={styles.noListImage}
-            />
+            <Image source={require('~assets/images/cat_1.png')} style={styles.noListImage} />
           </View>
           <TextAtom style={styles.noListTextBold}>There is no customer yet.</TextAtom>
           <TextAtom style={styles.noListText}>
@@ -136,6 +137,10 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
     }
     return null;
   };
+
+  if (isInitial) {
+    return <ActivityIndicatorAtom />;
+  }
 
   return (
     <View style={styles.sectionList}>
