@@ -118,6 +118,7 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
   };
 
   const _onPressList = item => {
+    console.log('_onPressList', item);
     navigation.navigate('EditAppointment', { item: item });
   };
 
@@ -125,7 +126,7 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
     const { item } = listItem;
     return (
       <TouchableOpacity onPress={() => _onPressList(item)} style={styles.listItemWrapper}>
-        <Image source={{ uri: `${item.user.userIcon}` }} style={styles.userIcon} />
+        <Image source={{ uri: `${item.user.profileImg}` }} style={styles.userIcon} />
         <View style={styles.textWrapper}>
           <Text style={styles.name}>{`${item.user.firstName} ${item.user.lastName}`}</Text>
           <Text style={styles.time}>{`${item.appointmentStart} ~ ${item.appointmentEnd}`}</Text>
@@ -225,11 +226,17 @@ const FAKEDATA = [
     appointmentEnd: '20:00',
     user: {
       id: 1,
+      firstLetter: 'A',
       firstName: 'Assuly',
       lastName: 'Henry',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
       lastVisit: '2020/01/02',
-      nameInitial: 'A',
     },
   },
   {
@@ -238,12 +245,18 @@ const FAKEDATA = [
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
-      id: 1,
-      firstName: 'Assuly',
+      id: 2,
+      firstLetter: 'B',
+      firstName: 'Bssuly',
       lastName: 'Henry',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
       lastVisit: '2020/01/02',
-      nameInitial: 'A',
     },
   },
   {
@@ -252,12 +265,18 @@ const FAKEDATA = [
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
-      id: 2,
-      firstName: 'Bob',
-      lastName: 'Jddkjk',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/02.jpg',
+      id: 3,
+      firstLetter: 'C',
+      firstName: 'Cssuly',
+      lastName: 'Henry',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
       lastVisit: '2020/01/02',
-      nameInitial: 'B',
     },
   },
   {
@@ -266,12 +285,18 @@ const FAKEDATA = [
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
-      id: 2,
-      firstName: 'Bob',
-      lastName: 'Jddkjk',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/02.jpg',
+      id: 4,
+      firstLetter: 'D',
+      firstName: 'Dssuly',
+      lastName: 'Henry',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
       lastVisit: '2020/01/02',
-      nameInitial: 'B',
     },
   },
 
@@ -281,14 +306,18 @@ const FAKEDATA = [
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
-      id: 2,
-      firstName: 'Cio',
-      lastName: 'YYYdhhdk',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/03.jpg',
-      lastVisit: '2020/01/04',
-      birthDay: '2001/02/20',
-      tel: '778-999-0202',
-      nameInitial: 'C',
+      id: 4,
+      firstLetter: 'D',
+      firstName: 'Dssuly',
+      lastName: 'Henry',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
+      lastVisit: '2020/01/02',
     },
   },
   {
@@ -297,14 +326,18 @@ const FAKEDATA = [
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
-      id: 2,
-      firstName: 'Cio',
-      lastName: 'YYYdhhdk',
-      userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/03.jpg',
-      lastVisit: '2020/01/04',
-      birthDay: '2001/02/20',
-      tel: '778-999-0202',
-      nameInitial: 'C',
+      id: 4,
+      firstLetter: 'D',
+      firstName: 'Dssuly',
+      lastName: 'Henry',
+      profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+      instagram: '',
+      mail: '',
+      birthday: '',
+      memo: '',
+      mobile: '',
+      twitter: '',
+      lastVisit: '2020/01/02',
     },
   },
 ];

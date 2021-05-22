@@ -16,14 +16,14 @@ const snsButtons: React.FC<snsButtonProps> = ({ customer }) => {
         <Image
           resizeMode={'contain'}
           style={styles.snsIcon}
-          source={require('../../../assets/images/tel2.png')}
+          source={require('~assets/images/tel2.png')}
         />
       </TouchableOpacity>
       <TouchableOpacity disabled={!customer.mail} style={!customer.mail && styles.snsIconDisable}>
         <Image
           resizeMode={'contain'}
           style={styles.snsIcon}
-          source={require('../../../assets/images/mail4.png')}
+          source={require('~assets/images/mail4.png')}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -32,7 +32,7 @@ const snsButtons: React.FC<snsButtonProps> = ({ customer }) => {
         <Image
           resizeMode={'contain'}
           style={styles.snsIcon}
-          source={require('../../../assets/images/instagram2.png')}
+          source={require('~assets/images/instagram2.png')}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -41,7 +41,7 @@ const snsButtons: React.FC<snsButtonProps> = ({ customer }) => {
         <Image
           resizeMode={'contain'}
           style={styles.snsIcon}
-          source={require('../../../assets/images/twitter.png')}
+          source={require('~assets/images/twitter.png')}
         />
       </TouchableOpacity>
     </View>

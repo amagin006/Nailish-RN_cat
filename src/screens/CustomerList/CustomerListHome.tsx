@@ -25,12 +25,12 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { saveCustomerList, selectedCustomer } from '~/redux/customer/actions';
 
 // component
-import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
+import { ListAddFloatButton } from '~/components/molecules/button/ListAddFloatButton';
 
 // util
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
-import { BioIcon } from '~/components/photoIcon/BioIcon';
+import { BioIcon } from '~/components/molecules/photoIcon/BioIcon';
 
 interface ICustomerListItem {
   initial?: string;

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { firebaseAuth } from '~/config/Firebase';
 
 // component
-import { RoundButton } from '~/components/button/button';
+import { RoundButton } from '~/components/molecules/button/button';
 import { userLoginWithPass, googleLogin, createUser, failedConfirm } from '~/redux/auth/actions';
 import { TextAtom, TextInputAtom, PasswordTextInput } from '~/components/atoms';
 import { AppGeneralColor } from '~/styles/ColorStyle';

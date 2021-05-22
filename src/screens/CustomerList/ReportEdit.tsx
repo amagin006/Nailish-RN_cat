@@ -19,10 +19,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
 
-import { RoundButton } from '~/components/button/button';
-import ReportMenuList from '~/screens/CustomerList/components/ReportMenuList';
+import { RoundButton } from '~/components/molecules/button/button';
+import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
-import { ListAddFloatButton } from '~/components/button/ListAddFloatButton';
+import { ListAddFloatButton } from '~/components/molecules/button/ListAddFloatButton';
 
 interface ReportEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;

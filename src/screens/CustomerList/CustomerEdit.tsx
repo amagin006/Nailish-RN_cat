@@ -11,14 +11,14 @@ import { MainStackNavParamList } from '~/route/types';
 
 // Redux
 import { useAppSelector, useAppDispatch } from '~/redux/hooks';
-import { addCustomerToList, deleteCustomer } from '../../redux/customer/actions';
+import { addCustomerToList, deleteCustomer } from '~/redux/customer/actions';
 
 // components
-import { RoundButton } from '../../components/button/button';
-import { LoadingIndicator } from '~/components/loadingIndicator/LoadingIndicator';
+import { RoundButton } from '~/components/molecules/button/button';
+import { LoadingIndicator } from '~/components/organisms/loadingIndicator/LoadingIndicator';
 
 // util, style
-import { db } from '../../config/Firebase';
+import { db } from '~/config/Firebase';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -51,6 +51,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('customer', selectedCustmer);
     const customer = selectedCustmer;
     if (customer) {
       setFirstName(customer.firstName);

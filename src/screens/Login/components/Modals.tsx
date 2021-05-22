@@ -6,7 +6,7 @@ import { TextAtom, ModalAtom, ActivityIndicatorAtom } from '~/components/atoms';
 import { TextInputAtom } from '~/components/atoms/TextInputAtom';
 
 // components
-import { RoundButton } from '~/components/button/button';
+import { RoundButton } from '~/components/molecules/button/button';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
