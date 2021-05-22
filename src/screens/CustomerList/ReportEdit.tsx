@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
+  Platform,
 } from 'react-native';
 // import RNPickerSelect from 'react-native-picker-select';
 import * as Permissions from 'expo-permissions';
@@ -23,6 +24,9 @@ import { RoundButton } from '~/components/molecules/button/button';
 import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 import { ListAddFloatButton } from '~/components/molecules/button/ListAddFloatButton';
+import { AppGeneralColor } from '~/styles/ColorStyle';
+import { TextAtom } from '~/components/atoms';
+import { TextLeftAtom } from '~/components/atoms/TextAtom';
 
 interface ReportEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;
@@ -38,6 +42,8 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      // TODO: change title new report or edit report
+      title: 'Edit Report',
       headerRight: () => {
         return (
           <TouchableOpacity
@@ -68,10 +74,13 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
 
   const _getPermissionCameraRoll = async () => {
     if (!hasPermissionCameraRoll) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        Alert.alert('Sorry, we need camera roll permissions to make this work!');
-        return;
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Sorry, we need camera roll permissions to make this work!');
+          return;
+        }
+        setHasPermissionCameraRoll(true);
       }
     }
 
@@ -120,15 +129,15 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
         </View>
         <View style={GeneralViewStyle.bodyWrapper}>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Visit Date</Text>
+            <TextLeftAtom>Visit Date</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Start Time</Text>
+            <TextLeftAtom>Start Time</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>End Time</Text>
+            <TextLeftAtom>End Time</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <ReportMenuList menuList={FAKE_MENU} />
@@ -138,7 +147,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             style={styles.selectButton}
           />
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Tips</Text>
+            <TextLeftAtom>Tips</TextLeftAtom>
             <View style={styles.tips}>
               <Text style={styles.dollerMark}>$</Text>
               <TextInput
@@ -151,7 +160,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Payment</Text>
+            <TextLeftAtom>Payment</TextLeftAtom>
             {/* <RNPickerSelect
               onValueChange={_onChangePayment}
               placeholder={{ label: 'Select Payment', value: null }}
@@ -161,7 +170,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             /> */}
           </View>
           <View style={styles.memo}>
-            <Text style={GeneralViewStyle.leftColumn}>Memo</Text>
+            <TextLeftAtom>Memo</TextLeftAtom>
             <TextInput
               multiline
               style={styles.memoInput}
@@ -220,8 +229,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: subImageSize,
     height: subImageSize,
-    backgroundColor: 'red',
     resizeMode: 'contain',
+    borderColor: AppGeneralColor.Palette.BorderGray,
+    borderWidth: 1,
   },
   columnWrapper: {
     flexDirection: 'row',

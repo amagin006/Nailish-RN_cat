@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { AppGeneralColor } from './ColorStyle';
+import { generalTextStyles } from './TextStyle';
 
 export const GeneralNavStyles = StyleSheet.create({
   headerRight: {
@@ -21,16 +22,20 @@ export const GeneralViewStyle = StyleSheet.create({
     marginTop: 10,
   },
   leftColumn: {
-    fontSize: 15,
     width: '28%',
-    color: '#9c9c9c',
+  },
+  leftColumnText: {
+    ...generalTextStyles.mediumLittleNormalText,
+    color: AppGeneralColor.TextColor.Primary,
   },
   rightColumn: {
     width: '50%',
   },
   price: {
-    fontSize: 16,
     width: 80,
     textAlign: 'right',
+  },
+  priceText: {
+    ...generalTextStyles.mediumNormalText,
   },
 });

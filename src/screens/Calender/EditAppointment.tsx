@@ -26,6 +26,7 @@ import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
+import { TextLeftAtom } from '~/components/atoms/TextAtom';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -79,22 +80,22 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
 
         <View style={styles.dateBlock}>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Visit Date</Text>
+            <TextLeftAtom>Visit Date</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>Start Time</Text>
+            <TextLeftAtom> Start Time</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <View style={styles.columnWrapper}>
-            <Text style={GeneralViewStyle.leftColumn}>End Time</Text>
+            <TextLeftAtom>End Time</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
         </View>
         <ReportMenuList menuList={FAKE_MENU} />
         <RoundButton onPress={_onPressSelectMenu} text={'Select Menu'} />
         <View style={styles.memo}>
-          <Text style={GeneralViewStyle.leftColumn}>Memo</Text>
+          <TextLeftAtom>Memo</TextLeftAtom>
           <TextInput multiline style={styles.memoInput} onChangeText={_onChageMemo} value={memo} />
         </View>
         {user && (

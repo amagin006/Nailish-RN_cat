@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
+import { GeneralViewStyle } from '~/styles/ViewStyle';
 
 export interface TextAtomProps extends Partial<Text> {
   containerStyle?: ViewStyle | ViewStyle[];
@@ -23,6 +24,18 @@ export const TextAtom: React.FC<TextAtomProps> = props => {
   return (
     <View style={props.containerStyle}>
       <Text style={[styles.defaultTextStyles, props.style]}>{props.children}</Text>
+    </View>
+  );
+};
+
+export const TextLeftAtom: React.FC<TextAtomProps> = props => {
+  if (!props.children) {
+    return <></>;
+  }
+
+  return (
+    <View style={[GeneralViewStyle.leftColumn, props.containerStyle]}>
+      <Text style={[GeneralViewStyle.leftColumnText, props.style]}>{props.children}</Text>
     </View>
   );
 };

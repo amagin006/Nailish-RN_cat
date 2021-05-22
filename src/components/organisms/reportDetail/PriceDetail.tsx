@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { TextAtom } from '~/components/atoms';
 
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 
@@ -20,23 +21,43 @@ const PriceDetail: React.FC<PriceDetailProps> = ({ menuList, tips }) => {
   return (
     <>
       <View style={GeneralViewStyle.menuWrapper}>
-        <Text style={GeneralViewStyle.leftColumn}>Subtotal</Text>
+        <TextAtom
+          containerStyle={GeneralViewStyle.leftColumn}
+          style={GeneralViewStyle.leftColumnText}>
+          Subtotal
+        </TextAtom>
         <Text style={GeneralViewStyle.price}>{`$ ${subtotal}`}</Text>
       </View>
       <View style={GeneralViewStyle.menuWrapper}>
-        <Text style={GeneralViewStyle.leftColumn}>Tips</Text>
+        <TextAtom
+          containerStyle={GeneralViewStyle.leftColumn}
+          style={GeneralViewStyle.leftColumnText}>
+          Tips
+        </TextAtom>
         <Text style={GeneralViewStyle.price}>{`$ ${tipsPrice}`}</Text>
       </View>
       <View style={GeneralViewStyle.menuWrapper}>
-        <Text style={GeneralViewStyle.leftColumn}>Tips</Text>
+        <TextAtom
+          containerStyle={GeneralViewStyle.leftColumn}
+          style={GeneralViewStyle.leftColumnText}>
+          Tips
+        </TextAtom>
         <Text style={GeneralViewStyle.price}>{`$ ${taxTotal}`}</Text>
       </View>
       <View style={[GeneralViewStyle.menuWrapper, styles.total]}>
-        <Text style={GeneralViewStyle.leftColumn}>Total</Text>
+        <TextAtom
+          containerStyle={GeneralViewStyle.leftColumn}
+          style={GeneralViewStyle.leftColumnText}>
+          Total
+        </TextAtom>
         <Text style={GeneralViewStyle.price}>{`$ ${total}`}</Text>
       </View>
       <View style={GeneralViewStyle.menuWrapper}>
-        <Text style={GeneralViewStyle.leftColumn}>Payment</Text>
+        <TextAtom
+          containerStyle={GeneralViewStyle.leftColumn}
+          style={GeneralViewStyle.leftColumnText}>
+          Payment
+        </TextAtom>
         <Text style={styles.rightText}>Credit card</Text>
       </View>
       <View style={styles.memo}>

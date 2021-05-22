@@ -30,7 +30,6 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Edit Report',
       headerRight: () => {
         return (
           <TouchableOpacity style={GeneralNavStyles.headerRight} onPress={_onEdit}>

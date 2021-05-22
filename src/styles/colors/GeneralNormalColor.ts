@@ -22,6 +22,7 @@ export const GeneralNormalColor = {
   TextColor: {
     Primary: '#636363',
     Secondary: '#32a852',
+    gray: '#9c9c9c',
   },
   Indicator: {
     Primary: '#9c9c9c',
