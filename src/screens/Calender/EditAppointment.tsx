@@ -27,6 +27,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
+import { BaseTimeInputFileld } from '~/components/molecules/dateInput/BaseTimeInputFileld';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -78,13 +79,14 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           )}
         </TouchableOpacity>
 
+        <BaseTimeInputFileld />
         <View style={styles.dateBlock}>
           <View style={styles.columnWrapper}>
             <TextLeftAtom>Visit Date</TextLeftAtom>
-            <TextInput style={styles.textInput} />
+            {/* <TextInput style={styles.textInput} /> */}
           </View>
           <View style={styles.columnWrapper}>
-            <TextLeftAtom> Start Time</TextLeftAtom>
+            <TextLeftAtom>Start Time</TextLeftAtom>
             <TextInput style={styles.textInput} />
           </View>
           <View style={styles.columnWrapper}>
