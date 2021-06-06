@@ -79,6 +79,10 @@ export const generalTextStyles = StyleSheet.create({
   },
 
   // font-family bold
+  boldBigXLText: {
+    fontFamily: FONT_FAMILY.FONT_BOLD,
+    fontSize: FONT_SIZE.BIG_XL,
+  },
   boldBigText: {
     fontFamily: FONT_FAMILY.FONT_BOLD,
     fontSize: FONT_SIZE.BIG,

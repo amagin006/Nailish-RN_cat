@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { fontScale } from '~/util/scaling/ScalingUtil';
 
 export const FONT_SIZE = {
+  BIG_XL: fontScale(34),
   BIG: fontScale(24),
   LITTLE_BIG: fontScale(22),
   MEDIUM: fontScale(20),

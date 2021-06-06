@@ -27,7 +27,10 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
-import { BaseTimeInputFileld } from '~/components/molecules/dateInput/BaseTimeInputFileld';
+import {
+  EditTimeOrganism,
+  ITimeValue,
+} from '~/components/organisms/EditAppointment/EditTimeOrganism';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -62,6 +65,10 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     console.log('_onPressDelete');
   };
 
+  const _onConfirmPicker = (timeValue: ITimeValue) => {
+    console.log('timeValue', timeValue);
+  };
+
   return (
     <ScrollView>
       <View style={GeneralViewStyle.bodyWrapper}>
@@ -79,21 +86,10 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           )}
         </TouchableOpacity>
 
-        <BaseTimeInputFileld />
-        <View style={styles.dateBlock}>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>Visit Date</TextLeftAtom>
-            {/* <TextInput style={styles.textInput} /> */}
-          </View>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>Start Time</TextLeftAtom>
-            <TextInput style={styles.textInput} />
-          </View>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>End Time</TextLeftAtom>
-            <TextInput style={styles.textInput} />
-          </View>
+        <View style={styles.editTimeBox}>
+          <EditTimeOrganism onConfirm={_onConfirmPicker} id={'START_TIME'} />
         </View>
+
         <ReportMenuList menuList={FAKE_MENU} />
         <RoundButton onPress={_onPressSelectMenu} text={'Select Menu'} />
         <View style={styles.memo}>
@@ -137,6 +133,9 @@ const styles = StyleSheet.create({
   },
   selectClientText: {
     fontSize: 18,
+  },
+  editTimeBox: {
+    marginVertical: 40,
   },
   columnWrapper: {
     flexDirection: 'row',

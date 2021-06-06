@@ -23,6 +23,8 @@ export const GeneralDarkColor = {
     Primary: '#636363',
     Secondary: '#32a852',
     gray: '#9c9c9c',
+
+    Link: '#3477EC',
   },
   Indicator: {
     Primary: '#9c9c9c',
