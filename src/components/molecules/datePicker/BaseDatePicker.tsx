@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Modal, TouchableWithoutFeedback, TextStyle } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import dayjs from 'dayjs';
 
 import { TextAtom } from '~/components/atoms/TextAtom';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -9,13 +10,13 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { TIME_HOUR, TIME_MINITES } from '~/components/molecules/datePicker/DatePickerHelper';
 import { generalTextStyles } from '~/styles/TextStyle';
 
-interface BaseTimePickerProps {
+interface BaseDatePickerProps {
   onConfirm: (time: string, id?: string) => void;
   id?: string;
   timeTextStyle?: TextStyle;
 }
 
-export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
+export const BaseDatePicker: React.FC<BaseDatePickerProps> = props => {
   const [isShowPicker, setIsShowPicker] = useState<boolean>(false);
   const [selectedHour, setSelectedHour] = useState<string>('00');
   const [selectedMin, setSelectedMin] = useState<string>('00');
@@ -72,6 +73,26 @@ export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
                 itemStyle={{}}
                 onValueChange={_onHourChange}>
                 {TIME_HOUR.map(item => {
+                  return (
+                    <Picker.Item
+                      key={`${item.value}`}
+                      label={`${item.label}`}
+                      value={`${item.value}`}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'flex-start',
+              }}>
+              <Picker
+                style={{ width: 100 }}
+                selectedValue={selectedMin}
+                onValueChange={_onMinutesChange}>
+                {TIME_MINITES.map(item => {
                   return (
                     <Picker.Item
                       key={`${item.value}`}

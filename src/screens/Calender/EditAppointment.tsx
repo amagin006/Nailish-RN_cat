@@ -21,6 +21,7 @@ import { useAppDispatch } from '~/redux/hooks';
 // component
 import { RoundButton } from '~/components/molecules/button/button';
 import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
+import { EditDateOrganism } from '~/components/organisms/EditAppointment/EditDateOrganism';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -86,8 +87,11 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           )}
         </TouchableOpacity>
 
-        <View style={styles.editTimeBox}>
-          <EditTimeOrganism onConfirm={_onConfirmPicker} id={'START_TIME'} />
+        <View style={styles.editDateBox}>
+          <View>
+            <EditDateOrganism onConfirm={_onConfirmPicker} containerStyle={styles.editDateText} />
+            <EditTimeOrganism onConfirm={_onConfirmPicker} />
+          </View>
         </View>
 
         <ReportMenuList menuList={FAKE_MENU} />
@@ -134,8 +138,15 @@ const styles = StyleSheet.create({
   selectClientText: {
     fontSize: 18,
   },
+  editDateBox: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
   editTimeBox: {
-    marginVertical: 40,
+    marginBottom: 40,
+  },
+  editDateText: {
+    marginBottom: 20,
   },
   columnWrapper: {
     flexDirection: 'row',

@@ -14,12 +14,8 @@ import {
 } from '~/route/types';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
-function dateFormatte(date) {
-  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
-}
+// util
+import { dateFormatte, getWeeksInMonth } from '~/util/timeUtil';
 
 var nextDay = [
   '2020-03-01',
@@ -47,15 +43,6 @@ function makeMarked(appointDates) {
     {},
   );
   return markedApp;
-}
-
-function getWeeksInMonth(year, month_number) {
-  var firstOfMonth = new Date(year, month_number - 1, 1);
-  var lastOfMonth = new Date(year, month_number, 0);
-
-  var used = firstOfMonth.getDay() + lastOfMonth.getDate();
-
-  return Math.ceil(used / 7);
 }
 
 type CustomerListNavProps = CompositeNavigationProp<

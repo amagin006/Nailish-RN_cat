@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { TextAtom } from '~/components/atoms';
 import { BaseTimePicker } from '~/components/molecules/datePicker/BaseTimePicker';
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -7,8 +7,8 @@ import { generalTextStyles } from '~/styles/TextStyle';
 import { Entypo } from '@expo/vector-icons';
 
 interface EditTimeOrganismProps {
+  containerStyle?: ViewStyle | ViewStyle[];
   onConfirm: (timeValues: ITimeValue) => void;
-  id?: string;
 }
 
 export interface ITimeValue {
@@ -16,8 +16,10 @@ export interface ITimeValue {
   endTime?: string;
 }
 
-const START_TIME = 'START_TIME';
-const END_TIME = 'END_TIME';
+export enum TimeType {
+  START_TIME = 'START_TIME',
+  END_TIME = 'END_TIME',
+}
 
 export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
   const [startTime, setStartTime] = useState<string | undefined>();
@@ -29,10 +31,10 @@ export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
       startTime: startTime,
       endTime: endTime,
     };
-    if (id === START_TIME) {
+    if (id === TimeType.START_TIME) {
       timeValues.startTime = time;
       setStartTime(time);
-    } else if (id === END_TIME) {
+    } else if (id === TimeType.END_TIME) {
       timeValues.endTime = time;
       setEndTime(time);
     }
@@ -40,12 +42,12 @@ export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
   };
 
   return (
-    <View style={styels.container}>
+    <View style={[styels.container, props.containerStyle]}>
       <View style={styels.timeBox}>
         <TextAtom style={styels.labelText}>StartTime</TextAtom>
         <BaseTimePicker
           onConfirm={_onConfirm}
-          id={START_TIME}
+          id={TimeType.START_TIME}
           timeTextStyle={styels.timeTextStyel}
         />
       </View>
@@ -54,7 +56,11 @@ export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
       </View>
       <View>
         <TextAtom style={styels.labelText}>EndTime</TextAtom>
-        <BaseTimePicker onConfirm={_onConfirm} id={END_TIME} timeTextStyle={styels.timeTextStyel} />
+        <BaseTimePicker
+          onConfirm={_onConfirm}
+          id={TimeType.END_TIME}
+          timeTextStyle={styels.timeTextStyel}
+        />
       </View>
     </View>
   );
@@ -63,8 +69,6 @@ export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
 const styels = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   arrow: {
     paddingTop: 10,

@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Modal, ModalProps, StyleSheet, ViewStyle } from 'react-native';
+import {
+  View,
+  Modal,
+  ModalProps,
+  StyleSheet,
+  ViewStyle,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
 interface ModalAtomProps extends Partial<ModalProps> {
@@ -17,24 +24,31 @@ export const ModalAtom: React.FC<ModalAtomProps> = props => {
       transparent={true}
       visible={props.visible}
       onRequestClose={props.onRequestClose}>
-      <View style={[styles.modalBack, props.modalBackStyle]}>
-        <View style={[styles.modalInner, props.modalInnerStyle]}>{props.children}</View>
-      </View>
+      <TouchableWithoutFeedback onPress={props.onRequestClose}>
+        <View style={styles.modalBack}>
+          <TouchableWithoutFeedback onPress={() => null}>
+            <View style={[styles.modalInner, props.modalInnerStyle]}>{props.children}</View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   modalBack: {
-    height: '100%',
+    flex: 1,
     backgroundColor: AppGeneralColor.Modal.BaseBackground,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalOuter: {
+    flex: 1,
   },
   modalInner: {
     backgroundColor: AppGeneralColor.Modal.BaseInner,
     width: '90%',
-    height: '60%',
+    minHeight: '60%',
     paddingHorizontal: '5%',
     borderRadius: 20,
   },
