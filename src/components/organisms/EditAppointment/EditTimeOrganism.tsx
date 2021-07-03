@@ -71,7 +71,7 @@ const styels = StyleSheet.create({
     flexDirection: 'row',
   },
   arrow: {
-    paddingTop: 10,
+    paddingTop: 15,
     marginHorizontal: 20,
   },
   labelText: {

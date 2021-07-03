@@ -1,4 +1,9 @@
-export function dateFormatte(date) {
+/**
+ * Formate to string from Date Object
+ * @param date - Date formart - e.g) new Date()
+ * @returns {string} - 2021-08-01
+ */
+export function dateFormate(date) {
   return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
     .getDate()
     .toString()

@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 
 import { ModalAtom, TextAtom } from '~/components/atoms';
-import { BaseTimePicker } from '~/components/molecules/datePicker/BaseTimePicker';
-import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
-import { Entypo } from '@expo/vector-icons';
-import { BaseDatePicker } from '~/components/molecules/datePicker/BaseDatePicker';
 
 // util
-import { dateFormatte, getWeeksInMonth } from '~/util/timeUtil';
+import { dateFormate, getWeeksInMonth } from '~/util/timeUtil';
 
 interface EditDateOrganismProps {
   containerStyle?: ViewStyle | ViewStyle[];
@@ -23,25 +19,25 @@ export interface IDateValue {
   date: string;
 }
 
+export interface ICalenderDateValue {
+  day: number,      // day of month (1-31)
+  month: number,    // month of year (1-12)
+  year: number,     // year
+  timestamp: string,  // UTC timestamp representing 00:00 AM of this date
+  dateString: string // date formatted as 'YYYY-MM-DD' string
+}
+
 export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
-  const today = dateFormatte(new Date());
+  const today = dateFormate(new Date());
   const [selectedDay, setSelectedDay] = useState<string>(today);
-  const [weeks, setWeeks] = useState<number>(0);
-  const [date, setDate] = useState<string | undefined>('2021-10-01');
+  const [markedDates, setMarkedDates] = useState({})
   const [isOpen, setIsOpen] = useState<boolean>(false); // TODO: Move to props
 
-  const _selectedDate = day => {
-    console.log('selectedDate', day);
-    setSelectedDay(day.dateString);
-  };
-
-  const _swipeMonth = months => {
-    const numberOfWeeks = getWeeksInMonth(
-      months[months.length - 1].year,
-      months[months.length - 1].month,
-    );
-    setWeeks(numberOfWeeks);
-  };
+  useEffect(() => {
+    const markDate = {}
+    markDate[today] = {selected: true}
+    setMarkedDates(markDate)
+  }, [])
 
   const _onPress = () => {
     setIsOpen(true);
@@ -51,48 +47,55 @@ export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
     setIsOpen(false);
   };
 
-  // TODO: Check if endtime is valid time or not.. not supposed to be before start time
-  const _onConfirm = (dateValues: IDateValue) => {
+  const _selectedDate = (day: ICalenderDateValue) => {
+    setSelectedDay(day.dateString);
+    const dateValues = {
+      year: day.year.toString(),
+      month: day.month.toString().padStart(2, '0'),
+      date: day.day.toString().padStart(2, '0')
+    }
+    setIsOpen(false)
     props.onConfirm(dateValues);
   };
 
   return (
-    <View style={[styels.container, props.containerStyle]}>
-      <View style={styels.dateWrapper}>
-        <TextAtom style={styels.labelText}>Date</TextAtom>
+    <View style={[styles.container, props.containerStyle]}>
+      <View style={styles.dateWrapper}>
+        <TextAtom style={styles.labelText}>Date</TextAtom>
         <TouchableOpacity onPress={_onPress}>
-          <TextAtom style={styels.dateText}>{date}</TextAtom>
+          <TextAtom style={styles.dateText}>{selectedDay}</TextAtom>
         </TouchableOpacity>
       </View>
       {isOpen && (
-        <ModalAtom visible={isOpen} onRequestClose={_onClose} style={styels.modalContainer}>
+        <ModalAtom visible={isOpen} onRequestClose={_onClose}  modalInnerStyle={styles.modalInnerStyle}>
           <CalendarList
             onDayPress={_selectedDate}
             horizontal
             markingType={'multi-dot'}
             pagingEnabled
             hideExtraDays={false}
-            // markedDates={markedDates}
-            onVisibleMonthsChange={_swipeMonth}
-            calendarWidth={300}
-            style={styels.calenderStyle}
-            // theme={{
-            //   'stylesheet.calendar.header': {
-            //     week: {
-            //       marginTop: 0,
-            //       flexDirection: 'row',
-            //       justifyContent: 'space-around',
-            //     },
-            //     header: {
-            //       flexDirection: 'row',
-            //       justifyContent: 'space-between',
-            //       paddingLeft: 10,
-            //       paddingRight: 10,
-            //       marginTop: 0,
-            //       alignItems: 'center',
-            //     },
-            //   },
-            // }}
+            markedDates={markedDates}
+            hideArrows={false}
+            calendarWidth={350}
+            style={styles.calenderStyle}
+            theme={{
+              selectedDayBackgroundColor: '#00adf5',
+              'stylesheet.calendar.header': {
+                week: {
+                  marginTop: 0,
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                },
+                header: {
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  marginTop: 0,
+                  alignItems: 'center',
+                },
+              },
+            }}
           />
         </ModalAtom>
       )}
@@ -100,14 +103,12 @@ export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
   );
 };
 
-const styels = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {},
   dateWrapper: {},
-  modalContainer: {
-    width: 300,
-  },
   calenderStyle: {
     marginTop: 20,
+    width: 350,
   },
   labelText: {
     ...generalTextStyles.mediumThinText,
@@ -115,4 +116,10 @@ const styels = StyleSheet.create({
   dateText: {
     ...generalTextStyles.boldBigText,
   },
+  modalInnerStyle :{
+    alignItems: 'center',
+    minHeight: 200,
+    height: 400,
+    paddingBottom: 10,
+  }
 });

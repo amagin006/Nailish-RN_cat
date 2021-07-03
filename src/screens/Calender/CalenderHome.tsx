@@ -15,7 +15,7 @@ import {
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
 // util
-import { dateFormatte, getWeeksInMonth } from '~/util/timeUtil';
+import { dateFormate, getWeeksInMonth } from '~/util/timeUtil';
 
 var nextDay = [
   '2020-03-01',
@@ -58,7 +58,7 @@ interface CalenderHomeProps {
 }
 
 const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
-  const today = dateFormatte(new Date());
+  const today = dateFormate(new Date());
   const [selectedDay, setSelectedDay] = useState<string>(today);
   const [markedDates, setMarkedDates] = useState({});
   const [weeks, setWeeks] = useState<number>();
@@ -122,9 +122,6 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
     );
   };
 
-  // console.log('appointmentDot', appointmentDot);
-  console.log('markedDates', markedDates);
-  // const height = weeks === 5 ? { height: 300 } : { height: 340 };
   return (
     <View style={{ flex: 1 }}>
       <CalendarList

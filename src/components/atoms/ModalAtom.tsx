@@ -13,6 +13,7 @@ interface ModalAtomProps extends Partial<ModalProps> {
   visible: boolean;
   onRequestClose: () => void;
 
+  containerStyle?: ViewStyle | ViewStyle[];
   modalBackStyle?: ViewStyle | ViewStyle[];
   modalInnerStyle?: ViewStyle | ViewStyle[];
 }
@@ -23,9 +24,10 @@ export const ModalAtom: React.FC<ModalAtomProps> = props => {
       animationType={props.animationType || 'fade'}
       transparent={true}
       visible={props.visible}
+      style={props.containerStyle}
       onRequestClose={props.onRequestClose}>
       <TouchableWithoutFeedback onPress={props.onRequestClose}>
-        <View style={styles.modalBack}>
+        <View style={[styles.modalBack, props.modalBackStyle]}>
           <TouchableWithoutFeedback onPress={() => null}>
             <View style={[styles.modalInner, props.modalInnerStyle]}>{props.children}</View>
           </TouchableWithoutFeedback>
