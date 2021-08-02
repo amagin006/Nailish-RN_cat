@@ -6,9 +6,9 @@ import { ModalAtom, TextAtom } from '~/components/atoms';
 import { generalTextStyles } from '~/styles/TextStyle';
 
 // util
-import { dateFormate, getWeeksInMonth } from '~/util/timeUtil';
+import { dateFormate } from '~/util/timeUtil';
 
-interface EditDateOrganismProps {
+interface EditDateMoleculesProps {
   containerStyle?: ViewStyle | ViewStyle[];
   onConfirm: (DateValues: IDateValue) => void;
 }
@@ -20,24 +20,24 @@ export interface IDateValue {
 }
 
 export interface ICalenderDateValue {
-  day: number,      // day of month (1-31)
-  month: number,    // month of year (1-12)
-  year: number,     // year
-  timestamp: string,  // UTC timestamp representing 00:00 AM of this date
-  dateString: string // date formatted as 'YYYY-MM-DD' string
+  day: number; // day of month (1-31)
+  month: number; // month of year (1-12)
+  year: number; // year
+  timestamp: string; // UTC timestamp representing 00:00 AM of this date
+  dateString: string; // date formatted as 'YYYY-MM-DD' string
 }
 
-export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
+export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
   const today = dateFormate(new Date());
   const [selectedDay, setSelectedDay] = useState<string>(today);
-  const [markedDates, setMarkedDates] = useState({})
+  const [markedDates, setMarkedDates] = useState({});
   const [isOpen, setIsOpen] = useState<boolean>(false); // TODO: Move to props
 
   useEffect(() => {
-    const markDate = {}
-    markDate[today] = {selected: true}
-    setMarkedDates(markDate)
-  }, [])
+    const markDate = {};
+    markDate[today] = { selected: true };
+    setMarkedDates(markDate);
+  }, []);
 
   const _onPress = () => {
     setIsOpen(true);
@@ -52,9 +52,9 @@ export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
     const dateValues = {
       year: day.year.toString(),
       month: day.month.toString().padStart(2, '0'),
-      date: day.day.toString().padStart(2, '0')
-    }
-    setIsOpen(false)
+      date: day.day.toString().padStart(2, '0'),
+    };
+    setIsOpen(false);
     props.onConfirm(dateValues);
   };
 
@@ -67,7 +67,10 @@ export const EditDateOrganism: React.FC<EditDateOrganismProps> = props => {
         </TouchableOpacity>
       </View>
       {isOpen && (
-        <ModalAtom visible={isOpen} onRequestClose={_onClose}  modalInnerStyle={styles.modalInnerStyle}>
+        <ModalAtom
+          visible={isOpen}
+          onRequestClose={_onClose}
+          modalInnerStyle={styles.modalInnerStyle}>
           <CalendarList
             onDayPress={_selectedDate}
             horizontal
@@ -116,10 +119,10 @@ const styles = StyleSheet.create({
   dateText: {
     ...generalTextStyles.boldBigText,
   },
-  modalInnerStyle :{
+  modalInnerStyle: {
     alignItems: 'center',
     minHeight: 200,
     height: 400,
     paddingBottom: 10,
-  }
+  },
 });

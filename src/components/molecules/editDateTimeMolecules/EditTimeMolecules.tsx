@@ -6,7 +6,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { Entypo } from '@expo/vector-icons';
 
-interface EditTimeOrganismProps {
+interface EditTimeMoleculesProps {
   containerStyle?: ViewStyle | ViewStyle[];
   onConfirm: (timeValues: ITimeValue) => void;
 }
@@ -21,7 +21,7 @@ export enum TimeType {
   END_TIME = 'END_TIME',
 }
 
-export const EditTimeOrganism: React.FC<EditTimeOrganismProps> = props => {
+export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
   const [startTime, setStartTime] = useState<string | undefined>();
   const [endTime, setEndTime] = useState<string | undefined>();
 

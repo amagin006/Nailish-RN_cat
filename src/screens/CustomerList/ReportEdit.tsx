@@ -20,13 +20,17 @@ import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
 
-import { RoundButton } from '~/components/molecules/button/button';
-import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
+import { RoundButton } from '~/components/atoms/button/button';
+import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
-import { ListAddFloatButton } from '~/components/molecules/button/ListAddFloatButton';
+import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
 import { AppGeneralColor } from '~/styles/ColorStyle';
-import { TextAtom } from '~/components/atoms';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
+import { EditDateTimeOrganisms } from '~/components/organisms/editDateTimeOrganisms/EditDateTimeOrganisms';
+import { IDateValue } from '~/components/molecules/editDateTimeMolecules/EditDateMolecules';
+import { ITimeValue } from '~/components/molecules/editDateTimeMolecules/EditTimeMolecules';
+import { PaymentCoulmnMolecules } from '~/components/molecules/columnMolecules/PaymentCoulmnMolecules';
+import { IPickerItem } from '~/components/atoms/PickerModalAtom';
 
 interface ReportEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;
@@ -70,6 +74,21 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
 
   const _onChageMemo = text => {
     setMemo(text);
+  };
+
+  const _onConfirmDate = (dateValues: IDateValue) => {
+    console.log('dateValues', dateValues);
+  };
+
+  const _onConfirmTime = (timeValues: ITimeValue) => {
+    console.log('timeValues', timeValues);
+  };
+
+  const _onConfirmPayment = (id: number) => {
+    console.log(
+      '_onConfirmPayment',
+      PAYMENT.filter(p => p.id === id),
+    );
   };
 
   const _getPermissionCameraRoll = async () => {
@@ -128,18 +147,12 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
           })}
         </View>
         <View style={GeneralViewStyle.bodyWrapper}>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>Visit Date</TextLeftAtom>
-            <TextInput style={styles.textInput} />
-          </View>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>Start Time</TextLeftAtom>
-            <TextInput style={styles.textInput} />
-          </View>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>End Time</TextLeftAtom>
-            <TextInput style={styles.textInput} />
-          </View>
+          <EditDateTimeOrganisms
+            container={styles.editDateTimeContainer}
+            onConfirmTime={_onConfirmTime}
+            onConfirmDate={_onConfirmDate}
+          />
+
           <ReportMenuList menuList={FAKE_MENU} />
           <RoundButton
             onPress={_onPressSelectMenu}
@@ -159,16 +172,13 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
               />
             </View>
           </View>
-          <View style={styles.columnWrapper}>
-            <TextLeftAtom>Payment</TextLeftAtom>
-            {/* <RNPickerSelect
-              onValueChange={_onChangePayment}
-              placeholder={{ label: 'Select Payment', value: null }}
-              items={PAYMENT}
-              style={pickerStyle}
-              value={payment}
-            /> */}
-          </View>
+
+          <PaymentCoulmnMolecules
+            options={PAYMENT}
+            onConfirm={_onConfirmPayment}
+            container={styles.paymentPickerContainer}
+          />
+
           <View style={styles.memo}>
             <TextLeftAtom>Memo</TextLeftAtom>
             <TextInput
@@ -203,9 +213,9 @@ const DEFAULTPHOTOS = [
   },
 ];
 
-const PAYMENT = [
-  { label: 'Credit Card', value: 'creditCard' },
-  { label: 'Cash', value: 'cash' },
+const PAYMENT: IPickerItem[] = [
+  { id: 1, label: 'Credit Card', value: 'creditCard' },
+  { id: 2, label: 'Cash', value: 'cash' },
 ];
 
 const width = Dimensions.get('screen').width;
@@ -220,7 +230,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: '5%',
-    marginBottom: 30,
   },
   subImageBox: {
     borderRadius: 10,
@@ -237,6 +246,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
+    marginVertical: 12,
+  },
+  editDateTimeContainer: {
+    marginVertical: 30,
+  },
+  paymentPickerContainer: {
     marginVertical: 12,
   },
   textInput: {
@@ -294,23 +309,6 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
-const pickerStyle = {
-  inputIOS: {
-    width: 110,
-    textAlign: 'right',
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#9c9c9c',
-  },
-  inputAndroid: {
-    width: 110,
-    textAlign: 'right',
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#9c9c9c',
-  },
-};
 
 export default ReportEdit;
 

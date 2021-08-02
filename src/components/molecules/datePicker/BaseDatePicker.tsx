@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Modal, TouchableWithoutFeedback, TextStyle } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import dayjs from 'dayjs';
 
 import { TextAtom } from '~/components/atoms/TextAtom';
 import { TouchableOpacity } from 'react-native-gesture-handler';

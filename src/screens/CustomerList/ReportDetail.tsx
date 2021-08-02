@@ -17,16 +17,16 @@ import { RouteProp } from '@react-navigation/native';
 import { MainStackNavParamList } from '~/route/types';
 
 // components
-import PagenationDot from '~/components/molecules/pagenation/pagenationDot';
-import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
-import PriceDetail from '~/components/organisms/reportDetail/PriceDetail';
-import { RoundButton } from '~/components/molecules/button/button';
+import PagenationDot from '~/components/atoms/pagenation/pagenationDot';
+import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
+import PriceDetail from '~/components/molecules/reportDetail/PriceDetail';
+import { RoundButton } from '~/components/atoms/button/button';
 
 // style
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { useAppSelector } from '~/redux/hooks';
-import { BioIcon } from '~/components/molecules/photoIcon/BioIcon';
+import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 
 interface ReportDetailProps {

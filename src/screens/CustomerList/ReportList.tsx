@@ -16,8 +16,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
 
 import { GeneralNavStyles } from '~/styles/ViewStyle';
-import SnsButtons from '~/components/molecules/button/snsButtons';
-import { BioIcon } from '~/components/molecules/photoIcon/BioIcon';
+import SnsButtons from '~/components/atoms/button/snsButtons';
+import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 

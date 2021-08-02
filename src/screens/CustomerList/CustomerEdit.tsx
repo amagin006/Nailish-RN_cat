@@ -14,8 +14,8 @@ import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 import { addCustomerToList, deleteCustomer } from '~/redux/customer/actions';
 
 // components
-import { RoundButton } from '~/components/molecules/button/button';
-import { LoadingIndicator } from '~/components/organisms/loadingIndicator/LoadingIndicator';
+import { RoundButton } from '~/components/atoms/button/button';
+import { LoadingIndicator } from '~/components/atoms';
 
 // util, style
 import { db } from '~/config/Firebase';

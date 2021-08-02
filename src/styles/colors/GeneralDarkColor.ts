@@ -4,7 +4,7 @@ export const GeneralDarkColor = {
     Secondary: '',
     White: '#ffffff',
     Black: '#000000',
-    SecondaryBlack: '#1D1D1D',
+    SecondaryBlack: '#363636',
 
     BaseGreen: '#96CEB4',
     BasePink: '#ff9999',

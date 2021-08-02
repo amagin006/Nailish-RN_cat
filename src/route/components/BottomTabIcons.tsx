@@ -83,7 +83,6 @@ const tabIconCreate = (route, tintColor) => {
           name="calendar-clock"
           style={{ marginTop: 8, color: tintColor }}
           size={24}
-          color="gray"
         />
       );
     case 'Setting':
@@ -92,7 +91,6 @@ const tabIconCreate = (route, tintColor) => {
           name="ios-settings-outline"
           style={{ marginTop: 6, color: tintColor }}
           size={24}
-          color="gray"
         />
       );
   }

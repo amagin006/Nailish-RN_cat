@@ -19,19 +19,23 @@ import { selectedCustomer } from '~/redux/customer/actions';
 import { useAppDispatch } from '~/redux/hooks';
 
 // component
-import { RoundButton } from '~/components/molecules/button/button';
-import ReportMenuList from '~/components/organisms/reportDetail/ReportMenuList';
-import { EditDateOrganism, IDateValue } from '~/components/organisms/EditAppointment/EditDateOrganism';
+import { RoundButton } from '~/components/atoms/button/button';
+import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
 import {
-  EditTimeOrganism,
+  EditDateMolecules,
+  IDateValue,
+} from '~/components/molecules/editDateTimeMolecules/EditDateMolecules';
+import {
+  EditTimeMolecules,
   ITimeValue,
-} from '~/components/organisms/EditAppointment/EditTimeOrganism';
+} from '~/components/molecules/editDateTimeMolecules/EditTimeMolecules';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import CustomerModel from '~/modules/customer/services/cusomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
+import { EditDateTimeOrganisms } from '~/components/organisms/editDateTimeOrganisms/EditDateTimeOrganisms';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -66,13 +70,13 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     console.log('_onPressDelete');
   };
 
-  const _onConfirmPicker = (timeValue: ITimeValue) => {
+  const _onConfirmTimePicker = (timeValue: ITimeValue) => {
     console.log('timeValue', timeValue);
   };
 
   const _onConfirmDatePicker = (dateValues: IDateValue) => {
     console.log('dateValues', dateValues);
-  }
+  };
 
   return (
     <ScrollView>
@@ -91,12 +95,11 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           )}
         </TouchableOpacity>
 
-        <View style={styles.editDateBox}>
-          <View>
-            <EditDateOrganism onConfirm={_onConfirmDatePicker} containerStyle={styles.editDateText} />
-            <EditTimeOrganism onConfirm={_onConfirmPicker} />
-          </View>
-        </View>
+        <EditDateTimeOrganisms
+          container={styles.editDateTimeContiner}
+          onConfirmDate={_onConfirmDatePicker}
+          onConfirmTime={_onConfirmTimePicker}
+        />
 
         <ReportMenuList menuList={FAKE_MENU} />
         <RoundButton onPress={_onPressSelectMenu} text={'Select Menu'} />
@@ -142,15 +145,8 @@ const styles = StyleSheet.create({
   selectClientText: {
     fontSize: 18,
   },
-  editDateBox: {
-    alignItems: 'center',
+  editDateTimeContiner: {
     marginVertical: 30,
-  },
-  editTimeBox: {
-    marginBottom: 40,
-  },
-  editDateText: {
-    marginBottom: 20,
   },
   columnWrapper: {
     flexDirection: 'row',
