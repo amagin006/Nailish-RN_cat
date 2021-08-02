@@ -19,7 +19,7 @@ import { GeneralNavStyles } from '~/styles/ViewStyle';
 import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;

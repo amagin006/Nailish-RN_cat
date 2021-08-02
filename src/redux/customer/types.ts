@@ -1,5 +1,5 @@
-import CustomerModel from '~/modules/customer/services/cusomerModels';
-import { ICustomerListItem } from '~/modules/customerList/CustomerListInterfaces';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { ICustomerListItem } from '~/modules/CustomerList/CustomerListInterfaces';
 
 export const SELECTED_CUSTOMER = 'SELECTED_CUSTOMER';
 export const SAVE_CUSTOMERLIST = 'SAVE_CUSTOMERLIST';

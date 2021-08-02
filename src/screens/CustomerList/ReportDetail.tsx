@@ -27,7 +27,7 @@ import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { useAppSelector } from '~/redux/hooks';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
 
 interface ReportDetailProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportDetail'>;

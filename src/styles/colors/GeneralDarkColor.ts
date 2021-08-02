@@ -10,6 +10,7 @@ export const GeneralDarkColor = {
     BasePink: '#ff9999',
     SecondalyPink: '#D9534F',
     BaseBlue: '#2482bd',
+    BaseGray: '#9c9c9c',
 
     BorderGray: '#D9D9D9',
 
@@ -40,5 +41,13 @@ export const GeneralDarkColor = {
 
   Calender: {
     listSeparator: '#e6e6e6',
+  },
+  SelectMenuList: {
+    listSeparator: '#e6e6e6',
+    titleBtnBorder: '#9c9c9c',
+  },
+
+  checkMarkAtom: {
+    lineBorder: '#404040',
   },
 };

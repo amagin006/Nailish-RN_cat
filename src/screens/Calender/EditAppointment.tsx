@@ -33,7 +33,7 @@ import {
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/editDateTimeOrganisms/EditDateTimeOrganisms';
 

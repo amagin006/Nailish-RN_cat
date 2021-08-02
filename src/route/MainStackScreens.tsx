@@ -12,6 +12,7 @@ import ReportEdit from '~/screens/CustomerList/ReportEdit';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import ReportDetail from '~/screens/CustomerList/ReportDetail';
 import EditAppointment from '~/screens/Calender/EditAppointment';
+import { SelectMenuList } from '~/screens/MenuList/SelectMenuList';
 
 const MainStackNav = createStackNavigator<MainStackNavParamList>();
 export const MainStackScreens = () => {
@@ -74,6 +75,16 @@ export const MainStackScreens = () => {
       />
 
       {/* --------- Calender ---------- */}
+
+      {/* --------- SelectMenuList ---------- */}
+      <MainStackNav.Screen
+        name="SelectMenuList"
+        component={SelectMenuList}
+        options={{
+          title: 'Select Menu',
+        }}
+      />
+      {/* --------- SelectMenuList ---------- */}
     </MainStackNav.Navigator>
   );
 };

@@ -3,9 +3,9 @@ import {
   ICustomerListItem,
   CustomerListPresenterInterface,
   CustomerListRepositoryInterface,
-} from '~/modules/customerList/CustomerListInterfaces';
+} from '~/modules/CustomerList/CustomerListInterfaces';
 
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
 
 export default class CustomerListPresenter
   extends BasePresenter

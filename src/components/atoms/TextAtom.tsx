@@ -35,7 +35,12 @@ export const TextLeftAtom: React.FC<TextAtomProps> = props => {
 
   return (
     <View style={[GeneralViewStyle.leftColumn, props.containerStyle]}>
-      <Text style={[GeneralViewStyle.leftColumnText, props.style]}>{props.children}</Text>
+      <Text
+        numberOfLines={props.numberOfLines}
+        ellipsizeMode={props.ellipsizeMode}
+        style={[GeneralViewStyle.leftColumnText, props.style]}>
+        {props.children}
+      </Text>
     </View>
   );
 };

@@ -1,5 +1,4 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
 
 export type RootStackParamList = {
   MainNav: NavigatorScreenParams<MainStackNavParamList>;
@@ -24,6 +23,7 @@ export type MainStackNavParamList = {
   ReportEdit: undefined;
 
   EditAppointment: { item: any } | undefined;
+  SelectMenuList: undefined;
 };
 
 export type CustomerListStackNavParamsList = {

@@ -14,7 +14,7 @@ export const GeneralNavStyles = StyleSheet.create({
 
 export const GeneralViewStyle = StyleSheet.create({
   bodyWrapper: {
-    marginHorizontal: '8%',
+    marginHorizontal: '5%',
   },
   menuWrapper: {
     flexDirection: 'row',

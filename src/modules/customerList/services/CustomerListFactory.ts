@@ -1,10 +1,10 @@
 import {
   CustomerListPresenterInterface,
   CustomerListRepositoryInterface,
-} from '~/modules/customerList/CustomerListInterfaces';
+} from '~/modules/CustomerList/CustomerListInterfaces';
 
-import CustomerListPresenter from '~/modules/customerList/services/CustomerListPresenter';
-import CustomerListRepository from '~/modules/customerList/repository/CustomerListRepository';
+import CustomerListPresenter from '~/modules/CustomerList/services/CustomerListPresenter';
+import CustomerListRepository from '~/modules/CustomerList/repository/CustomerListRepository';
 
 export default class CustomerListFactory {
   public static custmerListPresenter: CustomerListPresenterInterface;

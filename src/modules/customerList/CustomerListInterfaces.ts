@@ -1,4 +1,4 @@
-import CustomerModel, { ICustomer } from '~/modules/customer/services/cusomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
 import { UserInterface } from '~/redux/user/types';
 import firebase from 'firebase';
 

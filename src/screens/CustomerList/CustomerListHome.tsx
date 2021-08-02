@@ -28,8 +28,8 @@ import { saveCustomerList, selectedCustomer } from '~/redux/customer/actions';
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
 
 // util
-import CustomerModel from '~/modules/customer/services/cusomerModels';
-import CustomerListFactory from '~/modules/customerList/services/CustomerListFactory';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 

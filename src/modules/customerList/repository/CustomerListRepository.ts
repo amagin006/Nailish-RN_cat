@@ -1,9 +1,9 @@
 import BaseRepository from '~/modules/bases/models/BaseRepository';
-import { CustomerListRepositoryInterface } from '~/modules/customerList/CustomerListInterfaces';
+import { CustomerListRepositoryInterface } from '~/modules/CustomerList/CustomerListInterfaces';
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
-import CustomerModel from '~/modules/customer/services/cusomerModels';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
 
 export default class CustomerListRepository
   extends BaseRepository

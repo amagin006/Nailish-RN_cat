@@ -61,7 +61,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
   }, []);
 
   const _onPressSelectMenu = () => {
-    console.log('onPressSelectMenu');
+    navigation.navigate('SelectMenuList');
   };
 
   const _onChangeTips = text => {
