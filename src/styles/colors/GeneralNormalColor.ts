@@ -38,6 +38,14 @@ export const GeneralNormalColor = {
     BaseBackground: 'rgba(0, 0, 0, 0.4)',
     BaseInner: '#ffffff',
   },
+  Button: {
+    Primary: '#96CEB4',
+    Secondary: '#D9534F',
+    Confirm: '#66afd9',
+    Error: '#f52020',
+    Warning: '$f5e431',
+    Disabled: '#9c9c9c',
+  },
 
   Calender: {
     listSeparator: '#e6e6e6',

@@ -41,22 +41,22 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
   const [reportPhotos, setReportPhotos] = useState(DEFAULTPHOTOS);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [tips, setTips] = useState();
-  const [payment, setPayment] = useState();
+  const [payment, setPayment] = useState<IPickerItem | undefined>(undefined);
   const [memo, setMemo] = useState();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       // TODO: change title new report or edit report
       title: 'Edit Report',
-      headerRight: () => {
-        return (
-          <TouchableOpacity
-            style={GeneralNavStyles.headerRight}
-            onPress={() => console.log('onPress Saved')}>
-            <Text style={GeneralNavStyles.headerRightText}>Save</Text>
-          </TouchableOpacity>
-        );
-      },
+      // headerRight: () => {
+      //   return (
+      //     <TouchableOpacity
+      //       style={GeneralNavStyles.headerRight}
+      //       onPress={() => console.log('onPress Saved')}>
+      //       <Text style={GeneralNavStyles.headerRightText}>Save</Text>
+      //     </TouchableOpacity>
+      //   );
+      // },
     });
   }, []);
 
@@ -68,9 +68,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
     setTips(text);
   };
 
-  const _onChangePayment = item => {
-    setPayment(item);
-  };
+  const _onChangePayment = item => {};
 
   const _onChageMemo = text => {
     setMemo(text);
@@ -85,10 +83,13 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
   };
 
   const _onConfirmPayment = (id: number) => {
-    console.log(
-      '_onConfirmPayment',
-      PAYMENT.filter(p => p.id === id),
-    );
+    const payItem = PAYMENT.find(p => p.id === id);
+    console.log('_onConfirmPayment', payItem);
+    setPayment(payItem);
+  };
+
+  const _onPressSaveButton = () => {
+    console.log('save Report');
   };
 
   const _getPermissionCameraRoll = async () => {
@@ -188,6 +189,11 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
               value={memo}
             />
           </View>
+          <RoundButton
+            onPress={_onPressSaveButton}
+            text={'Save Report'}
+            style={styles.saveButton}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -307,6 +313,9 @@ const styles = StyleSheet.create({
   addIcon: {
     fontSize: 36,
     color: '#fff',
+  },
+  saveButton: {
+    backgroundColor: AppGeneralColor.Button.Confirm,
   },
 });
 
