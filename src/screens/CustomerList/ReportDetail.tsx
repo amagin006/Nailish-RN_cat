@@ -20,7 +20,7 @@ import { MainStackNavParamList } from '~/route/types';
 import PagenationDot from '~/components/atoms/pagenation/pagenationDot';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import PriceDetail from '~/components/organisms/ReportDetailOrganisms/PriceDetail';
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 
 // style
 import { GeneralViewStyle } from '~/styles/ViewStyle';
@@ -87,7 +87,12 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
         <View style={GeneralViewStyle.bodyWrapper}>
           <ReportMenuList menuList={appointItem.menu} />
           <PriceDetail menuList={appointItem.menu} />
-          <RoundButton onPress={_onDeletePress} text="delete" style={styles.button} />
+          <RoundButton
+            onPress={_onDeletePress}
+            text="Delete Report"
+            style={styles.button}
+            buttonColorType={IButtonColorType.Alert}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -127,7 +132,6 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
     marginBottom: 50,
-    backgroundColor: AppGeneralColor.Palette.Alert,
   },
 });
 

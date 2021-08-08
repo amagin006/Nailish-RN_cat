@@ -17,7 +17,7 @@ import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 
 interface SelectMenuListScreenProp {
   navigation: StackNavigationProp<MainStackNavParamList, 'SelectMenuListScreen'>;
@@ -95,8 +95,8 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
       <RoundButton
         containerStyle={styles.titleWrapper}
         text={'Save Select'}
+        buttonColorType={IButtonColorType.Confirm}
         textStyle={styles.titleText}
-        style={styles.selectBtnBackground}
         onPress={_onSelectMenu}
         iconLeft={<Entypo name="add-to-list" size={20} color={AppGeneralColor.Palette.White} />}
       />
@@ -116,9 +116,6 @@ const styles = StyleSheet.create({
   titleWrapper: {
     marginVertical: 18,
     marginHorizontal: 40,
-  },
-  selectBtnBackground: {
-    backgroundColor: AppGeneralColor.Button.Confirm,
   },
   itemWrapper: {
     borderColor: AppGeneralColor.SelectMenuList.listSeparator,

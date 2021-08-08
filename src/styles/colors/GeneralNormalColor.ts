@@ -42,8 +42,8 @@ export const GeneralNormalColor = {
     Primary: '#96CEB4',
     Secondary: '#D9534F',
     Confirm: '#66afd9',
-    Error: '#f52020',
-    Warning: '$f5e431',
+    Alert: '#f52020',
+    Warning: '#f5e431',
     Disabled: '#9c9c9c',
   },
 

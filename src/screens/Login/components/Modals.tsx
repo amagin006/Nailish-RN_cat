@@ -6,7 +6,7 @@ import { TextAtom, ModalAtom, ActivityIndicatorAtom } from '~/components/atoms';
 import { TextInputAtom } from '~/components/atoms/TextInputAtom';
 
 // components
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -44,7 +44,7 @@ export const ForgetModal: React.FC<ForgetModalProps> = props => {
           <TextAtom containerStyle={{ marginBottom: 60 }} style={styles.modalEmailSendText}>
             An email has been sent to the address you have provided.{'\n'}Please check your email
           </TextAtom>
-          <RoundButton onPress={props.onPressOk} style={styles.greenButton} text={'OK'} />
+          <RoundButton onPress={props.onPressOk} text={'OK'} />
         </View>
       ) : (
         <>
@@ -70,8 +70,16 @@ export const ForgetModal: React.FC<ForgetModalProps> = props => {
             </View>
           </View>
           <View style={styles.modalButtonBox}>
-            <RoundButton onPress={props.onPressSend} style={styles.greenButton} text={'Send'} />
-            <RoundButton onPress={props.onPressCancel} style={styles.pinkButton} text={'Cancel'} />
+            <RoundButton
+              buttonColorType={IButtonColorType.Confirm}
+              onPress={props.onPressSend}
+              text={'Send'}
+            />
+            <RoundButton
+              buttonColorType={IButtonColorType.Alert}
+              onPress={props.onPressCancel}
+              text={'Cancel'}
+            />
           </View>
         </>
       )}
@@ -101,7 +109,11 @@ export const FaliedConfirmModal: React.FC<FaliedConfirmModalProps> = props => {
         </TextAtom>
         <TextAtom style={styles.createFaliedText}>Please try again</TextAtom>
       </View>
-      <RoundButton onPress={props.onPressOk} style={styles.greenButton} text={'OK'} />
+      <RoundButton
+        buttonColorType={IButtonColorType.Primary}
+        onPress={props.onPressOk}
+        text={'OK'}
+      />
     </ModalAtom>
   );
 };
@@ -127,12 +139,6 @@ const styles = StyleSheet.create({
   },
   space: {
     marginBottom: Platform.OS === 'ios' ? 25 : 27,
-  },
-  greenButton: {
-    backgroundColor: AppGeneralColor.Palette.BaseGreen,
-  },
-  pinkButton: {
-    backgroundColor: AppGeneralColor.Palette.BasePink,
   },
   modalButtonBox: {
     marginBottom: 40,

@@ -6,14 +6,44 @@ interface BaseButtonProps {
   constinerStyle?: ViewStyle | ViewStyle[];
   style?: ViewStyle | ViewStyle[];
 
+  buttonColorType?: IButtonColorType;
   onPress: () => void;
   text?: string;
   textStyle?: TextStyle;
   disabled?: boolean;
 }
 
+export enum IButtonColorType {
+  Primary = 'Primary',
+  Secondary = 'Secondary',
+  Confirm = 'Confirm',
+  Alert = 'Alert',
+  Warning = 'Warning',
+  Disabled = 'Disabled',
+}
+
+const createButtonColor = (type: IButtonColorType | undefined) => {
+  switch (type) {
+    case IButtonColorType.Primary:
+      return styles.buttonPrimary;
+    case IButtonColorType.Secondary:
+      return styles.buttonSecondary;
+    case IButtonColorType.Confirm:
+      return styles.buttonConfirm;
+    case IButtonColorType.Alert:
+      return styles.buttonAlert;
+    case IButtonColorType.Warning:
+      return styles.buttonWarning;
+    case IButtonColorType.Disabled:
+      return styles.buttonDisabled;
+    default:
+      return styles.buttonPrimary;
+  }
+};
+
 export const BaseButton: React.FC<BaseButtonProps> = props => {
-  const color = props.disabled ? styles.buttonDisabled : styles.defaltColor;
+  const buttonColor = createButtonColor(props.buttonColorType);
+  const color = props.disabled ? styles.buttonDisabled : buttonColor || styles.defaltColor;
   return (
     <View style={props.constinerStyle}>
       <TouchableOpacity
@@ -30,6 +60,7 @@ interface RoundButtonProps {
   containerStyle?: ViewStyle | ViewStyle[];
   style?: ViewStyle | ViewStyle[];
 
+  buttonColorType?: IButtonColorType;
   onPress: () => void;
   text?: string;
   textStyle?: TextStyle;
@@ -38,7 +69,8 @@ interface RoundButtonProps {
 }
 
 export const RoundButton: React.FC<RoundButtonProps> = props => {
-  const color = props.disabled ? styles.buttonDisabled : props.style || styles.defaltColor;
+  const buttonColor = createButtonColor(props.buttonColorType);
+  const color = props.disabled ? styles.buttonDisabled : buttonColor || styles.defaltColor;
   return (
     <View style={props.containerStyle}>
       <TouchableOpacity
@@ -78,6 +110,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 18,
     marginHorizontal: 20,
+  },
+  buttonPrimary: {
+    backgroundColor: AppGeneralColor.Button.Primary,
+  },
+  buttonSecondary: {
+    backgroundColor: AppGeneralColor.Button.Secondary,
+  },
+  buttonConfirm: {
+    backgroundColor: AppGeneralColor.Button.Confirm,
+  },
+  buttonAlert: {
+    backgroundColor: AppGeneralColor.Button.Alert,
+  },
+  buttonWarning: {
+    backgroundColor: AppGeneralColor.Button.Warning,
   },
   buttonDisabled: {
     backgroundColor: AppGeneralColor.Button.Disabled,

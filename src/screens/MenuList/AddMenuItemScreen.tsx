@@ -15,7 +15,7 @@ import { GeneralViewStyle } from '~/styles/ViewStyle';
 // util
 import { IMENU_ITME_COLORS, MENU_ITME_COLORS } from '~/util/Consts/MenuItemColorConst';
 import { AppGeneralColor } from '~/styles/ColorStyle';
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 
 interface AddMenuItemScreenProps {}
 
@@ -85,9 +85,9 @@ const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = () => {
 
       <RoundButton
         containerStyle={styles.addBtnContainer}
+        buttonColorType={IButtonColorType.Confirm}
         text={'Add New Item'}
         onPress={_onPressAddNewItem}
-        style={styles.addBtnBackground}
       />
     </View>
   );
@@ -121,9 +121,6 @@ const styles = StyleSheet.create({
   },
   addBtnContainer: {
     marginTop: 60,
-  },
-  addBtnBackground: {
-    backgroundColor: AppGeneralColor.Button.Confirm,
   },
 });
 

@@ -19,7 +19,7 @@ import { selectedCustomer } from '~/redux/customer/actions';
 import { useAppDispatch } from '~/redux/hooks';
 
 // component
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import {
   EditDateMolecules,
@@ -29,13 +29,13 @@ import {
   EditTimeMolecules,
   ITimeValue,
 } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { TextLeftAtom } from '~/components/atoms/TextAtom';
+import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import { TextLeftAtom } from '~/components/atoms/TextAtom';
-import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -112,6 +112,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
             onPress={_onPressDelete}
             text={'Delete Appointment'}
             style={styles.deleteButton}
+            buttonColorType={IButtonColorType.Alert}
           />
         )}
       </View>
@@ -174,7 +175,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   deleteButton: {
-    backgroundColor: AppGeneralColor.Palette.Alert,
     marginBottom: 30,
   },
 });

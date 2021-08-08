@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 import { firebaseAuth } from '~/config/Firebase';
 
 // component
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import { userLoginWithPass, googleLogin, createUser, failedConfirm } from '~/redux/auth/actions';
 import { TextAtom, TextInputAtom, PasswordTextInput } from '~/components/atoms';
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -149,11 +149,7 @@ const Login: React.FC = () => {
               isPassword={true}
             />
             {isSignup ? (
-              <RoundButton
-                onPress={_onCreateUser}
-                style={styles.blueButton}
-                text={'Create Account'}
-              />
+              <RoundButton onPress={_onCreateUser} text={'Create Account'} />
             ) : (
               <>
                 <TouchableOpacity
@@ -162,8 +158,8 @@ const Login: React.FC = () => {
                   <TextAtom style={styles.forgetText}>Forget password?</TextAtom>
                 </TouchableOpacity>
                 <RoundButton
+                  buttonColorType={IButtonColorType.Confirm}
                   onPress={_onLoginWithEmail}
-                  style={styles.greenButton}
                   text={'Login'}
                 />
               </>
@@ -259,12 +255,6 @@ const styles = StyleSheet.create({
   },
   signUpButtonText: {
     color: '#344dd9',
-  },
-  greenButton: {
-    backgroundColor: AppGeneralColor.Palette.BaseGreen,
-  },
-  blueButton: {
-    backgroundColor: AppGeneralColor.Palette.BaseBlue,
   },
 });
 

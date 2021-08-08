@@ -12,7 +12,6 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-// import RNPickerSelect from 'react-native-picker-select';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -20,11 +19,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
 
-import { RoundButton } from '~/components/atoms/button/button';
+// components
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
-import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
-import { AppGeneralColor } from '~/styles/ColorStyle';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
@@ -32,6 +30,9 @@ import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTim
 import { PaymentCoulmnMolecules } from '~/components/molecules/ColumnMolecules/PaymentCoulmnMolecules';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';
 
+// styles
+import { GeneralViewStyle } from '~/styles/ViewStyle';
+import { AppGeneralColor } from '~/styles/ColorStyle';
 interface ReportEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;
 }
@@ -193,6 +194,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             onPress={_onPressSaveButton}
             text={'Save Report'}
             style={styles.saveButton}
+            buttonColorType={IButtonColorType.Confirm}
           />
         </View>
       </ScrollView>
