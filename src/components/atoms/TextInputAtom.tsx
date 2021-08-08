@@ -15,7 +15,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 
 interface TextInputAtomProps extends Partial<TextInputProps> {
   containerStyle?: ViewStyle | ViewStyle[];
-  style?: ViewStyle | ViewStyle[];
+  style?: ViewStyle;
   value?: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
@@ -73,17 +73,17 @@ export const PasswordTextInput: React.FC<PasswordTextInputProps> = props => {
 };
 
 const styles = StyleSheet.create({
-  textInput: {
-    flex: 1,
-    paddingVertical: 8,
-  },
   inputTextBox: {
     borderWidth: 1,
-    paddingVertical: Platform.OS === 'ios' ? 5 : 0,
-    borderRadius: 8,
+    borderRadius: 4,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  textInput: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
   },
   eyeIcon: {
     paddingTop: 3,

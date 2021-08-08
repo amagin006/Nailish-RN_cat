@@ -3,11 +3,11 @@ import { View, StyleSheet, ViewStyle } from 'react-native';
 import {
   EditDateMolecules,
   IDateValue,
-} from '~/components/molecules/editDateTimeMolecules/EditDateMolecules';
+} from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 import {
   EditTimeMolecules,
   ITimeValue,
-} from '~/components/molecules/editDateTimeMolecules/EditTimeMolecules';
+} from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
 
 interface EditDateTimeOrganismsProps {
   container?: ViewStyle | ViewStyle[];

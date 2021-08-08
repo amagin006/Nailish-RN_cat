@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { View, Text, StyleSheet, ViewStyle, TouchableOpacity, TextStyle } from 'react-native';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
@@ -29,20 +29,23 @@ export const BaseButton: React.FC<BaseButtonProps> = props => {
 interface RoundButtonProps {
   containerStyle?: ViewStyle | ViewStyle[];
   style?: ViewStyle | ViewStyle[];
+
   onPress: () => void;
   text?: string;
   textStyle?: TextStyle;
+  iconLeft?: ReactElement;
   disabled?: boolean;
 }
 
 export const RoundButton: React.FC<RoundButtonProps> = props => {
-  const color = props.disabled ? styles.buttonDisabled : styles.defaltColor;
+  const color = props.disabled ? styles.buttonDisabled : props.style || styles.defaltColor;
   return (
     <View style={props.containerStyle}>
       <TouchableOpacity
         onPress={props.onPress}
         disabled={props.disabled}
-        style={[styles.roundButtonWrapper, color, props.style]}>
+        style={[styles.roundButtonWrapper, color]}>
+        {props.iconLeft && <>{props.iconLeft}</>}
         {props.text && <Text style={[styles.text, props.textStyle]}>{props.text}</Text>}
       </TouchableOpacity>
     </View>
@@ -71,6 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#96CEB4',
+    flexDirection: 'row',
     marginTop: 10,
     borderRadius: 18,
     marginHorizontal: 20,

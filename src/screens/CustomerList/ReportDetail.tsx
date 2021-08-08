@@ -18,8 +18,8 @@ import { MainStackNavParamList } from '~/route/types';
 
 // components
 import PagenationDot from '~/components/atoms/pagenation/pagenationDot';
-import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
-import PriceDetail from '~/components/molecules/reportDetail/PriceDetail';
+import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
+import PriceDetail from '~/components/organisms/ReportDetailOrganisms/PriceDetail';
 import { RoundButton } from '~/components/atoms/button/button';
 
 // style

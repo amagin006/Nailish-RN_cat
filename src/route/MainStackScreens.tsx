@@ -7,12 +7,16 @@ import { BottomTabScreens } from '~/route/BottomTabScreens';
 import CustomerEdit from '~/screens/CustomerList/CustomerEdit';
 import ReportList from '~/screens/CustomerList/ReportList';
 import ReportEdit from '~/screens/CustomerList/ReportEdit';
+import ReportDetail from '~/screens/CustomerList/ReportDetail';
+
+import EditAppointment from '~/screens/Calender/EditAppointment';
+
+import AddMenuItemScreen from '~/screens/MenuList/AddMenuItemScreen';
+import SelectMenuList from '~/screens/MenuList/SelectMenuListScreen';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
-import ReportDetail from '~/screens/CustomerList/ReportDetail';
-import EditAppointment from '~/screens/Calender/EditAppointment';
-import { SelectMenuList } from '~/screens/MenuList/SelectMenuList';
+import SelectMenuListScreen from '~/screens/MenuList/SelectMenuListScreen';
 
 const MainStackNav = createStackNavigator<MainStackNavParamList>();
 export const MainStackScreens = () => {
@@ -78,10 +82,17 @@ export const MainStackScreens = () => {
 
       {/* --------- SelectMenuList ---------- */}
       <MainStackNav.Screen
-        name="SelectMenuList"
-        component={SelectMenuList}
+        name="SelectMenuListScreen"
+        component={SelectMenuListScreen}
         options={{
           title: 'Select Menu',
+        }}
+      />
+      <MainStackNav.Screen
+        name="AddMenuItemScreen"
+        component={AddMenuItemScreen}
+        options={{
+          title: 'Add Menu Item',
         }}
       />
       {/* --------- SelectMenuList ---------- */}

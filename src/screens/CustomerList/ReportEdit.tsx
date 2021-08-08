@@ -21,15 +21,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
 
 import { RoundButton } from '~/components/atoms/button/button';
-import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
+import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
-import { EditDateTimeOrganisms } from '~/components/organisms/editDateTimeOrganisms/EditDateTimeOrganisms';
-import { IDateValue } from '~/components/molecules/editDateTimeMolecules/EditDateMolecules';
-import { ITimeValue } from '~/components/molecules/editDateTimeMolecules/EditTimeMolecules';
-import { PaymentCoulmnMolecules } from '~/components/molecules/columnMolecules/PaymentCoulmnMolecules';
+import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
+import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
+import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import { PaymentCoulmnMolecules } from '~/components/molecules/ColumnMolecules/PaymentCoulmnMolecules';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';
 
 interface ReportEditProps {
@@ -61,7 +61,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
   }, []);
 
   const _onPressSelectMenu = () => {
-    navigation.navigate('SelectMenuList');
+    navigation.navigate('SelectMenuListScreen');
   };
 
   const _onChangeTips = text => {

@@ -6,7 +6,10 @@ import { TextAtom } from '~/components/atoms/TextAtom';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
-import { TIME_HOUR, TIME_MINITES } from '~/components/molecules/datePicker/DatePickerHelper';
+import {
+  TIME_HOUR,
+  TIME_MINITES,
+} from '~/components/molecules/DatePickerMolecules/DatePickerHelper';
 import { generalTextStyles } from '~/styles/TextStyle';
 
 interface BaseDatePickerProps {

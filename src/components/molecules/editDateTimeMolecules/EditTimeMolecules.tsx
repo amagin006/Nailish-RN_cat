@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { TextAtom } from '~/components/atoms';
-import { BaseTimePicker } from '~/components/molecules/datePicker/BaseTimePicker';
+import { BaseTimePicker } from '~/components/molecules/DatePickerMolecules/BaseTimePicker';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { Entypo } from '@expo/vector-icons';

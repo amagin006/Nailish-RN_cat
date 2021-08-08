@@ -20,22 +20,22 @@ import { useAppDispatch } from '~/redux/hooks';
 
 // component
 import { RoundButton } from '~/components/atoms/button/button';
-import ReportMenuList from '~/components/molecules/reportDetail/ReportMenuList';
+import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import {
   EditDateMolecules,
   IDateValue,
-} from '~/components/molecules/editDateTimeMolecules/EditDateMolecules';
+} from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 import {
   EditTimeMolecules,
   ITimeValue,
-} from '~/components/molecules/editDateTimeMolecules/EditTimeMolecules';
+} from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
-import { EditDateTimeOrganisms } from '~/components/organisms/editDateTimeOrganisms/EditDateTimeOrganisms';
+import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
