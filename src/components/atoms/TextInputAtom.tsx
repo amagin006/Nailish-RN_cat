@@ -12,9 +12,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 
 import { AppGeneralColor } from '~/styles/ColorStyle';
+import { TextAtom } from './TextAtom';
 
 interface TextInputAtomProps extends Partial<TextInputProps> {
   containerStyle?: ViewStyle | ViewStyle[];
+  inputTextBoxStyle?: ViewStyle;
   style?: ViewStyle;
   value?: string;
   onChangeText: (text: string) => void;
@@ -22,6 +24,7 @@ interface TextInputAtomProps extends Partial<TextInputProps> {
   onFocus?: () => void;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   error?: boolean;
+  errorText?: string;
 }
 
 export const TextInputAtom: React.FC<TextInputAtomProps> = props => {
@@ -29,15 +32,22 @@ export const TextInputAtom: React.FC<TextInputAtomProps> = props => {
     ? AppGeneralColor.TextInput.Error
     : AppGeneralColor.TextInput.Primary;
   return (
-    <View style={[props.containerStyle, styles.inputTextBox, { borderColor: borderColor }]}>
-      <TextInput
-        style={[props.style, styles.textInput]}
-        value={props.value}
-        onChangeText={props.onChangeText}
-        placeholder={props.placeholder}
-        onFocus={props.onFocus}
-        autoCapitalize={props.autoCapitalize || 'none'}
-      />
+    <View style={props.containerStyle}>
+      <View style={[props.inputTextBoxStyle, styles.inputTextBox, { borderColor: borderColor }]}>
+        <TextInput
+          style={[props.style, styles.textInput]}
+          value={props.value}
+          onChangeText={props.onChangeText}
+          placeholder={props.placeholder}
+          onFocus={props.onFocus}
+          autoCapitalize={props.autoCapitalize || 'none'}
+        />
+      </View>
+      {!!props.errorText ? (
+        <TextAtom style={[styles.errorText, { color: borderColor }]}>{props.errorText}</TextAtom>
+      ) : (
+        <View style={styles.errorSpace} />
+      )}
     </View>
   );
 };
@@ -87,5 +97,11 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     paddingTop: 3,
+  },
+  errorText: {
+    marginTop: 4,
+  },
+  errorSpace: {
+    marginTop: 20,
   },
 });

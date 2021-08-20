@@ -14,8 +14,11 @@ export default class MenuPresenter extends BasePresenter implements MenuPresente
     this.MenuRepository = menuRepository;
   }
 
-  addMenuItem = async () => {};
+  addMenuItem = async (user, menuItems) => {
+    await this.MenuRepository.addMenuItem(user, menuItems);
+    return false;
+  };
   deleteMenuItem = async () => {};
-  editMenuItem = async () => {};
+  updateMenuItem = async () => {};
   getMenuItemList = async () => {};
 }

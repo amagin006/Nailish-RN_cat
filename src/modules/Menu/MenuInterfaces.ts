@@ -1,20 +1,22 @@
+import { UserInterface } from '~/redux/user/types';
+
 export interface MenuPresenterInterface {
-  addMenuItem: () => Promise<void>;
-  deleteMenuItem: () => Promise<void>;
-  editMenuItem: () => Promise<void>;
-  getMenuItemList: () => Promise<void>;
+  addMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<boolean>;
+  deleteMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  updateMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  getMenuItemList: (user: UserInterface) => Promise<void>;
 }
 
 export interface MenuRepositoryInterface {
-  addMenuItem: () => Promise<void>;
-  deleteMenuItem: () => Promise<void>;
-  editMenuItem: () => Promise<void>;
-  getMenuItemList: () => Promise<void>;
+  addMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<boolean>;
+  deleteMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  updateMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  getMenuItemList: (user: UserInterface) => Promise<void>;
 }
 
 export interface IMenuItem {
-  id: number;
+  id?: string;
   menuName: string;
   color: string;
-  price: number;
+  price: string;
 }

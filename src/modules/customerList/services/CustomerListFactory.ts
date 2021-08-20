@@ -18,7 +18,7 @@ export default class CustomerListFactory {
   }
 
   // to get presenter
-  public static getCustomerListRepository(): CustomerListPresenterInterface {
+  public static getCustomerListPresenter(): CustomerListPresenterInterface {
     return CustomerListFactory.custmerListPresenter;
   }
 }

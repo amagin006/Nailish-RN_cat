@@ -29,7 +29,7 @@ interface CustomerEditProps {
   route: RouteProp<MainStackNavParamList, 'CustomerEdit'>;
 }
 
-const customerListPresenter = CustomerListFactory.getCustomerListRepository();
+const customerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const { navigation } = props;

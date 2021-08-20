@@ -24,7 +24,7 @@ interface SelectMenuListScreenProp {
 }
 
 const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
-  const [checkedIds, setCheckedIds] = useState<number[]>([]);
+  const [checkedItems, setCheckedItems] = useState<IMenuItem[]>([]);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -44,31 +44,22 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
 
   const _renderItem = ({ item }: { item: IMenuItem }) => {
     const _onSelectItem = () => {
-      const isAlreadyChecked = checkedIds.some(id => id === item.id);
+      const isAlreadyChecked = checkedItems.some(checkedItem => checkedItem.id === item.id);
       if (isAlreadyChecked) {
-        const newIds = checkedIds.filter(id => id !== item.id);
-        setCheckedIds(newIds);
+        const newItems = checkedItems.filter(checkedItem => checkedItem.id !== item.id);
+        setCheckedItems(newItems);
       } else {
-        setCheckedIds([...checkedIds, item.id]);
+        setCheckedItems([...checkedItems, item]);
       }
     };
 
-    const isChecked = checkedIds.some(id => id === item.id);
+    const isChecked = checkedItems.some(checkedItem => checkedItem.id === item.id);
 
     return (
       <TouchableOpacity style={styles.itemWrapper} onPress={_onSelectItem}>
         <View style={styles.itemInnerWrapper}>
           <CheckMarkAtom isChecked={isChecked} onCheck={_onSelectItem} />
-          <View
-            style={{
-              width: 20,
-              height: 20,
-              marginTop: 2,
-              backgroundColor: 'red',
-              borderRadius: 10,
-              marginHorizontal: 10,
-            }}
-          />
+          <View style={styles.colorView} />
           <View style={styles.rightTextBox}>
             <TextAtom
               containerStyle={styles.menuItemNameTextContainer}
@@ -87,7 +78,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   };
 
   const _onSelectMenu = () => {
-    console.log('_onSelectMenu');
+    console.log('_onSelectMenu', checkedItems);
   };
 
   return (
@@ -127,6 +118,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     ...GeneralViewStyle.bodyWrapper,
   },
+  colorView: {
+    width: 20,
+    height: 20,
+    marginTop: 2,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
   rightTextBox: {
     flexShrink: 1,
     justifyContent: 'flex-start',
@@ -145,22 +144,22 @@ const styles = StyleSheet.create({
 
 const DATA = [
   {
-    id: 1,
+    id: '1',
     menuName: 'Gel',
     color: '#FF7B7B',
-    price: 20.0,
+    price: '20.0',
   },
   {
-    id: 2,
+    id: '2',
     menuName: 'Off',
     color: '#7B8AFF',
-    price: 10.0,
+    price: '10.0',
   },
   {
-    id: 3,
+    id: '3',
     menuName: 'Design ---------- sddskfkfdsdfsdfsddskadskjdsfkjsdkfjklds',
     color: '#79AF52',
-    price: 500000000.0,
+    price: '500000000.0',
   },
 ];
 

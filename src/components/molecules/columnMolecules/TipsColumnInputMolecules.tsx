@@ -11,6 +11,7 @@ interface TipsColumnInputMoleculesProps {
 
   value: string;
   onChangeTips: (text: string) => void;
+  error?: string;
 }
 
 export const TipsColumnInputMolecules: React.FC<TipsColumnInputMoleculesProps> = props => {
@@ -26,6 +27,8 @@ export const TipsColumnInputMolecules: React.FC<TipsColumnInputMoleculesProps> =
             style={styles.tipTextInput}
             value={props.value}
             onChangeText={props.onChangeTips}
+            error={!!props.error}
+            errorText={props.error}
           />
         </View>
       </View>
@@ -39,12 +42,12 @@ const styles = StyleSheet.create({
   },
   tipsWrapper: {
     flexDirection: 'row',
-    alignItems: 'center',
     flex: 1,
   },
   dollerMark: {
     ...generalTextStyles.regularLittleNormalText,
     marginRight: 10,
+    marginTop: 12,
   },
   tipTextInput: {
     flexGrow: 1,
