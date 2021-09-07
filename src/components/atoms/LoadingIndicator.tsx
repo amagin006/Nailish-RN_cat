@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View } from 'react-native';
-import { ActivityIndicatorAtom } from '~/components/atoms';
+import { ActivityIndicatorAtom } from '~/components/atoms/ActivityIndicatorAtom';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
 export interface LoadingIndicatorProps {

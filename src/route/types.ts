@@ -1,4 +1,5 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
+import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
 
 export type RootStackParamList = {
   MainNav: NavigatorScreenParams<MainStackNavParamList>;
@@ -24,7 +25,7 @@ export type MainStackNavParamList = {
 
   EditAppointment: { item: any } | undefined;
   SelectMenuListScreen: undefined;
-  AddMenuItemScreen: undefined;
+  AddEditMenuItemScreen: IMenuItem | undefined;
 };
 
 export type CustomerListStackNavParamsList = {

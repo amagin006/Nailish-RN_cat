@@ -46,6 +46,10 @@ export const GeneralDarkColor = {
     Warning: '#f5e431',
     Disabled: '#9c9c9c',
   },
+  EmptyList: {
+    tint: '#dbdbdb',
+    PrimaryText: '#b0b0b0',
+  },
 
   Calender: {
     listSeparator: '#e6e6e6',
@@ -53,6 +57,7 @@ export const GeneralDarkColor = {
   SelectMenuList: {
     listSeparator: '#e6e6e6',
     titleBtnBorder: '#9c9c9c',
+    swipeIcon: '#000000',
   },
 
   checkMarkAtom: {

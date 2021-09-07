@@ -15,10 +15,14 @@ export default class MenuPresenter extends BasePresenter implements MenuPresente
   }
 
   addMenuItem = async (user, menuItems) => {
-    await this.MenuRepository.addMenuItem(user, menuItems);
-    return false;
+    const isSuccess = await this.MenuRepository.addMenuItem(user, menuItems);
+    console.log('presenter isSuccess', isSuccess);
+    return isSuccess;
   };
   deleteMenuItem = async () => {};
   updateMenuItem = async () => {};
-  getMenuItemList = async () => {};
+  getMenuItemList = async user => {
+    const menuItems = await this.MenuRepository.getMenuItemList(user);
+    return menuItems;
+  };
 }

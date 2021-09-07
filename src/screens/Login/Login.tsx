@@ -130,7 +130,7 @@ const Login: React.FC = () => {
               <View style={styles.space} />
             )}
             <TextInputAtom
-              containerStyle={styles.inputTextBox}
+              containerStyle={[styles.inputTextBox]}
               value={email}
               onChangeText={text => setEmail(text)}
               placeholder={'Enter your email'}
@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
     marginTop: '18%',
   },
   inputTextBox: {
-    paddingHorizontal: 10,
     marginBottom: 20,
   },
+  emailInput: {},
   errorText: {
     color: '#d61d00',
     alignSelf: 'flex-start',

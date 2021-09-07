@@ -21,11 +21,32 @@ export default class MenuRepository extends BaseRepository implements MenuReposi
       }
       return true;
     } catch (err) {
-      console.log('Error update image', err);
+      console.log('Error MenuRepository update image: ', err);
       return false;
     }
   };
   deleteMenuItem = async () => {};
   updateMenuItem = async () => {};
-  getMenuItemList = async () => {};
+  getMenuItemList = async user => {
+    let items: IMenuItem[] = [];
+    try {
+      const res = await db.collection('users').doc(`${user.uid}`).collection('menu').get();
+      if (!res) {
+        return items;
+      }
+      res.forEach(doc => {
+        console.log(doc.id, ' ==> ', doc.data());
+        const responseItem = doc.data();
+        const item = {
+          id: doc.id,
+          ...responseItem,
+        } as IMenuItem;
+        items.push(item);
+      });
+      return items;
+    } catch (err) {
+      console.log('Error MenuRepository getMenuItmeList: ', err);
+      return items;
+    }
+  };
 }

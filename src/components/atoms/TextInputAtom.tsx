@@ -63,21 +63,23 @@ export const PasswordTextInput: React.FC<PasswordTextInputProps> = props => {
     ? AppGeneralColor.TextInput.Error
     : AppGeneralColor.TextInput.Primary;
   return (
-    <View style={[props.containerStyle, styles.inputTextBox, { borderColor: borderColor }]}>
-      <TextInput
-        style={[props.style, styles.textInput]}
-        value={props.value}
-        onChangeText={props.onChangeText}
-        placeholder={props.placeholder}
-        onFocus={props.onFocus}
-        autoCapitalize={props.autoCapitalize || 'none'}
-        secureTextEntry={isHide}
-      />
-      {props.isPassword && (
-        <TouchableOpacity onPress={() => setIsHide(!isHide)}>
-          <Ionicons style={styles.eyeIcon} name={isHide ? 'md-eye-off' : 'md-eye'} size={26} />
-        </TouchableOpacity>
-      )}
+    <View style={props.containerStyle}>
+      <View style={[styles.inputTextBox, styles.passwordInputText, { borderColor: borderColor }]}>
+        <TextInput
+          style={[props.style, styles.textInput]}
+          value={props.value}
+          onChangeText={props.onChangeText}
+          placeholder={props.placeholder}
+          onFocus={props.onFocus}
+          autoCapitalize={props.autoCapitalize || 'none'}
+          secureTextEntry={isHide}
+        />
+        {props.isPassword && (
+          <TouchableOpacity onPress={() => setIsHide(!isHide)}>
+            <Ionicons style={styles.eyeIcon} name={isHide ? 'md-eye-off' : 'md-eye'} size={26} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -94,6 +96,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 8,
+  },
+  passwordInputText: {
+    paddingRight: 6,
   },
   eyeIcon: {
     paddingTop: 3,

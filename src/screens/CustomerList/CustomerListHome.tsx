@@ -32,13 +32,15 @@ import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { ActivityIndicatorAtom } from '~/components/atoms';
+import { generalTextStyles } from '~/styles/TextStyle';
+import { AppGeneralColor } from '~/styles/ColorStyle';
 
 interface ICustomerListItem {
   initial?: string;
   data: CustomerModel[];
 }
 
-const customerListPresenter = CustomerListFactory.getCustomerListRepository();
+const customerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 type CustomerListNavProps = CompositeNavigationProp<
   StackNavigationProp<MainStackNavParamList, 'BottomNav'>,
@@ -207,14 +209,14 @@ const styles = StyleSheet.create({
     tintColor: '#dbdbdb',
   },
   noListTextBold: {
-    fontSize: 20,
+    ...generalTextStyles.boldLittleMediumText,
+    color: AppGeneralColor.EmptyList.PrimaryText,
     textAlign: 'center',
-    color: '#b0b0b0',
     marginBottom: 18,
   },
   noListText: {
-    fontSize: 15,
-    color: '#b0b0b0',
+    ...generalTextStyles.regularLittleNormalText,
+    color: AppGeneralColor.EmptyList.PrimaryText,
     textAlign: 'center',
   },
 });

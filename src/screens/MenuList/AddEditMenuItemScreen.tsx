@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+
+// navigation
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
+
+// redux
 import { useSelector } from 'react-redux';
+import { RootState } from '~/redux/store';
 
 // components
 import { TextAtom, TextInputAtom } from '~/components/atoms';
@@ -14,37 +21,42 @@ import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 
 // util
-import { IMENU_ITME_COLORS, MENU_ITME_COLORS } from '~/util/Consts/MenuItemColorConst';
+import { MENU_ITME_COLORS } from '~/util/Consts/MenuItemColorConst';
 import MenuFactory from '~/modules/Menu/services/MenuFactory';
-import { RootState } from '~/redux/store';
 import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
-import { StackNavigationProp } from '@react-navigation/stack';
+
+// type
 import { MainStackNavParamList } from '~/route/types';
 
-interface AddMenuItemScreenProps {
-  navigation: StackNavigationProp<MainStackNavParamList, 'AddMenuItemScreen'>;
+interface AddEditMenuItemScreenProps {
+  navigation: StackNavigationProp<MainStackNavParamList, 'AddEditMenuItemScreen'>;
+  route: RouteProp<MainStackNavParamList, 'AddEditMenuItemScreen'>;
 }
 
-const MenuPresenter = MenuFactory.getCustomerListPresenter();
+const MenuPresenter = MenuFactory.getMenuPresenter();
 
-const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = props => {
-  const [selectedItem, setSelectedItem] = useState<IMENU_ITME_COLORS | undefined>(undefined);
+const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
+  const [selectedColor, setSelectedColor] = useState<string>(MENU_ITME_COLORS[0]);
   const [inputItemName, setInputItemName] = useState<string>('');
   const [tips, setTips] = useState<string>('');
   const [error, setError] = useState<{
     nameError: string;
     tipError: string;
-    colorError: string;
-  }>({ nameError: '', tipError: '', colorError: '' });
+  }>({ nameError: '', tipError: '' });
 
   const userRedux = useSelector((state: RootState) => state.user);
 
-  const _onSelectItem = (item: IMENU_ITME_COLORS) => {
-    setError(error => {
-      error.colorError = '';
-      return error;
-    });
-    setSelectedItem(item);
+  useEffect(() => {
+    const item = props.route.params;
+    if (item) {
+      setSelectedColor(item.color);
+      setInputItemName(item.menuName);
+      setTips(item.price);
+    }
+  }, []);
+
+  const _onSelectItem = (item: string) => {
+    setSelectedColor(item);
   };
 
   const _onChangeText = (text: string) => {
@@ -65,7 +77,7 @@ const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = props => {
 
   const _onPressAddNewItem = async () => {
     // error
-    if (!inputItemName || !tips || !selectedItem) {
+    if (!inputItemName || !tips) {
       let newError = { ...error };
       if (!inputItemName) {
         newError.nameError = 'Please input item name';
@@ -73,33 +85,32 @@ const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = props => {
       if (!tips) {
         newError.tipError = 'Please input item name';
       }
-      if (!selectedItem) {
-        newError.colorError = 'Please select color';
-      }
       setError(newError);
       return;
     }
 
     const itemBody: IMenuItem = {
       menuName: inputItemName,
-      color: selectedItem.value,
+      color: selectedColor,
       price: tips,
     };
     const isSuccess = await MenuPresenter.addMenuItem(userRedux, itemBody);
+    console.log('_onPressAddNewItem ,isSuccess', isSuccess);
+
     if (!isSuccess) {
       Alert.alert('', 'Something goes wrong.\nPlease try again.');
     }
     props.navigation.pop();
-    console.log('_onPressAddNewItem');
   };
 
-  const _renderColorItem = ({ item }: { item: IMENU_ITME_COLORS }) => {
-    const bgcolor = item.value;
+  const _onSelectedColor = () => {};
+
+  const _renderColorItem = ({ item }: { item: string }) => {
     return (
       <TouchableOpacity
         onPress={() => _onSelectItem(item)}
-        style={[styles.colorBtnWrapper, { backgroundColor: bgcolor }]}>
-        {item.id === selectedItem?.id ? (
+        style={[styles.colorBtnWrapper, { backgroundColor: item }]}>
+        {item === selectedColor ? (
           <View style={styles.checkIconWrapper}>
             <FontAwesome5 name="check" color={AppGeneralColor.Palette.White} size={24} />
           </View>
@@ -108,25 +119,10 @@ const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = props => {
     );
   };
 
-  const _keyExtractor = (item: IMENU_ITME_COLORS) => {
-    return `${item.id}`;
+  const _keyExtractor = (item: string) => {
+    return `${item}`;
   };
 
-  const _menuColorFooter = () => {
-    return (
-      <>
-        {!!error.colorError ? (
-          <View style={styles.listFooter}>
-            <TextAtom style={styles.errorText}>{error.colorError}</TextAtom>
-          </View>
-        ) : (
-          <View />
-        )}
-      </>
-    );
-  };
-
-  console.log('error.nameError----return ', error.nameError);
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -152,7 +148,6 @@ const AddMenuItemScreen: React.FC<AddMenuItemScreenProps> = props => {
         keyExtractor={_keyExtractor}
         numColumns={5}
         columnWrapperStyle={{ justifyContent: 'space-evenly' }}
-        ListFooterComponent={_menuColorFooter}
       />
 
       <RoundButton
@@ -203,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddMenuItemScreen;
+export default AddEditMenuItemScreen;

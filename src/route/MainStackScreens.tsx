@@ -11,7 +11,7 @@ import ReportDetail from '~/screens/CustomerList/ReportDetail';
 
 import EditAppointment from '~/screens/Calender/EditAppointment';
 
-import AddMenuItemScreen from '~/screens/MenuList/AddMenuItemScreen';
+import AddEditMenuItemScreen from '~/screens/MenuList/AddEditMenuItemScreen';
 import SelectMenuList from '~/screens/MenuList/SelectMenuListScreen';
 
 // style
@@ -89,8 +89,8 @@ export const MainStackScreens = () => {
         }}
       />
       <MainStackNav.Screen
-        name="AddMenuItemScreen"
-        component={AddMenuItemScreen}
+        name="AddEditMenuItemScreen"
+        component={AddEditMenuItemScreen}
         options={{
           title: 'Add Menu Item',
         }}
