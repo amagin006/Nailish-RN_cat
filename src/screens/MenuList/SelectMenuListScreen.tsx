@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useEffect, useRef } from 'react';
-import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, RefreshControl, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Entypo } from '@expo/vector-icons';
 
@@ -10,31 +10,42 @@ import { RootState } from '~/redux/store';
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
+import { RouteProp } from '@react-navigation/native';
 
 // component
 import { ActivityIndicatorAtom, TextAtom } from '~/components/atoms';
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
-import { SelectMenuListItemMolecules } from '~/components/molecules/MenuListMolecules/SelectMenuListItemMolecules';
+import {
+  EChangeAmountType,
+  SelectMenuListItemMolecules,
+} from '~/components/molecules/MenuListMolecules/SelectMenuListItemMolecules';
 
 // type
-import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
+import { IMenuItem, IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { GeneralNavStyles } from '~/styles/ViewStyle';
 
+// util
 import MenuFactory from '~/modules/Menu/services/MenuFactory';
+import {
+  ChnageItemAmount,
+  InitializeItemAmount,
+  UpdateMenuList,
+} from './helper/SelectMenuListHelper';
+import { useCallback } from 'react';
 
 interface SelectMenuListScreenProp {
   navigation: StackNavigationProp<MainStackNavParamList, 'SelectMenuListScreen'>;
+  route: RouteProp<MainStackNavParamList, 'SelectMenuListScreen'>;
 }
 
 const MenuPresenter = MenuFactory.getMenuPresenter();
 
 const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
-  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
-  const [checkedItems, setCheckedItems] = useState<IMenuItem[]>([]);
+  const [menuItems, setMenuItems] = useState<IMenuListItem[]>([]);
   const [openedItemIndex, setOpenedItemIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -56,33 +67,41 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
     });
   }, [props.navigation]);
 
+  // initial load
   useEffect(() => {
     const getListItems = async () => {
       setIsLoading(true);
       const items = await MenuPresenter.getMenuItemList(userRedux);
-      setMenuItems(items);
+      // Initalize Item amount
+      const listItems = InitializeItemAmount(items);
+      setMenuItems(listItems);
       setIsLoading(false);
     };
     getListItems();
   }, []);
 
+  // Fetch Menu List item and update with holding amount
+  const _fetchToUpdateMenuList = useCallback(async () => {
+    setIsLoading(true);
+    const items = await MenuPresenter.getMenuItemList(userRedux);
+    const newItems = UpdateMenuList(items, menuItems);
+    setMenuItems(newItems);
+    props.navigation.setParams({ updateItems: false });
+    setIsLoading(false);
+  }, [menuItems]);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      if (props.route.params?.updateItems) {
+        _fetchToUpdateMenuList();
+      }
+    });
+
+    return unsubscribe;
+  }, [props.route.params]);
+
   const _onAddMenuItem = () => {
     props.navigation.navigate('AddEditMenuItemScreen');
-  };
-
-  const _onSelectItem = (item: IMenuItem) => {
-    if (openedItemIndex !== null) {
-      menuItemRef.current[openedItemIndex].close();
-      setOpenedItemIndex(null);
-      return;
-    }
-    const isAlreadyChecked = checkedItems.some(checkedItem => checkedItem.id === item.id);
-    if (isAlreadyChecked) {
-      const newItems = checkedItems.filter(checkedItem => checkedItem.id !== item.id);
-      setCheckedItems(newItems);
-    } else {
-      setCheckedItems([...checkedItems, item]);
-    }
   };
 
   // when swipe open item
@@ -103,17 +122,23 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   };
 
   const _onEditItem = (item: IMenuItem, index: number) => {
-    props.navigation.navigate('AddEditMenuItemScreen', item);
+    props.navigation.navigate('AddEditMenuItemScreen', { menuItem: item });
     menuItemRef.current[index].close();
   };
 
   const _onDeleteItem = () => {};
 
-  const _onPlusItem = () => {};
+  const _onChnageItemAmount = (item: IMenuListItem, type: EChangeAmountType) => {
+    // when other item has already opened, close other items.
+    if (openedItemIndex !== null) {
+      menuItemRef.current[openedItemIndex].close();
+      return;
+    }
+    const newItems = ChnageItemAmount(item, type, menuItems);
+    setMenuItems(newItems);
+  };
 
-  const _onMinusItem = () => {};
-
-  const _renderItem = ({ item, index }: { item: IMenuItem; index: number }) => {
+  const _renderItem = ({ item, index }: { item: IMenuListItem; index: number }) => {
     return (
       <SelectMenuListItemMolecules
         ref={ref => {
@@ -123,10 +148,8 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
         }}
         item={item}
         index={index}
-        // TODO: item amount
-        amount={20}
-        onMinusItem={_onMinusItem}
-        onPlusItem={_onPlusItem}
+        amount={item.amount}
+        onChnageItemAmount={_onChnageItemAmount}
         onSwipeableClose={_onSwipeableClose}
         onSwipeableRightOpen={_onSwipeableRightOpen}
         onDelete={_onDeleteItem}
@@ -139,9 +162,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
     return `${item.id}`;
   };
 
-  const _onSelectMenu = () => {
-    console.log('_onSelectMenu', checkedItems);
-  };
+  const _onSelectMenu = () => {};
 
   const _emptyListShow = () => {
     // if (customerList.length <= 0) {
@@ -174,11 +195,14 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
             onPress={_onSelectMenu}
             iconLeft={<Entypo name="add-to-list" size={20} color={AppGeneralColor.Palette.White} />}
           />
-          <FlatList
+          <FlatList<IMenuListItem>
             data={menuItems}
             renderItem={_renderItem}
             keyExtractor={_keyExtractor}
             ListEmptyComponent={_emptyListShow}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={_fetchToUpdateMenuList} />
+            }
           />
         </>
       )}

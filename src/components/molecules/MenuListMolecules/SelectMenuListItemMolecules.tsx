@@ -9,7 +9,7 @@ import { FontAwesome5, Feather } from '@expo/vector-icons';
 import { TextAtom } from '~/components/atoms';
 
 // type
-import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
+import { IMenuItem, IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
@@ -17,16 +17,20 @@ import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 
 interface SelectMenuListItemMoleculesProps {
-  item: IMenuItem;
+  item: IMenuListItem;
   index: number;
   amount: number;
 
-  onPlusItem: () => void;
-  onMinusItem: () => void;
+  onChnageItemAmount: (item: IMenuListItem, type: EChangeAmountType) => void;
   onSwipeableClose: (index: number) => void;
   onSwipeableRightOpen: (index: number) => void;
   onDelete: (selectedItem: IMenuItem) => void;
   onEdit: (selectedItem: IMenuItem, index: number) => void;
+}
+
+export enum EChangeAmountType {
+  ADD = 'ADD',
+  MINUS = 'MINUS',
 }
 
 type RefType = Swipeable;
@@ -70,11 +74,11 @@ export const SelectMenuListItemMolecules = React.forwardRef<
   };
 
   const _onPlus = () => {
-    props.onPlusItem();
+    props.onChnageItemAmount(props.item, EChangeAmountType.ADD);
   };
 
   const _onMinus = () => {
-    props.onMinusItem();
+    props.onChnageItemAmount(props.item, EChangeAmountType.MINUS);
   };
 
   return (
@@ -103,8 +107,7 @@ export const SelectMenuListItemMolecules = React.forwardRef<
               <Feather name="plus-circle" size={30} color={AppGeneralColor.TextColor.Primary} />
             </TouchableOpacity>
             <View style={styles.countAmoutTextBox}>
-              {/* <TextAtom>{props.amount}</TextAtom> */}
-              <TextAtom style={styles.countAmoutText}>20</TextAtom>
+              <TextAtom style={styles.countAmoutText}>{`${props.amount}`}</TextAtom>
             </View>
             <TouchableOpacity onPress={_onMinus}>
               <Feather name="minus-circle" size={30} color={AppGeneralColor.TextColor.Primary} />
@@ -142,13 +145,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   itemInnerWrapper: {
+    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 10,
     ...GeneralViewStyle.bodyWrapper,
   },
   itemLeft: {
     flexDirection: 'row',
-    flexGrow: 1,
+    flexShrink: 1,
+    marginRight: 10,
   },
   colorView: {
     width: 20,

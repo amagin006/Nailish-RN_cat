@@ -46,6 +46,9 @@ export const GeneralDarkColor = {
     Warning: '#f5e431',
     Disabled: '#9c9c9c',
   },
+  Counter: {
+    CounterBackground: '#fff',
+  },
   EmptyList: {
     tint: '#dbdbdb',
     PrimaryText: '#b0b0b0',

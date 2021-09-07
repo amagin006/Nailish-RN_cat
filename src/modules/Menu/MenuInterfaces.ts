@@ -20,3 +20,7 @@ export interface IMenuItem {
   color: string;
   price: string;
 }
+
+export interface IMenuListItem extends IMenuItem {
+  amount: number;
+}

@@ -24,8 +24,8 @@ export type MainStackNavParamList = {
   ReportEdit: undefined;
 
   EditAppointment: { item: any } | undefined;
-  SelectMenuListScreen: undefined;
-  AddEditMenuItemScreen: IMenuItem | undefined;
+  SelectMenuListScreen: { updateItems: boolean } | undefined;
+  AddEditMenuItemScreen: { menuItem: IMenuItem } | undefined;
 };
 
 export type CustomerListStackNavParamsList = {

@@ -35,7 +35,6 @@ export default class MenuRepository extends BaseRepository implements MenuReposi
         return items;
       }
       res.forEach(doc => {
-        console.log(doc.id, ' ==> ', doc.data());
         const responseItem = doc.data();
         const item = {
           id: doc.id,

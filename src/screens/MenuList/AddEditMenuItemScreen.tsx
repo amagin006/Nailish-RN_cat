@@ -47,7 +47,7 @@ const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
   const userRedux = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    const item = props.route.params;
+    const item = props.route.params?.menuItem;
     if (item) {
       setSelectedColor(item.color);
       setInputItemName(item.menuName);
@@ -99,8 +99,10 @@ const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
 
     if (!isSuccess) {
       Alert.alert('', 'Something goes wrong.\nPlease try again.');
+      props.navigation.pop();
+      return;
     }
-    props.navigation.pop();
+    props.navigation.navigate('SelectMenuListScreen', { updateItems: true });
   };
 
   const _onSelectedColor = () => {};
