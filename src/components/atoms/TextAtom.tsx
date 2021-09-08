@@ -23,7 +23,12 @@ export const TextAtom: React.FC<TextAtomProps> = props => {
 
   return (
     <View style={props.containerStyle}>
-      <Text style={[styles.defaultTextStyles, props.style]}>{props.children}</Text>
+      <Text
+        style={[styles.defaultTextStyles, props.style]}
+        numberOfLines={props.numberOfLines}
+        ellipsizeMode={props.ellipsizeMode}>
+        {props.children}
+      </Text>
     </View>
   );
 };

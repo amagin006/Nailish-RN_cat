@@ -1,31 +1,36 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { TextAtom } from '~/components/atoms';
+import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
+import { AppGeneralColor } from '~/styles/ColorStyle';
+import { generalTextStyles } from '~/styles/TextStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 
 interface ReportMenuListProps {
-  menuList: any[];
-  style?: ViewStyle | ViewStyle[];
+  container?: ViewStyle | ViewStyle[];
+  menuList: IMenuListItem[];
 }
 
-const ReportMenuList: React.FC<ReportMenuListProps> = ({ menuList, style }) => {
+const ReportMenuList: React.FC<ReportMenuListProps> = ({ menuList, container }) => {
   return (
-    <View style={style}>
-      <View style={GeneralViewStyle.menuWrapper}>
-        <Text style={GeneralViewStyle.leftColumn}>Menu</Text>
-        <View style={GeneralViewStyle.rightColumn}>
-          {menuList.map((menuItem, index) => {
-            return (
-              <View style={styles.menuItemRow} key={index}>
-                <View style={[styles.menuItemBg, { backgroundColor: `${menuItem.bgcolor}` }]}>
-                  <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.menuItemText}>
-                    {menuItem.menuItem}
-                  </Text>
+    <View style={container}>
+      <Text style={GeneralViewStyle.leftColumnText}>Menu</Text>
+      <View style={GeneralViewStyle.priceColumn}>
+        {menuList.map((menuItem, index) => {
+          return (
+            <View style={styles.menuItemRow} key={index}>
+              <View style={styles.titleWrapper}>
+                <View style={[styles.colorView, { backgroundColor: `${menuItem.color}` }]}>
+                  <TextAtom style={styles.menuItemText}>{menuItem.menuName}</TextAtom>
                 </View>
-                <Text style={GeneralViewStyle.price}>$ {menuItem.price}</Text>
               </View>
-            );
-          })}
-        </View>
+              <View style={styles.priceWrapper}>
+                <TextAtom style={styles.priceText}>$ {menuItem.price}</TextAtom>
+                <TextAtom style={styles.amountText}>x {menuItem.amount}</TextAtom>
+              </View>
+            </View>
+          );
+        })}
       </View>
     </View>
   );
@@ -33,8 +38,13 @@ const ReportMenuList: React.FC<ReportMenuListProps> = ({ menuList, style }) => {
 
 const styles = StyleSheet.create({
   menuItemRow: {
-    marginBottom: 8,
-    justifyContent: 'flex-end',
+    marginBottom: 16,
+    paddingBottom: 6,
+    borderBottomColor: AppGeneralColor.SelectMenuList.listSeparator_2,
+    borderBottomWidth: 0.5,
+    alignItems: 'flex-end',
+  },
+  titleWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -43,16 +53,29 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
+  colorView: {
+    flexShrink: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+    borderRadius: 18,
+  },
   menuItemText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    ...generalTextStyles.boldNormalText,
+    color: AppGeneralColor.Palette.White,
   },
-  leftColumn: {
-    width: '20%',
+  priceWrapper: {
+    // alignItems: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 10,
   },
-  rightColumn: {
-    width: '50%',
+  priceText: {
+    ...generalTextStyles.regularNormalText,
+  },
+  amountText: {
+    ...generalTextStyles.regularLittleNormalText,
+    marginLeft: 10,
   },
 });
 

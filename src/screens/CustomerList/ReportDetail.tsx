@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,14 @@ import {
   Image,
   FlatList,
   StyleSheet,
+  TouchableOpacity,
   Dimensions,
+  ViewToken,
 } from 'react-native';
 import dayjs from 'dayjs';
+
+// redux
+import { useAppSelector } from '~/redux/hooks';
 
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -20,12 +25,11 @@ import { MainStackNavParamList } from '~/route/types';
 import PagenationDot from '~/components/atoms/pagenation/pagenationDot';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import PriceDetail from '~/components/organisms/ReportDetailOrganisms/PriceDetail';
+import { TextAtom } from '~/components/atoms';
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 
 // style
-import { GeneralViewStyle } from '~/styles/ViewStyle';
-import { AppGeneralColor } from '~/styles/ColorStyle';
-import { useAppSelector } from '~/redux/hooks';
+import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
 
@@ -44,16 +48,35 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
 
   const [viewableItemIndex, setViewableItemIndex] = useState(0);
 
-  const _renderPhoto = item => <Image source={{ uri: `${item.item.url}` }} style={styles.photo} />;
-  const _keyExtractor = item => `${item.id}`;
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <TouchableOpacity style={GeneralNavStyles.headerRight} onPress={_onEditReport}>
+            <TextAtom style={GeneralNavStyles.headerRightText}>Edit</TextAtom>
+          </TouchableOpacity>
+        );
+      },
+    });
+  }, [navigation]);
+
+  const _renderPhoto = (item: any) => (
+    <Image source={{ uri: `${item.item.url}` }} style={styles.photo} />
+  );
+  const _keyExtractor = (item: any) => `${item.id}`;
+
+  const _onEditReport = () => {
+    navigation.navigate('ReportEdit');
+  };
 
   const _onDeletePress = () => {
     console.log('========_onDeletePress========');
   };
 
-  const onViewRef = React.useRef(({ viewableItems }) => {
-    setViewableItemIndex(viewableItems[0].index);
+  const onViewRef = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    viewableItems[0].index && setViewableItemIndex(viewableItems[0].index);
   });
+
   const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   return (

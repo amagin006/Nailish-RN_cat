@@ -12,7 +12,6 @@ import ReportDetail from '~/screens/CustomerList/ReportDetail';
 import EditAppointment from '~/screens/Calender/EditAppointment';
 
 import AddEditMenuItemScreen from '~/screens/MenuList/AddEditMenuItemScreen';
-import SelectMenuList from '~/screens/MenuList/SelectMenuListScreen';
 
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';

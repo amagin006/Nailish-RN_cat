@@ -59,6 +59,7 @@ export const GeneralNormalColor = {
   },
   SelectMenuList: {
     listSeparator: '#e6e6e6',
+    listSeparator_2: '#9c9c9c',
     titleBtnBorder: '#9c9c9c',
     swipeIcon: '#000000',
   },

@@ -31,6 +31,9 @@ export const GeneralViewStyle = StyleSheet.create({
   rightColumn: {
     width: '50%',
   },
+  priceColumn: {
+    marginTop: 10,
+  },
   price: {
     width: 80,
     textAlign: 'right',

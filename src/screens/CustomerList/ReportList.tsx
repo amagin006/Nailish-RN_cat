@@ -20,6 +20,7 @@ import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { IReportListItem } from '~/modules/CustomerList/CustomerListInterfaces';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
@@ -42,21 +43,21 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
-    navigation.navigate('ReportEdit');
+    navigation.navigate('ReportEdit', { newReport: true });
   };
 
   const _onEdit = () => {
     navigation.navigate('CustomerEdit');
   };
 
-  const _keyExtractor = item => item.id;
+  const _keyExtractor = (item: any) => item.id;
 
-  const _onPressCard = item => {
+  const _onPressCard = (item: any) => {
     console.log('onPressCard', item);
     navigation.navigate('ReportDetail', { appointItem: item.item });
   };
 
-  const _renderItem = item => {
+  const _renderItem = (item: any) => {
     const date = dayjs(item.item.appointmentStart).format('YYYY/MM/DD');
     const startTime = dayjs(item.item.appointmentStart).format('HH:mm');
     const endTime = dayjs(item.item.appointmentEnd).format('HH:mm');
@@ -205,14 +206,20 @@ const styles = StyleSheet.create({
 
 export default ReportList;
 
-const FAKE_DATA = {
+const FAKE_DATA: IReportListItem = {
   user: {
-    id: 1,
+    id: '1',
     firstName: 'Assuly',
     lastName: 'Henry',
-    userIcon: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+    profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
     lastVisit: '2020/01/02',
-    nameInitial: 'A',
+    firstLetter: 'A',
+    instagram: '',
+    mail: '',
+    birthday: '',
+    memo: '',
+    mobile: '',
+    twitter: '',
   },
   report: [
     {
@@ -239,12 +246,14 @@ const FAKE_DATA = {
       ],
       menu: [
         {
-          menuItem: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+          id: '1',
+          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
           price: '20',
-          bgcolor: '#FF9F9F',
+          color: '#FF9F9F',
+          amount: 1,
         },
-        { menuItem: 'off', price: '30', bgcolor: '#87D1AA' },
-        { menuItem: 'Design', price: '40', bgcolor: '#AC71D1' },
+        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
       ],
     },
     {
@@ -270,9 +279,15 @@ const FAKE_DATA = {
         },
       ],
       menu: [
-        { menuItem: 'jel', price: '20', bgcolor: '#FF9F9F' },
-        { menuItem: 'off', price: '30', bgcolor: '#87D1AA' },
-        { menuItem: 'Design', price: '40', bgcolor: '#AC71D1' },
+        {
+          id: '1',
+          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+          price: '20',
+          color: '#FF9F9F',
+          amount: 1,
+        },
+        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
       ],
     },
     {
@@ -298,9 +313,15 @@ const FAKE_DATA = {
         },
       ],
       menu: [
-        { menuItem: 'jel', price: '20', bgcolor: '#FF9F9F' },
-        { menuItem: 'off', price: '30', bgcolor: '#87D1AA' },
-        { menuItem: 'Design', price: '40', bgcolor: '#AC71D1' },
+        {
+          id: '1',
+          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+          price: '20',
+          color: '#FF9F9F',
+          amount: 1,
+        },
+        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
       ],
     },
   ],

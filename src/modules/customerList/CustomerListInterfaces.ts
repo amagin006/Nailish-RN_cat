@@ -3,6 +3,7 @@ import { UserInterface } from '~/redux/user/types';
 import firebase from 'firebase';
 
 import '@firebase/firestore';
+import { IMenuListItem } from '../Menu/MenuInterfaces';
 
 export interface CustomerListPresenterInterface {
   getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
@@ -23,4 +24,20 @@ export interface CustomerListRepositoryInterface {
 export interface ICustomerListItem {
   initial?: string;
   data: CustomerModel[];
+}
+
+export interface IReportPhoto {
+  id: string;
+  url: string;
+}
+
+export interface IReportListItem {
+  user: ICustomer;
+  report: {
+    id: string;
+    appointmentStart: string;
+    appointmentEnd: string;
+    photo: IReportPhoto[];
+    menu: IMenuListItem[];
+  }[];
 }

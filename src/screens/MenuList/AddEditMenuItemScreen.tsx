@@ -7,8 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '~/redux/store';
+import { useAppSelector } from '~/redux/hooks';
 
 // components
 import { TextAtom, TextInputAtom } from '~/components/atoms';
@@ -44,7 +43,7 @@ const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
     tipError: string;
   }>({ nameError: '', tipError: '' });
 
-  const userRedux = useSelector((state: RootState) => state.user);
+  const userRedux = useAppSelector(state => state.user);
 
   useEffect(() => {
     const item = props.route.params?.menuItem;

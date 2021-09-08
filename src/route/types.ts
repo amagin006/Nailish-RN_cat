@@ -1,5 +1,5 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
-import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
+import { IMenuItem, IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 export type RootStackParamList = {
   MainNav: NavigatorScreenParams<MainStackNavParamList>;
@@ -21,7 +21,7 @@ export type MainStackNavParamList = {
   CustomerEdit: undefined;
   ReportList: undefined;
   ReportDetail: { appointItem: any };
-  ReportEdit: undefined;
+  ReportEdit: { newReport?: boolean; selectedMenuItems?: IMenuListItem[] } | undefined;
 
   EditAppointment: { item: any } | undefined;
   SelectMenuListScreen: { updateItems: boolean } | undefined;

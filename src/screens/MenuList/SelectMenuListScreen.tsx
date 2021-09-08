@@ -4,8 +4,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Entypo } from '@expo/vector-icons';
 
 // redux
-import { useSelector } from 'react-redux';
-import { RootState } from '~/redux/store';
+import { useAppSelector } from '~/redux/hooks';
 
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -53,7 +52,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   const menuItemRef = useRef<Swipeable[]>([]);
 
   // redux
-  const userRedux = useSelector((state: RootState) => state.user);
+  const userRedux = useAppSelector(state => state.user);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -105,7 +104,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   };
 
   // when swipe open item
-  const _onSwipeableRightOpen = index => {
+  const _onSwipeableRightOpen = (index: number) => {
     // when other item has already opened, close other items.
     if (openedItemIndex !== null) {
       menuItemRef.current[openedItemIndex].close();
@@ -114,7 +113,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   };
 
   // when swipe item is closed
-  const _onSwipeableClose = index => {
+  const _onSwipeableClose = (index: number) => {
     // when user closed latest opened item
     if (openedItemIndex === index) {
       setOpenedItemIndex(null);
@@ -158,14 +157,16 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
     );
   };
 
-  const _keyExtractor = item => {
+  const _keyExtractor = (item: IMenuListItem) => {
     return `${item.id}`;
   };
 
-  const _onSelectMenu = () => {};
+  const _onSelectMenu = () => {
+    const addedItems = menuItems.filter(item => item.amount > 0);
+    props.navigation.navigate('ReportEdit', { selectedMenuItems: addedItems });
+  };
 
   const _emptyListShow = () => {
-    // if (customerList.length <= 0) {
     return (
       <View style={styles.noListWrap}>
         <View style={styles.noListImagebox}>
@@ -177,8 +178,6 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
         </TextAtom>
       </View>
     );
-    // }
-    // return null;
   };
 
   return (
@@ -250,26 +249,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-const DATA = [
-  {
-    id: '1',
-    menuName: 'Gel',
-    color: '#FF7B7B',
-    price: '20.0',
-  },
-  {
-    id: '2',
-    menuName: 'Off',
-    color: '#7B8AFF',
-    price: '10.0',
-  },
-  {
-    id: '3',
-    menuName: 'Design ---------- sddskfkfdsdfsdfsddskadskjdsfkjsdkfjklds',
-    color: '#79AF52',
-    price: '500000000.0',
-  },
-];
 
 export default SelectMenuListScreen;

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackNavParamList } from '~/route/types';
+import { RouteProp } from '@react-navigation/core';
 
 // components
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
@@ -33,45 +34,44 @@ import { IPickerItem } from '~/components/atoms/PickerModalAtom';
 // styles
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
+import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
+
 interface ReportEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;
+  route: RouteProp<MainStackNavParamList, 'ReportEdit'>;
 }
 
-const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
-  const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState(false);
-  const [reportPhotos, setReportPhotos] = useState(DEFAULTPHOTOS);
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
-  const [tips, setTips] = useState();
+const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
+  const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
+  const [reportPhotos, setReportPhotos] = useState<{ id: string; url: string }[]>(DEFAULTPHOTOS);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
+  const [selectedMenuItems, setSelectedMenuItems] = useState<IMenuListItem[]>([]);
+  const [tips, setTips] = useState<string>('');
   const [payment, setPayment] = useState<IPickerItem | undefined>(undefined);
-  const [memo, setMemo] = useState();
+  const [memo, setMemo] = useState<string>('');
 
   useLayoutEffect(() => {
+    console.log('route.params?.newReport', route.params?.newReport);
+    const titleStr = route.params?.newReport ? 'New Report' : 'Edit Report';
     navigation.setOptions({
-      // TODO: change title new report or edit report
-      title: 'Edit Report',
-      // headerRight: () => {
-      //   return (
-      //     <TouchableOpacity
-      //       style={GeneralNavStyles.headerRight}
-      //       onPress={() => console.log('onPress Saved')}>
-      //       <Text style={GeneralNavStyles.headerRightText}>Save</Text>
-      //     </TouchableOpacity>
-      //   );
-      // },
+      title: titleStr,
     });
   }, []);
+
+  useEffect(() => {
+    const menuItems = route.params?.selectedMenuItems ?? [];
+    setSelectedMenuItems(menuItems);
+  }, [route.params?.selectedMenuItems]);
 
   const _onPressSelectMenu = () => {
     navigation.navigate('SelectMenuListScreen');
   };
 
-  const _onChangeTips = text => {
+  const _onChangeTips = (text: string) => {
     setTips(text);
   };
 
-  const _onChangePayment = item => {};
-
-  const _onChageMemo = text => {
+  const _onChageMemo = (text: string) => {
     setMemo(text);
   };
 
@@ -155,7 +155,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation }) => {
             onConfirmDate={_onConfirmDate}
           />
 
-          <ReportMenuList menuList={FAKE_MENU} />
+          <ReportMenuList menuList={selectedMenuItems} />
           <RoundButton
             onPress={_onPressSelectMenu}
             text={'Select Menu'}
@@ -323,8 +323,8 @@ const styles = StyleSheet.create({
 
 export default ReportEdit;
 
-const FAKE_MENU = [
-  { menuItem: 'jel', price: '20', bgcolor: '#FF9F9F' },
-  { menuItem: 'off', price: '30', bgcolor: '#87D1AA' },
-  { menuItem: 'Design', price: '40', bgcolor: '#AC71D1' },
+const FAKE_MENU: IMenuListItem[] = [
+  { id: '1', menuName: 'jel', price: '20', color: '#FF9F9F', amount: 2 },
+  { id: '2', menuName: 'off', price: '30', color: '#87D1AA', amount: 1 },
+  { id: '3', menuName: 'Design', price: '40', color: '#AC71D1', amount: 20 },
 ];

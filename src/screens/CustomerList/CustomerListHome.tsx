@@ -86,7 +86,7 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
   }, []);
 
   const _itemSeparator = () => <View style={styles.separator} />;
-  const _keyExtractor = item => item.id;
+  const _keyExtractor = (item: CustomerModel) => item.id;
 
   const _onPressCard = (item: CustomerModel) => {
     dispatch(selectedCustomer(item));
@@ -105,10 +105,10 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
     );
   };
 
-  const _renderSectionHeader = ({ section: data }) => {
+  const _renderSectionHeader = ({ section }: { section: ICustomerListItem }) => {
     return (
       <View style={styles.sectionHeader}>
-        <TextAtom style={styles.sectionHeaderText}>{data.initial}</TextAtom>
+        <TextAtom style={styles.sectionHeaderText}>{section.initial}</TextAtom>
       </View>
     );
   };
