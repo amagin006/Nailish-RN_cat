@@ -36,6 +36,7 @@ import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrgani
 // style
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
+import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -44,6 +45,10 @@ interface EditAppointmentProps {
 
 const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) => {
   const [memo, setMemo] = useState<string>('');
+  const [startEndTime, setStartEndTime] = useState<ITimeValue>({
+    startTime: '00:00',
+    endTime: '00:00',
+  });
   const [user, setUser] = useState<CustomerModel>(route.params?.item?.user);
 
   const dispatch = useAppDispatch();
@@ -62,7 +67,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     console.log('onPressSelectMenu');
   };
 
-  const _onChageMemo = text => {
+  const _onChageMemo = (text: string) => {
     setMemo(text);
   };
 
@@ -72,6 +77,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
 
   const _onConfirmTimePicker = (timeValue: ITimeValue) => {
     console.log('timeValue', timeValue);
+    setStartEndTime(timeValue);
   };
 
   const _onConfirmDatePicker = (dateValues: IDateValue) => {
@@ -99,6 +105,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           container={styles.editDateTimeContiner}
           onConfirmDate={_onConfirmDatePicker}
           onConfirmTime={_onConfirmTimePicker}
+          startEndTime={startEndTime}
         />
 
         <ReportMenuList menuList={FAKE_MENU} />
@@ -121,9 +128,9 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
 };
 
 const FAKE_MENU = [
-  { menuItem: 'jel', price: '20', bgcolor: '#FF9F9F' },
-  { menuItem: 'off', price: '30', bgcolor: '#87D1AA' },
-  { menuItem: 'Design', price: '40', bgcolor: '#AC71D1' },
+  { id: '1', menuName: 'jel', price: '20', color: '#FF9F9F', amount: 2 },
+  { id: '2', menuName: 'off', price: '30', color: '#87D1AA', amount: 1 },
+  { id: '3', menuName: 'Design', price: '40', color: '#AC71D1', amount: 4 },
 ];
 
 const styles = StyleSheet.create({

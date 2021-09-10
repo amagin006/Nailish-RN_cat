@@ -59,13 +59,7 @@ export const MainStackScreens = () => {
           title: 'Report Detail',
         }}
       />
-      <MainStackNav.Screen
-        name="ReportEdit"
-        component={ReportEdit}
-        options={{
-          title: 'Edit Report',
-        }}
-      />
+      <MainStackNav.Screen name="ReportEdit" component={ReportEdit} />
       {/* --------- CustomerList ---------- */}
 
       {/* --------- Calender ---------- */}

@@ -45,6 +45,10 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
   const [reportPhotos, setReportPhotos] = useState<{ id: string; url: string }[]>(DEFAULTPHOTOS);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
+  const [startEndtime, setStartEndTime] = useState<ITimeValue>({
+    startTime: '00:00',
+    endTime: '00:00',
+  });
   const [selectedMenuItems, setSelectedMenuItems] = useState<IMenuListItem[]>([]);
   const [tips, setTips] = useState<string>('');
   const [payment, setPayment] = useState<IPickerItem | undefined>(undefined);
@@ -81,6 +85,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
 
   const _onConfirmTime = (timeValues: ITimeValue) => {
     console.log('timeValues', timeValues);
+    setStartEndTime(timeValues);
   };
 
   const _onConfirmPayment = (id: number) => {
@@ -153,6 +158,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
             container={styles.editDateTimeContainer}
             onConfirmTime={_onConfirmTime}
             onConfirmDate={_onConfirmDate}
+            startEndTime={startEndtime}
           />
 
           <ReportMenuList menuList={selectedMenuItems} />

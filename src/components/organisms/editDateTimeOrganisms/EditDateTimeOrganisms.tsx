@@ -13,6 +13,7 @@ interface EditDateTimeOrganismsProps {
   container?: ViewStyle | ViewStyle[];
   innerContainerStyle?: ViewStyle;
 
+  startEndTime: ITimeValue;
   onConfirmDate: (dateValues: IDateValue) => void;
   onConfirmTime: (timeValue: ITimeValue) => void;
 }
@@ -23,7 +24,7 @@ export const EditDateTimeOrganisms: React.FC<EditDateTimeOrganismsProps> = props
       <View style={[styles.editDateBox, props.innerContainerStyle]}>
         <View>
           <EditDateMolecules onConfirm={props.onConfirmDate} containerStyle={styles.editDateText} />
-          <EditTimeMolecules onConfirm={props.onConfirmTime} />
+          <EditTimeMolecules onConfirm={props.onConfirmTime} startEndTime={props.startEndTime} />
         </View>
       </View>
     </View>

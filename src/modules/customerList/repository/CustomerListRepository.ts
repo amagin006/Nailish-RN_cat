@@ -3,7 +3,8 @@ import { CustomerListRepositoryInterface } from '~/modules/CustomerList/Customer
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import { UserInterface } from '~/redux/user/types';
 
 export default class CustomerListRepository
   extends BaseRepository
@@ -13,7 +14,7 @@ export default class CustomerListRepository
     super();
   }
 
-  public async fetchCustomerList(user) {
+  public async fetchCustomerList(user: UserInterface) {
     try {
       return await db
         .collection('users')
@@ -30,7 +31,7 @@ export default class CustomerListRepository
   /**
    * upLoadPhoto
    */
-  public async upLoadPhoto(user, customerId, imageUrl) {
+  public async upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string) {
     const metadata = {
       contentType: 'image/jpeg',
     };
@@ -44,7 +45,7 @@ export default class CustomerListRepository
       return new Promise<string>(resolve => resolve(''));
     }
     const imgURI = imageUrl;
-    let blob;
+    let blob: Blob | Uint8Array | ArrayBuffer;
     try {
       const response = await fetch(imgURI);
       console.log('response', response);
@@ -81,7 +82,7 @@ export default class CustomerListRepository
   /**
    * updateCustomer
    */
-  public async updateCustomer(user, updateCustomer) {
+  public async updateCustomer(user: UserInterface, updateCustomer: ICustomer) {
     const customerRef = db
       .collection('users')
       .doc(`${user.uid}`)
@@ -97,7 +98,7 @@ export default class CustomerListRepository
   /**
    * deleteCustomer
    */
-  public async deleteCustomer(user, customerId) {
+  public async deleteCustomer(user: UserInterface, customerId: string) {
     console.log('customerId', customerId);
     if (!customerId) {
       console.log('Error delete customer is undifined');

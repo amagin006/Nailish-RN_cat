@@ -5,10 +5,12 @@ import { BaseTimePicker } from '~/components/molecules/DatePickerMolecules/BaseT
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { Entypo } from '@expo/vector-icons';
+import dayjs from 'dayjs';
 
 interface EditTimeMoleculesProps {
   containerStyle?: ViewStyle | ViewStyle[];
   onConfirm: (timeValues: ITimeValue) => void;
+  startEndTime: ITimeValue;
 }
 
 export interface ITimeValue {
@@ -21,11 +23,20 @@ export enum TimeType {
   END_TIME = 'END_TIME',
 }
 
-export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
-  const [startTime, setStartTime] = useState<string | undefined>();
-  const [endTime, setEndTime] = useState<string | undefined>();
+const isStarBeforeEnd = (start: string, end: string): boolean => {
+  const startTime = dayjs(`2000-01-01 ${start}`);
+  const endTime = dayjs(`2000-01-01 ${end}`);
+  const minDiff = endTime.diff(startTime, 'minutes', true);
+  if (minDiff >= 0) {
+    return true;
+  }
+  return false;
+};
 
-  // TODO: Check if endtime is valid time or not.. not supposed to be before start time
+export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
+  const [startTime, setStartTime] = useState<string>('00:00');
+  const [endTime, setEndTime] = useState<string>('00:00');
+
   const _onConfirm = (time: string, id?: string) => {
     let timeValues = {
       startTime: startTime,
@@ -33,12 +44,40 @@ export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
     };
     if (id === TimeType.START_TIME) {
       timeValues.startTime = time;
-      setStartTime(time);
     } else if (id === TimeType.END_TIME) {
       timeValues.endTime = time;
-      setEndTime(time);
     }
     props.onConfirm(timeValues);
+  };
+
+  const _onStartHourChange = (hour: string) => {
+    const newStartTime = `${hour}:${startTime.slice(3, 5)}`;
+    if (!isStarBeforeEnd(newStartTime, endTime)) {
+      setEndTime(newStartTime);
+    }
+    setStartTime(newStartTime);
+  };
+
+  const _onStartMinChange = (min: string) => {
+    const newStartTime = `${startTime.slice(0, 2)}:${min}`;
+    if (!isStarBeforeEnd(newStartTime, endTime)) {
+      setEndTime(newStartTime);
+    }
+    setStartTime(newStartTime);
+  };
+
+  const _onEndHourChange = (hour: string) => {
+    const newEndTime = `${hour}:${startTime.slice(3, 5)}`;
+    if (isStarBeforeEnd(startTime, newEndTime)) {
+      setEndTime(newEndTime);
+    }
+  };
+
+  const _onEndMinChange = (min: string) => {
+    const newEndTime = `${startTime.slice(0, 2)}:${min}`;
+    if (isStarBeforeEnd(startTime, newEndTime)) {
+      setEndTime(newEndTime);
+    }
   };
 
   return (
@@ -47,8 +86,11 @@ export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
         <TextAtom style={styels.labelText}>StartTime</TextAtom>
         <BaseTimePicker
           onConfirm={_onConfirm}
+          onHourChange={_onStartHourChange}
+          onMinChange={_onStartMinChange}
           id={TimeType.START_TIME}
           timeTextStyle={styels.timeTextStyel}
+          timeValue={startTime}
         />
       </View>
       <View style={styels.arrow}>
@@ -58,8 +100,11 @@ export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
         <TextAtom style={styels.labelText}>EndTime</TextAtom>
         <BaseTimePicker
           onConfirm={_onConfirm}
+          onHourChange={_onEndHourChange}
+          onMinChange={_onEndMinChange}
           id={TimeType.END_TIME}
           timeTextStyle={styels.timeTextStyel}
+          timeValue={endTime}
         />
       </View>
     </View>

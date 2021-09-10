@@ -14,14 +14,18 @@ import { generalTextStyles } from '~/styles/TextStyle';
 
 interface BaseTimePickerProps {
   onConfirm: (time: string, id?: string) => void;
+  onHourChange: (hour: string) => void;
+  onMinChange: (min: string) => void;
+  timeValue: string;
+
   id?: string;
   timeTextStyle?: TextStyle;
 }
 
 export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
   const [isShowPicker, setIsShowPicker] = useState<boolean>(false);
-  const [selectedHour, setSelectedHour] = useState<string>('00');
-  const [selectedMin, setSelectedMin] = useState<string>('00');
+  const selectedHour = props.timeValue.slice(0, 2);
+  const selectedMin = props.timeValue.slice(3, 5);
 
   const _toggleModal = () => {
     setIsShowPicker(!isShowPicker);
@@ -30,14 +34,6 @@ export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
   const _closeModal = () => {
     setIsShowPicker(false);
     props.onConfirm(`${selectedHour}:${selectedMin}`, props.id);
-  };
-
-  const _onHourChange = (itemValue, itemIndex) => {
-    setSelectedHour(itemValue);
-  };
-
-  const _onMinutesChange = (itemValue, itemIndex) => {
-    setSelectedMin(itemValue);
   };
 
   return (
@@ -73,7 +69,7 @@ export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
                 style={{ width: 100 }}
                 selectedValue={selectedHour}
                 itemStyle={{}}
-                onValueChange={_onHourChange}>
+                onValueChange={props.onHourChange}>
                 {TIME_HOUR.map(item => {
                   return (
                     <Picker.Item
@@ -93,7 +89,7 @@ export const BaseTimePicker: React.FC<BaseTimePickerProps> = props => {
               <Picker
                 style={{ width: 100 }}
                 selectedValue={selectedMin}
-                onValueChange={_onMinutesChange}>
+                onValueChange={props.onMinChange}>
                 {TIME_MINITES.map(item => {
                   return (
                     <Picker.Item

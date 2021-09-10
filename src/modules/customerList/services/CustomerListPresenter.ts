@@ -5,7 +5,8 @@ import {
   CustomerListRepositoryInterface,
 } from '~/modules/CustomerList/CustomerListInterfaces';
 
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import { UserInterface } from '~/redux/user/types';
 
 export default class CustomerListPresenter
   extends BasePresenter
@@ -22,7 +23,7 @@ export default class CustomerListPresenter
   /**
    * get customerList
    */
-  public getCustomerList = async user => {
+  public getCustomerList = async (user: UserInterface) => {
     try {
       let newCustomerList: ICustomerListItem[] = [];
       const data = await this.CustomerListRepository.fetchCustomerList(user);
@@ -55,7 +56,7 @@ export default class CustomerListPresenter
   /**
    * upLoadPhoto
    */
-  public async upLoadPhoto(user, customerId, imageUrl) {
+  public async upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string) {
     const downloadURL = await this.CustomerListRepository.upLoadPhoto(user, customerId, imageUrl);
     return downloadURL;
   }
@@ -63,14 +64,14 @@ export default class CustomerListPresenter
   /**
    * updateCustomer
    */
-  public async updateCustomer(user, updateCustomer) {
+  public async updateCustomer(user: UserInterface, updateCustomer: ICustomer) {
     await this.CustomerListRepository.updateCustomer(user, updateCustomer);
   }
 
   /**
    * deleteCustomer
    */
-  public async deleteCustomer(user, customerId) {
+  public async deleteCustomer(user: UserInterface, customerId: string) {
     return await this.CustomerListRepository.deleteCustomer(user, customerId);
   }
 }
