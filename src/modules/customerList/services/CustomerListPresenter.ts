@@ -3,6 +3,7 @@ import {
   ICustomerListItem,
   CustomerListPresenterInterface,
   CustomerListRepositoryInterface,
+  ICustmerReport,
 } from '~/modules/CustomerList/CustomerListInterfaces';
 
 import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
@@ -73,5 +74,12 @@ export default class CustomerListPresenter
    */
   public async deleteCustomer(user: UserInterface, customerId: string) {
     return await this.CustomerListRepository.deleteCustomer(user, customerId);
+  }
+
+  /**
+   * create Custom Report
+   */
+  public async setNewReport(user: UserInterface, customerId: string, report: ICustmerReport) {
+    return await this.CustomerListRepository.setNewReport(user, customerId, report);
   }
 }

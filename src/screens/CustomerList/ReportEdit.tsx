@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+import dayjs from 'dayjs';
 
 // navigation
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -41,17 +42,27 @@ interface ReportEditProps {
   route: RouteProp<MainStackNavParamList, 'ReportEdit'>;
 }
 
+interface IReportPhoto {
+  id: string | null;
+  url: string;
+}
+
 const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
-  const [reportPhotos, setReportPhotos] = useState<{ id: string; url: string }[]>(DEFAULTPHOTOS);
+  const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
+  const [date, setDate] = useState<IDateValue>({
+    year: dayjs().format('YYYY'),
+    month: dayjs().format('MM'),
+    date: dayjs().format('DD'),
+  });
   const [startEndtime, setStartEndTime] = useState<ITimeValue>({
     startTime: '00:00',
     endTime: '00:00',
   });
   const [selectedMenuItems, setSelectedMenuItems] = useState<IMenuListItem[]>([]);
   const [tips, setTips] = useState<string>('');
-  const [payment, setPayment] = useState<IPickerItem | undefined>(undefined);
+  const [payment, setPayment] = useState<IPickerItem>(PAYMENT[0]);
   const [memo, setMemo] = useState<string>('');
 
   useLayoutEffect(() => {
@@ -63,9 +74,24 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
+    _makePhotoArray();
     const menuItems = route.params?.selectedMenuItems ?? [];
     setSelectedMenuItems(menuItems);
   }, [route.params?.selectedMenuItems]);
+
+  const _makePhotoArray = useCallback(() => {
+    let newReportPhoto: IReportPhoto[] = [];
+    for (let i = 0; i < 4; i++) {
+      const reportPhoto = {
+        id: reportPhotos[i] ? reportPhotos[i].id : null,
+        url: reportPhotos[i]
+          ? reportPhotos[i].url
+          : 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+      };
+      newReportPhoto.push(reportPhoto);
+    }
+    setReportPhotos(newReportPhoto);
+  }, []);
 
   const _onPressSelectMenu = () => {
     navigation.navigate('SelectMenuListScreen');
@@ -80,6 +106,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
   };
 
   const _onConfirmDate = (dateValues: IDateValue) => {
+    setDate(dateValues);
     console.log('dateValues', dateValues);
   };
 
@@ -90,12 +117,22 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
 
   const _onConfirmPayment = (id: number) => {
     const payItem = PAYMENT.find(p => p.id === id);
-    console.log('_onConfirmPayment', payItem);
-    setPayment(payItem);
+    if (payItem) {
+      setPayment(payItem);
+    }
   };
 
   const _onPressSaveButton = () => {
-    console.log('save Report');
+    const saveData = {
+      date,
+      startEndtime,
+      selectedMenuItems,
+      tips,
+      payment,
+      memo,
+    };
+    console.log('save reportPhotos', reportPhotos);
+    console.log('save Report', saveData);
   };
 
   const _getPermissionCameraRoll = async () => {
@@ -115,7 +152,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.6,
       });
       if (!result.cancelled) {
         let newReportPhotos = [...reportPhotos];
@@ -132,7 +169,7 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
       <ScrollView>
         <View>
           <Image
-            source={{ uri: `${reportPhotos[selectedPhotoIndex].url}` }}
+            source={{ uri: `${reportPhotos[selectedPhotoIndex]?.url}` }}
             style={styles.mainPhoto}
           />
           <ListAddFloatButton
@@ -143,12 +180,14 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
         </View>
         <View style={styles.subImageWrapper}>
           {reportPhotos.map((photo, index) => {
+            console.log('0000000000000', photo);
+            console.log('0000000000000index', index);
             return (
               <TouchableOpacity
                 onPress={() => setSelectedPhotoIndex(index)}
                 key={`${index}`}
                 style={styles.subImageBox}>
-                <Image source={{ uri: `${photo.url}` }} style={styles.subImage} />
+                <Image source={{ uri: `${photo?.url}` }} style={styles.subImage} />
               </TouchableOpacity>
             );
           })}

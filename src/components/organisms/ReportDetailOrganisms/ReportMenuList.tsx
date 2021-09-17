@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
   },
   colorView: {
     flexShrink: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-    borderRadius: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 4,
   },
   menuItemText: {
     ...generalTextStyles.boldNormalText,

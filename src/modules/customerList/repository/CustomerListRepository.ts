@@ -1,5 +1,8 @@
 import BaseRepository from '~/modules/bases/models/BaseRepository';
-import { CustomerListRepositoryInterface } from '~/modules/CustomerList/CustomerListInterfaces';
+import {
+  CustomerListRepositoryInterface,
+  ICustmerReport,
+} from '~/modules/CustomerList/CustomerListInterfaces';
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
@@ -111,6 +114,27 @@ export default class CustomerListRepository
         .collection('customer')
         .doc(`${customerId}`)
         .delete();
+      console.log('Document successfully deleted! customerId', customerId);
+      return true;
+    } catch (err) {
+      console.log('Error deleteCustomer on CustomerListRepository ', err);
+      return false;
+    }
+  }
+
+  /**
+   * create Custom Report
+   */
+  public async setNewReport(user: UserInterface, customerId: string, report: ICustmerReport) {
+    console.log('setNewReport user', user);
+    console.log('setNewReport report', user);
+    if (!report) {
+      console.log('Error customer Report is undifined');
+      return false;
+    }
+    try {
+      await db.collection('users').doc(`${user.uid}`).collection('customer').doc(`${customerId}`);
+      // TODO: UPLOAD REPORT DATA
       console.log('Document successfully deleted! customerId', customerId);
       return true;
     } catch (err) {

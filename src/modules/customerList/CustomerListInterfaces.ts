@@ -4,12 +4,15 @@ import firebase from 'firebase';
 
 import '@firebase/firestore';
 import { IMenuListItem } from '../Menu/MenuInterfaces';
+import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import { IPickerItem } from '~/components/atoms/PickerModalAtom';
 
 export interface CustomerListPresenterInterface {
   getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
   upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
+  setNewReport(user: UserInterface, customerId: string, report: ICustmerReport): Promise<any>;
 }
 
 export interface CustomerListRepositoryInterface {
@@ -19,6 +22,7 @@ export interface CustomerListRepositoryInterface {
   upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
+  setNewReport(user: UserInterface, customerId: string, report: ICustmerReport): Promise<any>;
 }
 
 export interface ICustomerListItem {
@@ -33,11 +37,15 @@ export interface IReportPhoto {
 
 export interface IReportListItem {
   user: ICustomer;
-  report: {
-    id: string;
-    appointmentStart: string;
-    appointmentEnd: string;
-    photo: IReportPhoto[];
-    menu: IMenuListItem[];
-  }[];
+  report: ICustmerReport[];
+}
+
+export interface ICustmerReport {
+  id: string;
+  date: string;
+  startEndtime: ITimeValue;
+  selectedMenuItems: IMenuListItem[];
+  tips: string;
+  payment: IPickerItem;
+  memo: string;
 }

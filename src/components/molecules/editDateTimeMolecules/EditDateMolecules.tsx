@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { CalendarList } from 'react-native-calendars';
+import { CalendarList, DateObject } from 'react-native-calendars';
 
 import { ModalAtom, TextAtom } from '~/components/atoms';
 import { generalTextStyles } from '~/styles/TextStyle';
@@ -34,8 +34,9 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
   const [isOpen, setIsOpen] = useState<boolean>(false); // TODO: Move to props
 
   useEffect(() => {
-    const markDate = {};
+    const markDate: { [key: string]: { selected: boolean } } = {};
     markDate[today] = { selected: true };
+    console.log(markDate);
     setMarkedDates(markDate);
   }, []);
 
@@ -47,9 +48,9 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
     setIsOpen(false);
   };
 
-  const _selectedDate = (day: ICalenderDateValue) => {
+  const _selectedDate = (day: DateObject) => {
     setSelectedDay(day.dateString);
-    const dateValues = {
+    const dateValues: IDateValue = {
       year: day.year.toString(),
       month: day.month.toString().padStart(2, '0'),
       date: day.day.toString().padStart(2, '0'),
