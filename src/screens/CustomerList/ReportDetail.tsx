@@ -66,7 +66,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const _keyExtractor = (item: any) => `${item.id}`;
 
   const _onEditReport = () => {
-    navigation.navigate('ReportEdit');
+    navigation.navigate('NewReportAndEdit');
   };
 
   const _onDeletePress = () => {

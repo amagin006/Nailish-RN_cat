@@ -43,7 +43,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
-    navigation.navigate('ReportEdit', { newReport: true });
+    navigation.navigate('NewReportAndEdit', { newReport: true });
   };
 
   const _onEdit = () => {
@@ -72,40 +72,43 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
     );
   };
 
-  const _listHeader = () => {
-    return (
-      <View style={styles.customerInfoBox}>
-        <View style={styles.customerIconWrapper}>
-          <BioIcon image={customer.profileImg} style={styles.customerIcon} />
-        </View>
-        <Text style={styles.name}>{`${customer.firstName} ${customer.lastName}`}</Text>
-        {customer.birthday ? (
-          <View style={styles.birthDayWrapper}>
-            <FontAwesome name={'birthday-cake'} style={styles.birthDayIcon} />
-            <Text style={styles.birthDay}>{customer.birthday}</Text>
-          </View>
-        ) : null}
-        <View style={styles.snsCenterBox}>
-          <SnsButtons customer={customer} />
-        </View>
-        <TouchableOpacity style={styles.newReportButton} onPress={_onAddNewReport}>
-          <FontAwesome name={'file-text-o'} style={styles.newReportIcon} />
-          <Text style={styles.newReportText}>New Report</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
         data={FAKE_DATA.report}
         keyExtractor={_keyExtractor}
-        ListHeaderComponent={_listHeader}
+        ListHeaderComponent={<ListHeader customer={customer} onAddNewReport={_onAddNewReport} />}
         ListHeaderComponentStyle={styles.listHeader}
         renderItem={_renderItem}
       />
     </SafeAreaView>
+  );
+};
+
+const ListHeader: React.FC<{ customer: CustomerModel; onAddNewReport: () => void }> = ({
+  customer,
+  onAddNewReport,
+}) => {
+  return (
+    <View style={styles.customerInfoBox}>
+      <View style={styles.customerIconWrapper}>
+        <BioIcon image={customer.profileImg} style={styles.customerIcon} />
+      </View>
+      <Text style={styles.name}>{`${customer.firstName} ${customer.lastName}`}</Text>
+      {customer.birthday ? (
+        <View style={styles.birthDayWrapper}>
+          <FontAwesome name={'birthday-cake'} style={styles.birthDayIcon} />
+          <Text style={styles.birthDay}>{customer.birthday}</Text>
+        </View>
+      ) : null}
+      <View style={styles.snsCenterBox}>
+        <SnsButtons customer={customer} />
+      </View>
+      <TouchableOpacity style={styles.newReportButton} onPress={onAddNewReport}>
+        <FontAwesome name={'file-text-o'} style={styles.newReportIcon} />
+        <Text style={styles.newReportText}>New Report</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

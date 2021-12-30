@@ -37,9 +37,9 @@ import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
-interface ReportEditProps {
-  navigation: StackNavigationProp<MainStackNavParamList, 'ReportEdit'>;
-  route: RouteProp<MainStackNavParamList, 'ReportEdit'>;
+interface NewReportAndEditProps {
+  navigation: StackNavigationProp<MainStackNavParamList, 'NewReportAndEdit'>;
+  route: RouteProp<MainStackNavParamList, 'NewReportAndEdit'>;
 }
 
 interface IReportPhoto {
@@ -47,7 +47,7 @@ interface IReportPhoto {
   url: string;
 }
 
-const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
+const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }) => {
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
   const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
@@ -180,8 +180,6 @@ const ReportEdit: React.FC<ReportEditProps> = ({ navigation, route }) => {
         </View>
         <View style={styles.subImageWrapper}>
           {reportPhotos.map((photo, index) => {
-            console.log('0000000000000', photo);
-            console.log('0000000000000index', index);
             return (
               <TouchableOpacity
                 onPress={() => setSelectedPhotoIndex(index)}
@@ -366,7 +364,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReportEdit;
+export default NewReportAndEdit;
 
 const FAKE_MENU: IMenuListItem[] = [
   { id: '1', menuName: 'jel', price: '20', color: '#FF9F9F', amount: 2 },

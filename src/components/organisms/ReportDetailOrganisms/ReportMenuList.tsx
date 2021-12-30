@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     borderBottomColor: AppGeneralColor.SelectMenuList.listSeparator_2,
     borderBottomWidth: 0.5,
-    alignItems: 'flex-end',
   },
   titleWrapper: {
     flexDirection: 'row',
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     color: AppGeneralColor.Palette.White,
   },
   priceWrapper: {
-    // alignItems: 'flex-end',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     flexDirection: 'row',
     marginLeft: 10,

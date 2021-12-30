@@ -13,7 +13,7 @@ interface EditDateTimeOrganismsProps {
   container?: ViewStyle | ViewStyle[];
   innerContainerStyle?: ViewStyle;
 
-  startEndTime: ITimeValue;
+  startEndTime: ITimeValue; // {startTime: '10:00' || undifine, endTime: '14:00' || undifine}
   onConfirmDate: (dateValues: IDateValue) => void;
   onConfirmTime: (timeValue: ITimeValue) => void;
 }

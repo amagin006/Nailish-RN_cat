@@ -6,7 +6,7 @@ import { BottomTabScreens } from '~/route/BottomTabScreens';
 // component
 import CustomerEdit from '~/screens/CustomerList/CustomerEdit';
 import ReportList from '~/screens/CustomerList/ReportList';
-import ReportEdit from '~/screens/CustomerList/ReportEdit';
+import NewReportAndEdit from '~/screens/CustomerList/NewReportAndEdit';
 import ReportDetail from '~/screens/CustomerList/ReportDetail';
 
 import EditAppointment from '~/screens/Calender/EditAppointment';
@@ -59,7 +59,7 @@ export const MainStackScreens = () => {
           title: 'Report Detail',
         }}
       />
-      <MainStackNav.Screen name="ReportEdit" component={ReportEdit} />
+      <MainStackNav.Screen name="NewReportAndEdit" component={NewReportAndEdit} />
       {/* --------- CustomerList ---------- */}
 
       {/* --------- Calender ---------- */}

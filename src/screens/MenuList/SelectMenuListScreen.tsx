@@ -163,7 +163,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
 
   const _onSelectMenu = () => {
     const addedItems = menuItems.filter(item => item.amount > 0);
-    props.navigation.navigate('ReportEdit', { selectedMenuItems: addedItems });
+    props.navigation.navigate('NewReportAndEdit', { selectedMenuItems: addedItems });
   };
 
   const _emptyListShow = () => {

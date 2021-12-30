@@ -21,7 +21,7 @@ export type MainStackNavParamList = {
   CustomerEdit: undefined;
   ReportList: undefined;
   ReportDetail: { appointItem: any };
-  ReportEdit: { newReport?: boolean; selectedMenuItems?: IMenuListItem[] } | undefined;
+  NewReportAndEdit: { newReport?: boolean; selectedMenuItems?: IMenuListItem[] } | undefined;
 
   EditAppointment: { item: any } | undefined;
   SelectMenuListScreen: { updateItems: boolean } | undefined;
