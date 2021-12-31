@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { CalendarList, DateObject } from 'react-native-calendars';
+import { CalendarList } from 'react-native-calendars';
 
 import { ModalAtom, TextAtom } from '~/components/atoms';
 import { generalTextStyles } from '~/styles/TextStyle';
 
 // util
 import { dateFormate } from '~/util/timeUtil';
+
+// Type
+import { DateData } from 'react-native-calendars/src/types';
 
 interface EditDateMoleculesProps {
   containerStyle?: ViewStyle | ViewStyle[];
@@ -48,7 +51,7 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
     setIsOpen(false);
   };
 
-  const _selectedDate = (day: DateObject) => {
+  const _selectedDate = (day: DateData) => {
     setSelectedDay(day.dateString);
     const dateValues: IDateValue = {
       year: day.year.toString(),
@@ -90,14 +93,14 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
                   flexDirection: 'row',
                   justifyContent: 'space-around',
                 },
-                header: {
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  marginTop: 0,
-                  alignItems: 'center',
-                },
+                // header: {
+                //   flexDirection: 'row',
+                //   justifyContent: 'space-between',
+                //   paddingLeft: 10,
+                //   paddingRight: 10,
+                //   marginTop: 0,
+                //   alignItems: 'center',
+                // },
               },
             }}
           />

@@ -133,9 +133,9 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
     navigation.popToTop();
   };
 
-  const _upLoadPhoto = async (customerId): Promise<string> => {
+  const _upLoadImagePhoto = async (customerId: string): Promise<string> => {
     setIsLoading(true);
-    return await customerListPresenter.upLoadPhoto(userRedux, customerId, imageUrl);
+    return await customerListPresenter.upLoadImagePhoto(userRedux, customerId, imageUrl);
   };
 
   async function uploadCustomerData() {
@@ -171,12 +171,12 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
         throw Error('Failed adding new customer');
       }
       updateCustomer.id = res.id;
-      updateCustomer.profileImg = await _upLoadPhoto(res.id);
+      updateCustomer.profileImg = await _upLoadImagePhoto(res.id);
       const newCustomerModel = new CustomerModel(updateCustomer);
       dispatch(addCustomerToList(newCustomerModel));
     } else {
       // update customer
-      updateCustomer.profileImg = await _upLoadPhoto(customer.id);
+      updateCustomer.profileImg = await _upLoadImagePhoto(customer.id);
       updateCustomer.id = customer.id;
     }
     await customerListPresenter.updateCustomer(userRedux, updateCustomer);

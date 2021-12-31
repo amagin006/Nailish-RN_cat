@@ -4,25 +4,60 @@ import firebase from 'firebase';
 
 import '@firebase/firestore';
 import { IMenuListItem } from '../Menu/MenuInterfaces';
-import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';
+
+// Type
+import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 
 export interface CustomerListPresenterInterface {
   getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
-  upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
+  upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
-  setNewReport(user: UserInterface, customerId: string, report: ICustmerReport): Promise<any>;
+  setNewReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report?: ICustmerReport,
+  ): Promise<boolean>;
+  upLoadReportPhoto(
+    user: UserInterface,
+    customerId: string,
+    imageUrl: string,
+    reportId: string,
+    photoIndex: number,
+  ): Promise<string>;
+  getNewReportKey(user: UserInterface, customerId: string): Promise<any>;
+  getUploadReportPhotoUrls(
+    user: UserInterface,
+    customerId: string,
+    reportPhotos: IReportPhoto[],
+    reportId: string,
+  ): Promise<(IReportPhoto | null)[]>;
 }
 
 export interface CustomerListRepositoryInterface {
   fetchCustomerList(
     user: UserInterface,
   ): Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>;
-  upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
+  upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
-  setNewReport(user: UserInterface, customerId: string, report: ICustmerReport): Promise<any>;
+  setNewReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report?: ICustmerReport,
+  ): Promise<boolean>;
+  upLoadReportPhoto(
+    user: UserInterface,
+    customerId: string,
+    imageUrl: string,
+    reportId: string,
+    photoIndex: number,
+  ): Promise<string>;
+  getNewReportKey(user: UserInterface, customerId: string): Promise<any>;
 }
 
 export interface ICustomerListItem {
@@ -31,7 +66,7 @@ export interface ICustomerListItem {
 }
 
 export interface IReportPhoto {
-  id: string;
+  id: number | null;
   url: string;
 }
 
@@ -41,8 +76,9 @@ export interface IReportListItem {
 }
 
 export interface ICustmerReport {
-  id: string;
-  date: string;
+  id?: string;
+  photoUrls?: (IReportPhoto | null)[] | undefined;
+  date: IDateValue;
   startEndtime: ITimeValue;
   selectedMenuItems: IMenuListItem[];
   tips: string;

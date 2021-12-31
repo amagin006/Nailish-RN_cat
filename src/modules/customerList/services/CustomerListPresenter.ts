@@ -4,6 +4,7 @@ import {
   CustomerListPresenterInterface,
   CustomerListRepositoryInterface,
   ICustmerReport,
+  IReportPhoto,
 } from '~/modules/CustomerList/CustomerListInterfaces';
 
 import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
@@ -55,10 +56,14 @@ export default class CustomerListPresenter
   };
 
   /**
-   * upLoadPhoto
+   * upLoadImagePhoto
    */
-  public async upLoadPhoto(user: UserInterface, customerId?: string, imageUrl?: string) {
-    const downloadURL = await this.CustomerListRepository.upLoadPhoto(user, customerId, imageUrl);
+  public async upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string) {
+    const downloadURL = await this.CustomerListRepository.upLoadImagePhoto(
+      user,
+      customerId,
+      imageUrl,
+    );
     return downloadURL;
   }
 
@@ -79,7 +84,69 @@ export default class CustomerListPresenter
   /**
    * create Custom Report
    */
-  public async setNewReport(user: UserInterface, customerId: string, report: ICustmerReport) {
-    return await this.CustomerListRepository.setNewReport(user, customerId, report);
+  public async setNewReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report?: ICustmerReport,
+  ) {
+    return await this.CustomerListRepository.setNewReport(user, customerId, reportId, report);
+  }
+
+  /**
+   * upLoad one ReportPhoto to firebase storage
+   */
+  public async upLoadReportPhoto(
+    user: UserInterface,
+    customerId: string,
+    imageUrl: string,
+    reportId: string,
+    photoIndex: number,
+  ) {
+    const downloadURL = await this.CustomerListRepository.upLoadReportPhoto(
+      user,
+      customerId,
+      imageUrl,
+      reportId,
+      photoIndex,
+    );
+    return downloadURL;
+  }
+
+  public async getUploadReportPhotoUrls(
+    user: UserInterface,
+    customerId: string,
+    reportPhotos: IReportPhoto[],
+    reportId: string,
+  ) {
+    // Upload firebase storage and Get photo url from firebase storage
+    const photoUrls: (IReportPhoto | null)[] = await Promise.all(
+      reportPhotos.map(async (photo, index) => {
+        if (photo.id || photo.id === 0) {
+          const photoRes = await this.upLoadReportPhoto(
+            user,
+            customerId,
+            photo.url,
+            reportId,
+            index,
+          );
+          const photoInfo: IReportPhoto = {
+            id: index,
+            url: photoRes,
+          };
+          return photoInfo;
+        } else {
+          return null;
+        }
+      }),
+    );
+    return photoUrls;
+  }
+
+  /**
+   * To get customer uniqu report key for firebase collection
+   */
+  public async getNewReportKey(user: UserInterface, customerId: string) {
+    return await this.CustomerListRepository.getNewReportKey(user, customerId);
   }
 }

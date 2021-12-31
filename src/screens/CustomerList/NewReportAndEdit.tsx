@@ -27,27 +27,37 @@ import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportM
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
-import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
-import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
 import { PaymentCoulmnMolecules } from '~/components/molecules/ColumnMolecules/PaymentCoulmnMolecules';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';
+import { LoadingIndicator } from '~/components/atoms';
+
+// Type
+import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
+import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 // styles
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
+// Services
+import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
+
+// Redux
+import { useAppSelector } from '~/redux/hooks';
 interface NewReportAndEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'NewReportAndEdit'>;
   route: RouteProp<MainStackNavParamList, 'NewReportAndEdit'>;
 }
 
-interface IReportPhoto {
-  id: string | null;
-  url: string;
-}
+const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }) => {
+  // Redux
+  const userRedux = useAppSelector(state => state.user);
+  const customerIdRedux = useAppSelector(state => state.customer?.selectedCustomer.id);
+
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
   const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
@@ -64,6 +74,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const [tips, setTips] = useState<string>('');
   const [payment, setPayment] = useState<IPickerItem>(PAYMENT[0]);
   const [memo, setMemo] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     console.log('route.params?.newReport', route.params?.newReport);
@@ -122,8 +133,22 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     }
   };
 
-  const _onPressSaveButton = () => {
+  const _onPressSaveButton = async () => {
+    setIsLoading(true);
+
+    // Get new Report key on firebase
+    const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
+
+    // Upload photo and get url from firebase storage
+    const photoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
+      userRedux,
+      customerIdRedux,
+      reportPhotos,
+      reportId,
+    );
+
     const saveData = {
+      photoUrls,
       date,
       startEndtime,
       selectedMenuItems,
@@ -131,8 +156,21 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       payment,
       memo,
     };
-    console.log('save reportPhotos', reportPhotos);
-    console.log('save Report', saveData);
+
+    // save to firebase
+    const resNewReport = await CustomerListPresenter.setNewReport(
+      userRedux,
+      customerIdRedux,
+      reportId,
+      saveData,
+    );
+    if (!resNewReport) {
+      Alert.alert('Sorry, something went wrong. Try it later...');
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(false);
+    navigation.pop();
   };
 
   const _getPermissionCameraRoll = async () => {
@@ -157,6 +195,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       if (!result.cancelled) {
         let newReportPhotos = [...reportPhotos];
         newReportPhotos[selectedPhotoIndex].url = result.uri;
+        newReportPhotos[selectedPhotoIndex].id = selectedPhotoIndex;
         setReportPhotos(newReportPhotos);
       }
     } catch (err) {
@@ -166,6 +205,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {isLoading && <LoadingIndicator isLoading={isLoading} />}
       <ScrollView>
         <View>
           <Image
@@ -184,7 +224,10 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
               <TouchableOpacity
                 onPress={() => setSelectedPhotoIndex(index)}
                 key={`${index}`}
-                style={styles.subImageBox}>
+                style={[
+                  styles.subImageBox,
+                  selectedPhotoIndex === index && styles.subImageBoxSelected,
+                ]}>
                 <Image source={{ uri: `${photo?.url}` }} style={styles.subImage} />
               </TouchableOpacity>
             );
@@ -284,6 +327,10 @@ const styles = StyleSheet.create({
   },
   subImageBox: {
     borderRadius: 10,
+  },
+  subImageBoxSelected: {
+    borderColor: AppGeneralColor.Button.Alert,
+    borderWidth: 1,
   },
   subImage: {
     borderRadius: 10,
