@@ -12,6 +12,7 @@ import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDat
 
 export interface CustomerListPresenterInterface {
   getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
+  getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
   upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
@@ -19,7 +20,7 @@ export interface CustomerListPresenterInterface {
     user: UserInterface,
     customerId: string,
     reportId: string,
-    report?: ICustmerReport,
+    report?: ICustomerReport,
   ): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
@@ -38,9 +39,8 @@ export interface CustomerListPresenterInterface {
 }
 
 export interface CustomerListRepositoryInterface {
-  fetchCustomerList(
-    user: UserInterface,
-  ): Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>;
+  fetchCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
+  getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
   upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
   deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
@@ -48,7 +48,7 @@ export interface CustomerListRepositoryInterface {
     user: UserInterface,
     customerId: string,
     reportId: string,
-    report?: ICustmerReport,
+    report?: ICustomerReport,
   ): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
@@ -72,10 +72,10 @@ export interface IReportPhoto {
 
 export interface IReportListItem {
   user: ICustomer;
-  report: ICustmerReport[];
+  report: ICustomerReport[];
 }
 
-export interface ICustmerReport {
+export interface ICustomerReport {
   id?: string;
   photoUrls?: (IReportPhoto | null)[] | undefined;
   date: IDateValue;

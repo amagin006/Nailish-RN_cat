@@ -3,7 +3,7 @@ import {
   ICustomerListItem,
   CustomerListPresenterInterface,
   CustomerListRepositoryInterface,
-  ICustmerReport,
+  ICustomerReport,
   IReportPhoto,
 } from '~/modules/CustomerList/CustomerListInterfaces';
 
@@ -27,33 +27,25 @@ export default class CustomerListPresenter
    */
   public getCustomerList = async (user: UserInterface) => {
     try {
-      let newCustomerList: ICustomerListItem[] = [];
-      const data = await this.CustomerListRepository.fetchCustomerList(user);
-      data.forEach(doc => {
-        const id = doc.id;
-        const newCustomer = new CustomerModel({ id, ...doc.data() });
-
-        if (newCustomerList.length === 0) {
-          newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
-        } else {
-          let findRow;
-          newCustomerList.map(row => {
-            if (row.initial === newCustomer.firstLetter) {
-              row?.data && row.data.push(newCustomer);
-              findRow = true;
-              return;
-            }
-          });
-          !findRow &&
-            newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
-        }
-      });
-      return newCustomerList || [];
+      return await this.CustomerListRepository.fetchCustomerList(user);
     } catch (err) {
       console.log('Error firebase: ', err);
       return [];
     }
   };
+
+  /**
+   * get Customer report list
+   */
+
+  public async getCustomerReportList(user: UserInterface, customerId: string) {
+    try {
+      return await this.CustomerListRepository.getCustomerReportList(user, customerId);
+    } catch (err) {
+      console.log('Error Firebase getCustomerReportList', err);
+      return [];
+    }
+  }
 
   /**
    * upLoadImagePhoto
@@ -88,7 +80,7 @@ export default class CustomerListPresenter
     user: UserInterface,
     customerId: string,
     reportId: string,
-    report?: ICustmerReport,
+    report?: ICustomerReport,
   ) {
     return await this.CustomerListRepository.setNewReport(user, customerId, reportId, report);
   }
@@ -136,7 +128,11 @@ export default class CustomerListPresenter
           };
           return photoInfo;
         } else {
-          return null;
+          const photoInfo: IReportPhoto = {
+            id: index,
+            url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+          };
+          return photoInfo;
         }
       }),
     );

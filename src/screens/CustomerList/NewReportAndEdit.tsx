@@ -148,6 +148,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     );
 
     const saveData = {
+      id: reportId,
       photoUrls,
       date,
       startEndtime,

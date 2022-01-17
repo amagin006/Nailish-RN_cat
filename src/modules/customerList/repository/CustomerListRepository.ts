@@ -1,12 +1,13 @@
 import BaseRepository from '~/modules/bases/models/BaseRepository';
 import {
   CustomerListRepositoryInterface,
-  ICustmerReport,
+  ICustomerReport,
+  ICustomerListItem,
 } from '~/modules/CustomerList/CustomerListInterfaces';
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
-import { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
 import { UserInterface } from '~/redux/user/types';
 
 export default class CustomerListRepository
@@ -19,15 +20,59 @@ export default class CustomerListRepository
 
   public async fetchCustomerList(user: UserInterface) {
     try {
-      return await db
+      const data = await db
         .collection('users')
         .doc(`${user.uid}`)
         .collection('customer')
         .orderBy('firstName')
         .get();
+
+      let newCustomerList: ICustomerListItem[] = [];
+      data.forEach(doc => {
+        const id = doc.id;
+        const newCustomer = new CustomerModel({ id, ...doc.data() });
+
+        if (newCustomerList.length === 0) {
+          newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
+        } else {
+          let findRow;
+          newCustomerList.map(row => {
+            if (row.initial === newCustomer.firstLetter) {
+              row?.data && row.data.push(newCustomer);
+              findRow = true;
+              return;
+            }
+          });
+          !findRow &&
+            newCustomerList.push({ initial: newCustomer.firstLetter, data: [newCustomer] });
+        }
+      });
+      return newCustomerList || [];
     } catch (err) {
       console.log('Error fetchCustomerList: ', err);
       throw new Error('Error fetchCustomerList on CustomerListRepository');
+    }
+  }
+
+  public async getCustomerReportList(user: UserInterface, customerId: string) {
+    try {
+      const data = await db
+        .collection('users')
+        .doc(`${user.uid}`)
+        .collection('customer')
+        .doc(`${customerId}`)
+        .collection('report')
+        .get();
+
+      const newReportList: ICustomerReport[] = [];
+      data.forEach(doc => {
+        const dataID = doc.data() as ICustomerReport;
+        newReportList.push(dataID);
+      });
+      return newReportList;
+    } catch (err) {
+      console.log('Error fetchCustomerReportList: ', err);
+      throw new Error('Error fetchCustomerReportList on CustomerListRepository');
     }
   }
 
@@ -129,7 +174,7 @@ export default class CustomerListRepository
     user: UserInterface,
     customerId: string,
     reportId: string,
-    report: ICustmerReport,
+    report: ICustomerReport,
   ) {
     if (!report) {
       console.log('Error customer Report is undifined');

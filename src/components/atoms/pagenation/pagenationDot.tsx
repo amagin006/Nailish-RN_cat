@@ -7,15 +7,16 @@ interface PagenationDotProps {
   style: ViewStyle | ViewStyle[];
 }
 
+function dotColor(index: number, focusItemIndex: number) {
+  return index === focusItemIndex ? styles.colorDot : styles.whiteDot;
+}
+
 export const PagenationDot: React.FC<PagenationDotProps> = ({ list, foucsItemIndex, style }) => {
-  function dotColor(index) {
-    return index === foucsItemIndex ? styles.colorDot : styles.whiteDot;
-  }
   return (
     <View style={style}>
       <View style={styles.dotWrapper}>
-        {list.map((listItem, index) => {
-          return <View key={index} style={[styles.dot, dotColor(index)]} />;
+        {list.map((_, index) => {
+          return <View key={index} style={[styles.dot, dotColor(index, foucsItemIndex)]} />;
         })}
       </View>
     </View>

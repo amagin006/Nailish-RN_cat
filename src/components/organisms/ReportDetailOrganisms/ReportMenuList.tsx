@@ -16,21 +16,23 @@ const ReportMenuList: React.FC<ReportMenuListProps> = ({ menuList, container }) 
     <View style={container}>
       <Text style={GeneralViewStyle.leftColumnText}>Menu</Text>
       <View style={GeneralViewStyle.priceColumn}>
-        {menuList.map((menuItem, index) => {
-          return (
-            <View style={styles.menuItemRow} key={index}>
-              <View style={styles.titleWrapper}>
-                <View style={[styles.colorView, { backgroundColor: `${menuItem.color}` }]}>
-                  <TextAtom style={styles.menuItemText}>{menuItem.menuName}</TextAtom>
+        {menuList && Array.isArray(menuList)
+          ? menuList.map((menuItem, index) => {
+              return (
+                <View style={styles.menuItemRow} key={index}>
+                  <View style={styles.titleWrapper}>
+                    <View style={[styles.colorView, { backgroundColor: `${menuItem.color}` }]}>
+                      <TextAtom style={styles.menuItemText}>{menuItem.menuName}</TextAtom>
+                    </View>
+                  </View>
+                  <View style={styles.priceWrapper}>
+                    <TextAtom style={styles.priceText}>$ {menuItem.price}</TextAtom>
+                    <TextAtom style={styles.amountText}>x {menuItem.amount}</TextAtom>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.priceWrapper}>
-                <TextAtom style={styles.priceText}>$ {menuItem.price}</TextAtom>
-                <TextAtom style={styles.amountText}>x {menuItem.amount}</TextAtom>
-              </View>
-            </View>
-          );
-        })}
+              );
+            })
+          : null}
       </View>
     </View>
   );

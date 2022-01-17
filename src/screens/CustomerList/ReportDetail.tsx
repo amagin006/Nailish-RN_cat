@@ -32,6 +32,7 @@ import { IButtonColorType, RoundButton } from '~/components/atoms/button/button'
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { ICustomerReport, IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 interface ReportDetailProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportDetail'>;
@@ -60,10 +61,13 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
     });
   }, [navigation]);
 
-  const _renderPhoto = (item: any) => (
-    <Image source={{ uri: `${item.item.url}` }} style={styles.photo} />
-  );
-  const _keyExtractor = (item: any) => `${item.id}`;
+  const _renderPhoto = ({ item }: { item: IReportPhoto }) => {
+    return <Image source={{ uri: item?.url }} style={styles.photo} />;
+  };
+
+  const _keyExtractor = (item: IReportPhoto) => {
+    return `${item.id}`;
+  };
 
   const _onEditReport = () => {
     navigation.navigate('NewReportAndEdit');
@@ -74,7 +78,8 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   };
 
   const onViewRef = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    viewableItems[0].index && setViewableItemIndex(viewableItems[0].index);
+    console.log('========onViewRef========', viewableItems);
+    viewableItems[0]?.index && setViewableItemIndex(viewableItems[0].index);
   });
 
   const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 });
@@ -92,8 +97,8 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
             <Text style={styles.date}>{`${date} ${startTime} ~ ${endTime}`}</Text>
           </View>
         </View>
-        <FlatList
-          data={appointItem.photo}
+        <FlatList<IReportPhoto>
+          data={appointItem.photoUrls}
           horizontal={true}
           renderItem={_renderPhoto}
           pagingEnabled
@@ -105,11 +110,11 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
         <PagenationDot
           style={styles.pagenationDotStyle}
           foucsItemIndex={viewableItemIndex}
-          list={appointItem.photo}
+          list={appointItem.photoUrls}
         />
         <View style={GeneralViewStyle.bodyWrapper}>
-          <ReportMenuList menuList={appointItem.menu} />
-          <PriceDetail menuList={appointItem.menu} />
+          <ReportMenuList menuList={appointItem.selectedMenuItems} />
+          <PriceDetail menuList={appointItem.selectedMenuItems} />
           <RoundButton
             onPress={_onDeletePress}
             text="Delete Report"

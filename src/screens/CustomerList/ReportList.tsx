@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -20,14 +20,20 @@ import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import { IReportListItem } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport, IReportListItem } from '~/modules/CustomerList/CustomerListInterfaces';
+import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
 }
 
+const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
+
 const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
   const customer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
+  const userRedux = useAppSelector(state => state.user);
+
+  const [reportList, setReportList] = useState<ICustomerReport[]>([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,6 +47,22 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
+  useEffect(() => {
+    const _fetchRepoert = async () => {
+      try {
+        const reportList = await CustomerListPresenter.getCustomerReportList(
+          userRedux,
+          customer.id,
+        );
+        console.log('reportList', reportList);
+        setReportList(reportList);
+      } catch (err) {
+        console.log('Error getCustomerReportList', err);
+      }
+    };
+    _fetchRepoert();
+  }, []);
+
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
     navigation.navigate('NewReportAndEdit', { newReport: true });
@@ -52,18 +74,21 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
 
   const _keyExtractor = (item: any) => item.id;
 
-  const _onPressCard = (item: any) => {
+  const _onPressCard = (item: ICustomerReport) => {
     console.log('onPressCard', item);
-    navigation.navigate('ReportDetail', { appointItem: item.item });
+    navigation.navigate('ReportDetail', { appointItem: item });
   };
 
-  const _renderItem = (item: any) => {
-    const date = dayjs(item.item.appointmentStart).format('YYYY/MM/DD');
-    const startTime = dayjs(item.item.appointmentStart).format('HH:mm');
-    const endTime = dayjs(item.item.appointmentEnd).format('HH:mm');
+  const _renderItem = ({ item }: { item: ICustomerReport }) => {
+    const date = `${item.date.year}/${item.date.month}/${item.date.date}`;
+    const startTime = item.startEndtime.startTime;
+    const endTime = item.startEndtime.endTime;
+    const thumbnailPhotoUrl = item.photoUrls
+      ? item.photoUrls[0]?.url
+      : 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png';
     return (
       <TouchableOpacity onPress={() => _onPressCard(item)} style={styles.reportCardWrapper}>
-        <Image style={styles.cardImage} source={{ uri: `${item.item.photo[0].url}` }} />
+        <Image style={styles.cardImage} source={{ uri: thumbnailPhotoUrl }} />
         <View style={styles.textWrapper}>
           <Text style={styles.dateText}>{date}</Text>
           <Text style={styles.timeText}>{`${startTime} ~ ${endTime}`}</Text>
@@ -75,7 +100,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
-        data={FAKE_DATA.report}
+        data={reportList}
         keyExtractor={_keyExtractor}
         ListHeaderComponent={<ListHeader customer={customer} onAddNewReport={_onAddNewReport} />}
         ListHeaderComponentStyle={styles.listHeader}
@@ -209,123 +234,123 @@ const styles = StyleSheet.create({
 
 export default ReportList;
 
-const FAKE_DATA: IReportListItem = {
-  user: {
-    id: '1',
-    firstName: 'Assuly',
-    lastName: 'Henry',
-    profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
-    lastVisit: '2020/01/02',
-    firstLetter: 'A',
-    instagram: '',
-    mail: '',
-    birthday: '',
-    memo: '',
-    mobile: '',
-    twitter: '',
-  },
-  report: [
-    {
-      id: '1',
-      appointmentStart: '2020-02-08 12:00',
-      appointmentEnd: '2020-02-08 14:00',
-      photo: [
-        {
-          id: 'aaa',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-        {
-          id: 'aab',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-        {
-          id: 'aac',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-        {
-          id: 'aad',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-      ],
-      menu: [
-        {
-          id: '1',
-          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
-          price: '20',
-          color: '#FF9F9F',
-          amount: 1,
-        },
-        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
-        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
-      ],
-    },
-    {
-      id: '2',
-      appointmentStart: '2020-02-23 18:00',
-      appointmentEnd: '2020-02-23 20:00',
-      photo: [
-        {
-          id: 'aba',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-        {
-          id: 'abb',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-        {
-          id: 'abc',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-        {
-          id: 'abd',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-      ],
-      menu: [
-        {
-          id: '1',
-          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
-          price: '20',
-          color: '#FF9F9F',
-          amount: 1,
-        },
-        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
-        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
-      ],
-    },
-    {
-      id: '3',
-      appointmentStart: '2020-03-08 12:00',
-      appointmentEnd: '2020-03-08 18:00',
-      photo: [
-        {
-          id: 'aca',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-        {
-          id: 'acb',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-        {
-          id: 'acc',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
-        },
-        {
-          id: 'acd',
-          url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
-        },
-      ],
-      menu: [
-        {
-          id: '1',
-          menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
-          price: '20',
-          color: '#FF9F9F',
-          amount: 1,
-        },
-        { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
-        { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
-      ],
-    },
-  ],
-};
+// const FAKE_DATA: IReportListItem = {
+//   user: {
+//     id: '1',
+//     firstName: 'Assuly',
+//     lastName: 'Henry',
+//     profileImg: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/01.jpg',
+//     lastVisit: '2020/01/02',
+//     firstLetter: 'A',
+//     instagram: '',
+//     mail: '',
+//     birthday: '',
+//     memo: '',
+//     mobile: '',
+//     twitter: '',
+//   },
+//   report: [
+//     {
+//       id: '1',
+//       appointmentStart: '2020-02-08 12:00',
+//       appointmentEnd: '2020-02-08 14:00',
+//       photo: [
+//         {
+//           id: 'aaa',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//         {
+//           id: 'aab',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//         {
+//           id: 'aac',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//         {
+//           id: 'aad',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//       ],
+//       menu: [
+//         {
+//           id: '1',
+//           menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+//           price: '20',
+//           color: '#FF9F9F',
+//           amount: 1,
+//         },
+//         { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+//         { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
+//       ],
+//     },
+//     {
+//       id: '2',
+//       appointmentStart: '2020-02-23 18:00',
+//       appointmentEnd: '2020-02-23 20:00',
+//       photo: [
+//         {
+//           id: 'aba',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//         {
+//           id: 'abb',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//         {
+//           id: 'abc',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//         {
+//           id: 'abd',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//       ],
+//       menu: [
+//         {
+//           id: '1',
+//           menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+//           price: '20',
+//           color: '#FF9F9F',
+//           amount: 1,
+//         },
+//         { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+//         { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
+//       ],
+//     },
+//     {
+//       id: '3',
+//       appointmentStart: '2020-03-08 12:00',
+//       appointmentEnd: '2020-03-08 18:00',
+//       photo: [
+//         {
+//           id: 'aca',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//         {
+//           id: 'acb',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//         {
+//           id: 'acc',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample1.jpg',
+//         },
+//         {
+//           id: 'acd',
+//           url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/nailsample2.jpg',
+//         },
+//       ],
+//       menu: [
+//         {
+//           id: '1',
+//           menuName: 'jeldsffsdkfdkkjsdkjsjkjlkkljkljkljkljlkjlkjlkjkl',
+//           price: '20',
+//           color: '#FF9F9F',
+//           amount: 1,
+//         },
+//         { id: '1', menuName: 'off', price: '30', color: '#87D1AA', amount: 3 },
+//         { id: '2', menuName: 'Design', price: '40', color: '#AC71D1', amount: 1 },
+//       ],
+//     },
+//   ],
+// };

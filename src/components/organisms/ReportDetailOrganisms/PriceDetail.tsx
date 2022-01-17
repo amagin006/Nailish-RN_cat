@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TextAtom } from '~/components/atoms';
+import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 import { GeneralViewStyle } from '~/styles/ViewStyle';
 
 interface PriceDetailProps {
-  menuList: any[];
+  menuList: IMenuListItem[];
   tips?: number;
 }
 
 const PriceDetail: React.FC<PriceDetailProps> = ({ menuList, tips }) => {
   const subtotal = menuList
     .map(menuItem => parseInt(menuItem.price))
-    .reduce((total, price) => total + price);
+    .reduce((total, price) => total + price, 0);
 
   const tipsPrice = tips ? tips : 0;
   const TAX = 0.12;
