@@ -62,7 +62,14 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   }, [navigation]);
 
   const _renderPhoto = ({ item }: { item: IReportPhoto }) => {
-    return <Image source={{ uri: item?.url }} style={styles.photo} />;
+    return (
+      <Image
+        source={
+          item.url ? { uri: item?.url } : require('../../../assets/images/imagePlaceholder.png')
+        }
+        style={styles.photo}
+      />
+    );
   };
 
   const _keyExtractor = (item: IReportPhoto) => {
@@ -78,7 +85,6 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   };
 
   const onViewRef = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    console.log('========onViewRef========', viewableItems);
     viewableItems[0]?.index && setViewableItemIndex(viewableItems[0].index);
   });
 

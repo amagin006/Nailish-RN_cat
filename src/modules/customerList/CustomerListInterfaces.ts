@@ -35,7 +35,7 @@ export interface CustomerListPresenterInterface {
     customerId: string,
     reportPhotos: IReportPhoto[],
     reportId: string,
-  ): Promise<(IReportPhoto | null)[]>;
+  ): Promise<IReportPhoto[]>;
 }
 
 export interface CustomerListRepositoryInterface {
@@ -67,7 +67,7 @@ export interface ICustomerListItem {
 
 export interface IReportPhoto {
   id: number | null;
-  url: string;
+  url: string | null;
 }
 
 export interface IReportListItem {
@@ -77,7 +77,7 @@ export interface IReportListItem {
 
 export interface ICustomerReport {
   id?: string;
-  photoUrls?: (IReportPhoto | null)[] | undefined;
+  photoUrls?: IReportPhoto[];
   date: IDateValue;
   startEndtime: ITimeValue;
   selectedMenuItems: IMenuListItem[];

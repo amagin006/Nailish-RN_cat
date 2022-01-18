@@ -94,10 +94,8 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     let newReportPhoto: IReportPhoto[] = [];
     for (let i = 0; i < 4; i++) {
       const reportPhoto = {
-        id: reportPhotos[i] ? reportPhotos[i].id : null,
-        url: reportPhotos[i]
-          ? reportPhotos[i].url
-          : 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+        id: reportPhotos[i] ? reportPhotos[i].id : i,
+        url: reportPhotos[i] ? reportPhotos[i].url : null,
       };
       newReportPhoto.push(reportPhoto);
     }
@@ -136,6 +134,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const _onPressSaveButton = async () => {
     setIsLoading(true);
 
+    console.log('reportPhotos', reportPhotos);
     // Get new Report key on firebase
     const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
 
@@ -171,7 +170,8 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       return;
     }
     setIsLoading(false);
-    navigation.pop();
+    // navigation.pop();
+    navigation.navigate('ReportList', { reload: true });
   };
 
   const _getPermissionCameraRoll = async () => {
@@ -210,7 +210,11 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       <ScrollView>
         <View>
           <Image
-            source={{ uri: `${reportPhotos[selectedPhotoIndex]?.url}` }}
+            source={
+              reportPhotos[selectedPhotoIndex]?.url
+                ? { uri: `${reportPhotos[selectedPhotoIndex]?.url}` }
+                : require('../../../assets/images/imagePlaceholder.png')
+            }
             style={styles.mainPhoto}
           />
           <ListAddFloatButton
@@ -229,7 +233,14 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
                   styles.subImageBox,
                   selectedPhotoIndex === index && styles.subImageBoxSelected,
                 ]}>
-                <Image source={{ uri: `${photo?.url}` }} style={styles.subImage} />
+                <Image
+                  source={
+                    photo?.url
+                      ? { uri: `${photo?.url}` }
+                      : require('../../../assets/images/imagePlaceholder.png')
+                  }
+                  style={styles.subImage}
+                />
               </TouchableOpacity>
             );
           })}

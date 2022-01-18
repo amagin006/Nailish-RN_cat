@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Image,
@@ -22,18 +22,23 @@ import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import { ICustomerReport, IReportListItem } from '~/modules/CustomerList/CustomerListInterfaces';
 import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
+import { ActivityIndicatorAtom } from '~/components/atoms';
+import { RouteProp } from '@react-navigation/native';
 
 interface ReportListProps {
-  navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
+  navigation: StackNavigationProp<MainStackNavParamList, 'ReportList'>;
+  route: RouteProp<MainStackNavParamList, 'ReportList'>;
 }
 
 const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
-const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
+const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
+  const isNeedReload = route.params?.reload;
   const customer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
   const userRedux = useAppSelector(state => state.user);
 
   const [reportList, setReportList] = useState<ICustomerReport[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -47,21 +52,28 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
+  const _fetchRepoert = useCallback(async () => {
+    setIsFetching(true);
+    try {
+      const reportList = await CustomerListPresenter.getCustomerReportList(userRedux, customer.id);
+      setReportList(reportList);
+    } catch (err) {
+      console.log('Error getCustomerReportList', err);
+    }
+    setIsFetching(false);
+  }, []);
+
+  // Initial fetch
   useEffect(() => {
-    const _fetchRepoert = async () => {
-      try {
-        const reportList = await CustomerListPresenter.getCustomerReportList(
-          userRedux,
-          customer.id,
-        );
-        console.log('reportList', reportList);
-        setReportList(reportList);
-      } catch (err) {
-        console.log('Error getCustomerReportList', err);
-      }
-    };
     _fetchRepoert();
   }, []);
+
+  useEffect(() => {
+    if (isNeedReload) {
+      _fetchRepoert();
+      navigation.setParams({ reload: false });
+    }
+  }, [isNeedReload]);
 
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
@@ -83,12 +95,22 @@ const ReportList: React.FC<ReportListProps> = ({ navigation }) => {
     const date = `${item.date.year}/${item.date.month}/${item.date.date}`;
     const startTime = item.startEndtime.startTime;
     const endTime = item.startEndtime.endTime;
-    const thumbnailPhotoUrl = item.photoUrls
-      ? item.photoUrls[0]?.url
-      : 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png';
     return (
       <TouchableOpacity onPress={() => _onPressCard(item)} style={styles.reportCardWrapper}>
-        <Image style={styles.cardImage} source={{ uri: thumbnailPhotoUrl }} />
+        {isFetching ? (
+          <View style={styles.cardImage}>
+            <ActivityIndicatorAtom />
+          </View>
+        ) : (
+          <Image
+            style={styles.cardImage}
+            source={
+              item.photoUrls
+                ? { uri: item.photoUrls[0].url }
+                : require('../../../assets/images/imagePlaceholder.png')
+            }
+          />
+        )}
         <View style={styles.textWrapper}>
           <Text style={styles.dateText}>{date}</Text>
           <Text style={styles.timeText}>{`${startTime} ~ ${endTime}`}</Text>

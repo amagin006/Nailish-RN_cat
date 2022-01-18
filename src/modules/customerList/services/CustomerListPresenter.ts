@@ -112,9 +112,9 @@ export default class CustomerListPresenter
     reportId: string,
   ) {
     // Upload firebase storage and Get photo url from firebase storage
-    const photoUrls: (IReportPhoto | null)[] = await Promise.all(
+    const photoUrls: IReportPhoto[] = await Promise.all(
       reportPhotos.map(async (photo, index) => {
-        if (photo.id || photo.id === 0) {
+        if ((photo.id || photo.id === 0) && !!photo.url) {
           const photoRes = await this.upLoadReportPhoto(
             user,
             customerId,
@@ -130,7 +130,7 @@ export default class CustomerListPresenter
         } else {
           const photoInfo: IReportPhoto = {
             id: index,
-            url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+            url: null,
           };
           return photoInfo;
         }

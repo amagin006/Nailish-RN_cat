@@ -19,7 +19,7 @@ export type BottomTabNavParamList = {
 export type MainStackNavParamList = {
   BottomNav: NavigatorScreenParams<BottomTabNavParamList>;
   CustomerEdit: undefined;
-  ReportList: undefined;
+  ReportList: { reload: boolean };
   ReportDetail: { appointItem: any };
   NewReportAndEdit: { newReport?: boolean; selectedMenuItems?: IMenuListItem[] } | undefined;
 
