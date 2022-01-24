@@ -14,7 +14,7 @@ import { useAppSelector, useAppDispatch } from '~/redux/hooks';
 import { addCustomerToList, deleteCustomer } from '~/redux/customer/actions';
 
 // components
-import { RoundButton } from '~/components/atoms/button/button';
+import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import { LoadingIndicator } from '~/components/atoms';
 
 // util, style
@@ -42,7 +42,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const [twitter, setTwitter] = useState<string | undefined>('');
   const [birthday, setBirthDay] = useState<string | undefined>('');
   const [memo, setMemo] = useState<string | undefined>('');
-  const [imageUrl, setImageUrl] = useState<string | undefined>('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [customer, setCustomer] = useState<CustomerModel | undefined>();
 
@@ -125,7 +125,11 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   };
 
   const _deleteCustomer = async () => {
-    const isSuccess = await customerListPresenter.deleteCustomer(userRedux, customer?.id);
+    if (!customer) {
+      Alert.alert('Something goes wrong. try it later');
+      return;
+    }
+    const isSuccess = await customerListPresenter.deleteCustomer(userRedux, customer.id);
     if (!isSuccess) {
       Alert.alert('Sorry, something goes wrong. try again');
     }
@@ -133,9 +137,12 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
     navigation.popToTop();
   };
 
-  const _upLoadImagePhoto = async (customerId: string): Promise<string> => {
-    setIsLoading(true);
-    return await customerListPresenter.upLoadImagePhoto(userRedux, customerId, imageUrl);
+  const _upLoadImagePhoto = async (customerId: string): Promise<string | null> => {
+    if (imageUrl) {
+      setIsLoading(true);
+      return await customerListPresenter.upLoadImagePhoto(userRedux, customerId, imageUrl);
+    }
+    return null;
   };
 
   async function uploadCustomerData() {
@@ -303,7 +310,11 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       </View>
       {!isNewCustomer && (
         <View style={styles.deleteButton}>
-          <RoundButton onPress={_onDelete} text={'Delete customer'} style={styles.roundButton} />
+          <RoundButton
+            onPress={_onDelete}
+            text={'Delete customer'}
+            buttonColorType={IButtonColorType.Alert}
+          />
         </View>
       )}
     </KeyboardAwareScrollView>
@@ -382,9 +393,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: '#E2E8ED',
-  },
-  roundButton: {
-    backgroundColor: AppGeneralColor.Palette.Alert,
   },
 });
 

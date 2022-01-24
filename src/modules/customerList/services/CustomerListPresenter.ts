@@ -86,6 +86,17 @@ export default class CustomerListPresenter
   }
 
   /**
+   * Delete customer Report
+   */
+  public async deleteReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+  ): Promise<boolean> {
+    return await this.CustomerListRepository.deleteReport(user, customerId, reportId);
+  }
+
+  /**
    * upLoad one ReportPhoto to firebase storage
    */
   public async upLoadReportPhoto(

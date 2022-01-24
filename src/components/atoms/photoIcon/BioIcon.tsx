@@ -5,7 +5,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 interface BioIconProps {
   containerStyle?: ViewStyle | ViewStyle[];
   style?: ImageStyle | ImageStyle[];
-  image: string;
+  image?: string | null | undefined;
 }
 
 export const BioIcon: React.FC<BioIconProps> = props => {

@@ -147,7 +147,6 @@ export default class CustomerListRepository
    * deleteCustomer
    */
   public async deleteCustomer(user: UserInterface, customerId: string) {
-    console.log('customerId', customerId);
     if (!customerId) {
       console.log('Error delete customer is undifined');
       return false;
@@ -194,6 +193,49 @@ export default class CustomerListRepository
       console.log('Error Document fali set New Report: ', err);
       return false;
     }
+  }
+
+  /**
+   * Delete customer report
+   */
+  public async deleteReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+  ): Promise<boolean> {
+    // delete report from firebase database
+    try {
+      await db
+        .collection('users')
+        .doc(`${user.uid}`)
+        .collection('customer')
+        .doc(`${customerId}`)
+        .collection('report')
+        .doc(`${reportId}`)
+        .delete();
+      console.log('report successfully deleted! from firebaseDatabase', customerId, reportId);
+    } catch (err) {
+      console.log('Error deleteReport - firebase database on CustomerListRepository ', err);
+      return false;
+    }
+
+    // delete photo from firebase strage
+    try {
+      const storage = firebase.storage();
+      const storageRef = storage
+        .ref('user')
+        .child(`${user.uid}/customers/${customerId}/${reportId}`);
+      const photoAllList = await storageRef.listAll(); // get all photo file on report directory
+      const promises = photoAllList.items.map(item => item.delete()); // delete func return promise
+      Promise.all(promises); // resoleve all
+      console.log('image successfully deleted! from storage');
+    } catch (err) {
+      console.log('Error deleteReport - storage on CustomerListRepository ', err);
+      return false;
+    }
+
+    console.log('deleteReport --- Report successfully deleted!');
+    return true;
   }
 
   /**

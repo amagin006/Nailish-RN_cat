@@ -6,15 +6,15 @@ export default class CustomerModel extends BaseModel {
   public id: string = '';
   public firstLetter: string = '';
   public firstName: string = '';
-  public lastName: string = '';
-  public profileImg: string = '';
-  public instagram: string = '';
-  public mail: string = '';
-  public birthday: string = '';
-  public memo: string = '';
-  public mobile: string = '';
-  public twitter: string = '';
-  public lastVisit: string = '';
+  public lastName: string | undefined = '';
+  public profileImg: string | null = '';
+  public instagram: string | undefined = '';
+  public mail: string | undefined = '';
+  public birthday: string | undefined = '';
+  public memo: string | undefined = '';
+  public mobile: string | undefined = '';
+  public twitter: string | undefined = '';
+  public lastVisit: string | undefined = '';
 
   /**
    * has already set user or not
@@ -54,6 +54,6 @@ export interface ICustomer {
   instagram?: string;
   twitter?: string;
   memo?: string;
-  profileImg?: string;
+  profileImg: string | null;
   lastVisit?: string;
 }

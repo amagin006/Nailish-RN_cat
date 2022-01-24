@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ViewToken,
+  Alert,
 } from 'react-native';
 import dayjs from 'dayjs';
 
@@ -25,29 +26,41 @@ import { MainStackNavParamList } from '~/route/types';
 import PagenationDot from '~/components/atoms/pagenation/pagenationDot';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import PriceDetail from '~/components/organisms/ReportDetailOrganisms/PriceDetail';
-import { TextAtom } from '~/components/atoms';
+import { LoadingIndicator, TextAtom } from '~/components/atoms';
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
+import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 
 // style
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
-import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
+
+// Type
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import { ICustomerReport, IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
+import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
+
+// Services
+import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 
 interface ReportDetailProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportDetail'>;
   route: RouteProp<MainStackNavParamList, 'ReportDetail'>;
 }
 
+const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
+
 const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const { appointItem } = route.params;
+
+  // Redux
+  const userRedux = useAppSelector(state => state.user);
   const selectedCustomer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
 
   const date = dayjs(appointItem.appointmentStart).format('YYYY/MM/DD');
   const startTime = dayjs(appointItem.appointmentStart).format('HH:mm');
   const endTime = dayjs(appointItem.appointmentEnd).format('HH:mm');
 
-  const [viewableItemIndex, setViewableItemIndex] = useState(0);
+  // State
+  const [viewableItemIndex, setViewableItemIndex] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -81,7 +94,26 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   };
 
   const _onDeletePress = () => {
-    console.log('========_onDeletePress========');
+    Alert.alert('Are you sure you want to delete this report?', '', [
+      { text: 'Cancel' },
+      { text: 'OK', onPress: _deleteReport },
+    ]);
+  };
+
+  const _deleteReport = async () => {
+    // delete report
+    setIsLoading(true);
+    console.log('_deleteReport');
+    const isSuccess = await CustomerListPresenter.deleteReport(
+      userRedux,
+      selectedCustomer.id,
+      appointItem.id,
+    );
+    if (!isSuccess) {
+      Alert.alert('Something goes wrong. Try it later');
+    }
+    setIsLoading(false);
+    navigation.navigate('ReportList', { reload: true });
   };
 
   const onViewRef = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -92,6 +124,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
+      {isLoading && <LoadingIndicator isLoading={isLoading} />}
       <ScrollView>
         <View style={styles.userWrapper}>
           <BioIcon image={selectedCustomer.profileImg} style={styles.userIcon} />

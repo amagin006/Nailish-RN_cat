@@ -15,13 +15,14 @@ export interface CustomerListPresenterInterface {
   getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
   upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
-  deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
+  deleteCustomer(user: UserInterface, customerId: string): Promise<boolean>;
   setNewReport(
     user: UserInterface,
     customerId: string,
     reportId: string,
     report?: ICustomerReport,
   ): Promise<boolean>;
+  deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
     customerId: string,
@@ -43,13 +44,14 @@ export interface CustomerListRepositoryInterface {
   getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
   upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
   updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
-  deleteCustomer(user: UserInterface, customerId?: string): Promise<boolean>;
+  deleteCustomer(user: UserInterface, customerId: string): Promise<boolean>;
   setNewReport(
     user: UserInterface,
     customerId: string,
     reportId: string,
     report?: ICustomerReport,
   ): Promise<boolean>;
+  deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
     customerId: string,

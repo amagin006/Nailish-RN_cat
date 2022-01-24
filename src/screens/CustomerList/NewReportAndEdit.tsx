@@ -77,15 +77,14 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
-    console.log('route.params?.newReport', route.params?.newReport);
     const titleStr = route.params?.newReport ? 'New Report' : 'Edit Report';
     navigation.setOptions({
       title: titleStr,
     });
+    _makePhotoArray();
   }, []);
 
   useEffect(() => {
-    _makePhotoArray();
     const menuItems = route.params?.selectedMenuItems ?? [];
     setSelectedMenuItems(menuItems);
   }, [route.params?.selectedMenuItems]);
@@ -134,7 +133,6 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const _onPressSaveButton = async () => {
     setIsLoading(true);
 
-    console.log('reportPhotos', reportPhotos);
     // Get new Report key on firebase
     const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
 
@@ -254,11 +252,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
           />
 
           <ReportMenuList menuList={selectedMenuItems} />
-          <RoundButton
-            onPress={_onPressSelectMenu}
-            text={'Select Menu'}
-            style={styles.selectButton}
-          />
+          <RoundButton onPress={_onPressSelectMenu} text={'Add Menu'} style={styles.selectButton} />
           <View style={styles.columnWrapper}>
             <TextLeftAtom>Tips</TextLeftAtom>
             <View style={styles.tips}>
