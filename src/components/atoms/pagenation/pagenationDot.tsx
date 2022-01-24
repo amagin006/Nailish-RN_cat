@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 
-interface PagenationDotProps {
-  list: any[];
+interface PagenationDotProps<T> {
+  list: T[] | undefined;
   foucsItemIndex: number;
   style: ViewStyle | ViewStyle[];
 }
@@ -11,7 +11,12 @@ function dotColor(index: number, focusItemIndex: number) {
   return index === focusItemIndex ? styles.colorDot : styles.whiteDot;
 }
 
-export const PagenationDot: React.FC<PagenationDotProps> = ({ list, foucsItemIndex, style }) => {
+export const PagenationDot = <T extends unknown>({
+  list,
+  foucsItemIndex,
+  style,
+}: PagenationDotProps<T>) => {
+  if (!list) return null;
   return (
     <View style={style}>
       <View style={styles.dotWrapper}>

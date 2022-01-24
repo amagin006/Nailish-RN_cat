@@ -1,4 +1,6 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
+// Type
+import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
 import { IMenuItem, IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 export type RootStackParamList = {
@@ -20,7 +22,7 @@ export type MainStackNavParamList = {
   BottomNav: NavigatorScreenParams<BottomTabNavParamList>;
   CustomerEdit: undefined;
   ReportList: { reload: boolean } | undefined;
-  ReportDetail: { appointItem: any };
+  ReportDetail: { appointItem: ICustomerReport };
   NewReportAndEdit: { newReport?: boolean; selectedMenuItems?: IMenuListItem[] } | undefined;
 
   EditAppointment: { item: any } | undefined;

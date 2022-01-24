@@ -54,9 +54,8 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const userRedux = useAppSelector(state => state.user);
   const selectedCustomer: CustomerModel = useAppSelector(state => state.customer?.selectedCustomer);
 
-  const date = dayjs(appointItem.appointmentStart).format('YYYY/MM/DD');
-  const startTime = dayjs(appointItem.appointmentStart).format('HH:mm');
-  const endTime = dayjs(appointItem.appointmentEnd).format('HH:mm');
+  const { year, date, month } = appointItem.date;
+  const { startTime, endTime } = appointItem.startEndtime;
 
   // State
   const [viewableItemIndex, setViewableItemIndex] = useState<number>(0);
@@ -103,7 +102,10 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const _deleteReport = async () => {
     // delete report
     setIsLoading(true);
-    console.log('_deleteReport');
+    if (!appointItem.id) {
+      Alert.alert('Something goes wrong. Try it later');
+      return;
+    }
     const isSuccess = await CustomerListPresenter.deleteReport(
       userRedux,
       selectedCustomer.id,
@@ -117,7 +119,10 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   };
 
   const onViewRef = React.useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    viewableItems[0]?.index && setViewableItemIndex(viewableItems[0].index);
+    const newIndex = viewableItems[0]?.index;
+    if (newIndex !== undefined && newIndex !== null) {
+      setViewableItemIndex(newIndex);
+    }
   });
 
   const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 50 });
@@ -133,7 +138,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
               style={
                 styles.name
               }>{`${selectedCustomer.firstName} ${selectedCustomer.lastName}`}</Text>
-            <Text style={styles.date}>{`${date} ${startTime} ~ ${endTime}`}</Text>
+            <Text style={styles.date}>{`${year}/${month}/${date} ${startTime} ~ ${endTime}`}</Text>
           </View>
         </View>
         <FlatList<IReportPhoto>
