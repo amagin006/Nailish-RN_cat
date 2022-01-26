@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import dayjs from 'dayjs';
 import { FontAwesome } from '@expo/vector-icons';
 
 // navigation
@@ -20,7 +19,7 @@ import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import { ICustomerReport, IReportListItem } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
 import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { RouteProp } from '@react-navigation/native';
@@ -77,7 +76,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
 
   const _onAddNewReport = () => {
     console.log('_onAddNewReport');
-    navigation.navigate('NewReportAndEdit', { newReport: true });
+    navigation.navigate('NewReportAndEdit');
   };
 
   const _onEdit = () => {
@@ -92,6 +91,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
   };
 
   const _renderItem = ({ item }: { item: ICustomerReport }) => {
+    console.log('item', item);
     const date = `${item.date.year}/${item.date.month}/${item.date.date}`;
     const startTime = item.startEndtime.startTime;
     const endTime = item.startEndtime.endTime;
@@ -105,7 +105,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
           <Image
             style={styles.cardImage}
             source={
-              item.photoUrls
+              item.photoUrls && item.photoUrls[0].url
                 ? { uri: item.photoUrls[0].url }
                 : require('../../../assets/images/imagePlaceholder.png')
             }

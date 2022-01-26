@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { TextAtom } from '~/components/atoms';
 import { BaseTimePicker } from '~/components/molecules/DatePickerMolecules/BaseTimePicker';
@@ -34,8 +34,15 @@ const isStarBeforeEnd = (start: string, end: string): boolean => {
 };
 
 export const EditTimeMolecules: React.FC<EditTimeMoleculesProps> = props => {
-  const [startTime, setStartTime] = useState<string>('00:00');
-  const [endTime, setEndTime] = useState<string>('00:00');
+  const [startTime, setStartTime] = useState<string>(props.startEndTime?.startTime ?? '00:00');
+  const [endTime, setEndTime] = useState<string>(props.startEndTime?.endTime ?? '00:00');
+
+  useEffect(() => {
+    if (props.startEndTime?.startTime && props.startEndTime?.endTime) {
+      setStartTime(props.startEndTime.startTime);
+      setEndTime(props.startEndTime.endTime);
+    }
+  }, [props.startEndTime]);
 
   const _onConfirm = (time: string, id?: string) => {
     let timeValues = {

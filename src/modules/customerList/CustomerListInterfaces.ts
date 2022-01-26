@@ -1,6 +1,5 @@
 import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
 import { UserInterface } from '~/redux/user/types';
-import firebase from 'firebase';
 
 import '@firebase/firestore';
 import { IMenuListItem } from '../Menu/MenuInterfaces';
@@ -79,7 +78,7 @@ export interface IReportListItem {
 
 export interface ICustomerReport {
   id?: string;
-  photoUrls?: IReportPhoto[];
+  photoUrls: IReportPhoto[];
   date: IDateValue;
   startEndtime: ITimeValue;
   selectedMenuItems: IMenuListItem[];

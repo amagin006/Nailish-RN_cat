@@ -89,7 +89,8 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   };
 
   const _onEditReport = () => {
-    navigation.navigate('NewReportAndEdit');
+    console.log('appino--------->>>', appointItem);
+    navigation.navigate('NewReportAndEdit', { appointItem: appointItem });
   };
 
   const _onDeletePress = () => {

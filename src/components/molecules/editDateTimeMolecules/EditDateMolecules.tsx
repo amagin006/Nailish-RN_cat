@@ -10,9 +10,11 @@ import { dateFormate } from '~/util/timeUtil';
 
 // Type
 import { DateData } from 'react-native-calendars/src/types';
+import dayjs from 'dayjs';
 
 interface EditDateMoleculesProps {
   containerStyle?: ViewStyle | ViewStyle[];
+  appointmentDate: IDateValue;
   onConfirm: (DateValues: IDateValue) => void;
 }
 
@@ -32,6 +34,7 @@ export interface ICalenderDateValue {
 
 export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
   const today = dateFormate(new Date());
+
   const [selectedDay, setSelectedDay] = useState<string>(today);
   const [markedDates, setMarkedDates] = useState({});
   const [isOpen, setIsOpen] = useState<boolean>(false); // TODO: Move to props
@@ -39,9 +42,15 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
   useEffect(() => {
     const markDate: { [key: string]: { selected: boolean } } = {};
     markDate[today] = { selected: true };
-    console.log(markDate);
     setMarkedDates(markDate);
   }, []);
+
+  useEffect(() => {
+    const { year, month, date } = props.appointmentDate || {};
+    if (year && month && date) {
+      setSelectedDay(`${year}/${month}/${date}`);
+    }
+  }, [props.appointmentDate]);
 
   const _onPress = () => {
     setIsOpen(true);

@@ -31,7 +31,7 @@ export const PickerModalAtom: React.FC<PickerModalAtopProps> = props => {
     props.onConfirm && props.onConfirm(props.options[selectedIndex].id);
   };
 
-  const _onValueChange = (_, itemIndex) => {
+  const _onValueChange = (_: any, itemIndex: number) => {
     setSelectedIndex(itemIndex);
   };
 

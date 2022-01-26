@@ -34,7 +34,7 @@ import { LoadingIndicator } from '~/components/atoms';
 // Type
 import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
-import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport, IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 // styles
 import { GeneralViewStyle } from '~/styles/ViewStyle';
@@ -59,6 +59,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const customerIdRedux = useAppSelector(state => state.customer?.selectedCustomer.id);
 
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
+  const [appointmentItemInfo, setAppointmentItemInfo] = useState<ICustomerReport | undefined>();
   const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [date, setDate] = useState<IDateValue>({
@@ -66,7 +67,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     month: dayjs().format('MM'),
     date: dayjs().format('DD'),
   });
-  const [startEndtime, setStartEndTime] = useState<ITimeValue>({
+  const [startEndtime, setStartEndtime] = useState<ITimeValue>({
     startTime: '00:00',
     endTime: '00:00',
   });
@@ -77,11 +78,21 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
-    const titleStr = route.params?.newReport ? 'New Report' : 'Edit Report';
+    const appointItem = route.params?.appointItem;
+    const titleStr = appointItem ? 'Edit Report' : 'New Report';
+    if (appointItem) {
+      setAppointmentItemInfo(appointItem);
+      setDate(appointItem.date);
+      setStartEndtime(appointItem.startEndtime);
+      setSelectedMenuItems(appointItem.selectedMenuItems);
+      setTips(appointItem.tips);
+      setPayment(appointItem.payment);
+      setReportPhotos(appointItem.photoUrls);
+    }
+    _makePhotoArray(); // Create Initial photo Array
     navigation.setOptions({
       title: titleStr,
     });
-    _makePhotoArray();
   }, []);
 
   useEffect(() => {
@@ -119,8 +130,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   };
 
   const _onConfirmTime = (timeValues: ITimeValue) => {
-    console.log('timeValues', timeValues);
-    setStartEndTime(timeValues);
+    setStartEndtime(timeValues);
   };
 
   const _onConfirmPayment = (id: number) => {
@@ -168,7 +178,6 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       return;
     }
     setIsLoading(false);
-    // navigation.pop();
     navigation.navigate('ReportList', { reload: true });
   };
 
@@ -249,6 +258,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
             onConfirmTime={_onConfirmTime}
             onConfirmDate={_onConfirmDate}
             startEndTime={startEndtime}
+            appointmentDate={date}
           />
 
           <ReportMenuList menuList={selectedMenuItems} />
@@ -294,24 +304,24 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   );
 };
 
-const DEFAULTPHOTOS = [
-  {
-    id: '1',
-    url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-  },
-  {
-    id: '2',
-    url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-  },
-  {
-    id: '3',
-    url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-  },
-  {
-    id: '4',
-    url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-  },
-];
+// const DEFAULTPHOTOS = [
+//   {
+//     id: '1',
+//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+//   },
+//   {
+//     id: '2',
+//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+//   },
+//   {
+//     id: '3',
+//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+//   },
+//   {
+//     id: '4',
+//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
+//   },
+// ];
 
 const PAYMENT: IPickerItem[] = [
   { id: 1, label: 'Credit Card', value: 'creditCard' },
