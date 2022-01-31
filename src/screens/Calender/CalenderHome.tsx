@@ -141,14 +141,6 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
               flexDirection: 'row',
               justifyContent: 'space-around',
             },
-            header: {
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingLeft: 10,
-              paddingRight: 10,
-              marginTop: 0,
-              alignItems: 'center',
-            },
           },
         }}
       />

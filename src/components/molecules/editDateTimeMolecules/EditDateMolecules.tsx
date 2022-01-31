@@ -22,6 +22,7 @@ export interface IDateValue {
   year: string;
   month: string;
   date: string;
+  dateString: string;
 }
 
 export interface ICalenderDateValue {
@@ -66,6 +67,7 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
       year: day.year.toString(),
       month: day.month.toString().padStart(2, '0'),
       date: day.day.toString().padStart(2, '0'),
+      dateString: day.dateString,
     };
     setIsOpen(false);
     props.onConfirm(dateValues);
@@ -92,7 +94,7 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
             hideExtraDays={false}
             markedDates={markedDates}
             hideArrows={false}
-            calendarWidth={350}
+            calendarWidth={280}
             style={styles.calenderStyle}
             theme={{
               selectedDayBackgroundColor: '#00adf5',
@@ -100,16 +102,7 @@ export const EditDateMolecules: React.FC<EditDateMoleculesProps> = props => {
                 week: {
                   marginTop: 0,
                   flexDirection: 'row',
-                  justifyContent: 'space-around',
                 },
-                // header: {
-                //   flexDirection: 'row',
-                //   justifyContent: 'space-between',
-                //   paddingLeft: 10,
-                //   paddingRight: 10,
-                //   marginTop: 0,
-                //   alignItems: 'center',
-                // },
               },
             }}
           />
@@ -124,7 +117,7 @@ const styles = StyleSheet.create({
   dateWrapper: {},
   calenderStyle: {
     marginTop: 20,
-    width: 350,
+    width: 280,
   },
   labelText: {
     ...generalTextStyles.mediumThinText,
@@ -135,6 +128,7 @@ const styles = StyleSheet.create({
   modalInnerStyle: {
     alignItems: 'center',
     minHeight: 200,
+    width: 290,
     height: 400,
     paddingBottom: 10,
   },

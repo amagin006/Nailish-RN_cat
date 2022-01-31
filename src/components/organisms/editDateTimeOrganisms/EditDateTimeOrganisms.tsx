@@ -14,13 +14,12 @@ interface EditDateTimeOrganismsProps {
   innerContainerStyle?: ViewStyle;
 
   startEndTime: ITimeValue; // {startTime: '10:00' || undifine, endTime: '14:00' || undifine}
-  appointmentDate: IDateValue; //
+  appointmentDate: IDateValue;
   onConfirmDate: (dateValues: IDateValue) => void;
   onConfirmTime: (timeValue: ITimeValue) => void;
 }
 
 export const EditDateTimeOrganisms: React.FC<EditDateTimeOrganismsProps> = props => {
-  console.log('props====organisms', props);
   return (
     <View style={props.container}>
       <View style={[styles.editDateBox, props.innerContainerStyle]}>

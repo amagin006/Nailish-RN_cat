@@ -91,7 +91,6 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
   };
 
   const _renderItem = ({ item }: { item: ICustomerReport }) => {
-    console.log('item', item);
     const date = `${item.date.year}/${item.date.month}/${item.date.date}`;
     const startTime = item.startEndtime.startTime;
     const endTime = item.startEndtime.endTime;

@@ -56,19 +56,20 @@ export default class CustomerListRepository
 
   public async getCustomerReportList(user: UserInterface, customerId: string) {
     try {
-      const data = await db
+      const dataRef = db
         .collection('users')
         .doc(`${user.uid}`)
-        .collection('customer')
-        .doc(`${customerId}`)
         .collection('report')
-        .get();
+        .where('customerId', '==', customerId);
+
+      const data = await dataRef.orderBy('date.dateString').get();
 
       const newReportList: ICustomerReport[] = [];
       data.forEach(doc => {
         const dataID = doc.data() as ICustomerReport;
         newReportList.push(dataID);
       });
+      console.log('newReportList', newReportList);
       return newReportList;
     } catch (err) {
       console.log('Error fetchCustomerReportList: ', err);
@@ -183,14 +184,37 @@ export default class CustomerListRepository
       const reportRef = db
         .collection('users')
         .doc(`${user.uid}`)
-        .collection('customer')
-        .doc(`${customerId}`)
         .collection('report')
         .doc(`${reportId}`);
+
       await reportRef.set(report);
       return true;
     } catch (err) {
       console.log('Error Document fali set New Report: ', err);
+      return false;
+    }
+  }
+
+  /**
+   * Update cutomer report
+   */
+  public async updateReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report: ICustomerReport,
+  ): Promise<boolean> {
+    try {
+      const reportRef = db
+        .collection('users')
+        .doc(`${user.uid}`)
+        .collection('report')
+        .doc(`${reportId}`);
+      await reportRef.set(report);
+      console.log('report successfully deleted! from firebaseDatabase', customerId, reportId);
+      return true;
+    } catch (err) {
+      console.log('Error deleteReport - firebase database on CustomerListRepository ', err);
       return false;
     }
   }
@@ -273,6 +297,7 @@ export default class CustomerListRepository
     const uploadProsess = new Promise<string>(function (resolve, reject) {
       const uploadRef = storage
         .ref('user')
+        // .child(`${user.uid}/customers/${customerId}/${reportId}/report_${photoIndex}`);
         .child(`${user.uid}/customers/${customerId}/${reportId}/report_${photoIndex}`);
       const uploadTask = uploadRef.put(blob, metadata);
       uploadTask.on(
@@ -299,7 +324,7 @@ export default class CustomerListRepository
    * To get customer uniqu report key for firebase collection
    */
   public async getNewReportKey(user: UserInterface, customerId?: string) {
-    const newPostKey = firebase.database().ref(`${user.uid}/customers/${customerId}`).push().key;
+    const newPostKey = firebase.database().ref(`${user.uid}/report/`).push().key;
     console.log('newPostKey', newPostKey);
     return newPostKey;
   }

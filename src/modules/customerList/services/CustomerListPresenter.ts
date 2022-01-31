@@ -88,6 +88,18 @@ export default class CustomerListPresenter
   /**
    * Delete customer Report
    */
+  public async updateReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report: ICustomerReport,
+  ) {
+    return await this.CustomerListRepository.updateReport(user, customerId, reportId, report);
+  }
+
+  /**
+   * Delete customer Report
+   */
   public async deleteReport(
     user: UserInterface,
     customerId: string,
@@ -125,7 +137,11 @@ export default class CustomerListPresenter
     // Upload firebase storage and Get photo url from firebase storage
     const photoUrls: IReportPhoto[] = await Promise.all(
       reportPhotos.map(async (photo, index) => {
-        if ((photo.id || photo.id === 0) && !!photo.url) {
+        if ((photo.id || photo.id === 0) && photo.url?.startsWith('http')) {
+          // already uploaded photo on fire storage
+          return photo;
+        } else if ((photo.id || photo.id === 0) && !!photo.url) {
+          // need to upload fire storage
           const photoRes = await this.upLoadReportPhoto(
             user,
             customerId,
@@ -139,6 +155,7 @@ export default class CustomerListPresenter
           };
           return photoInfo;
         } else {
+          // initial photo
           const photoInfo: IReportPhoto = {
             id: index,
             url: null,

@@ -21,6 +21,12 @@ export interface CustomerListPresenterInterface {
     reportId: string,
     report?: ICustomerReport,
   ): Promise<boolean>;
+  updateReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report: ICustomerReport,
+  ): Promise<boolean>;
   deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
@@ -50,6 +56,12 @@ export interface CustomerListRepositoryInterface {
     reportId: string,
     report?: ICustomerReport,
   ): Promise<boolean>;
+  updateReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report: ICustomerReport,
+  ): Promise<boolean>;
   deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
   upLoadReportPhoto(
     user: UserInterface,
@@ -78,6 +90,7 @@ export interface IReportListItem {
 
 export interface ICustomerReport {
   id?: string;
+  customerId: string;
   photoUrls: IReportPhoto[];
   date: IDateValue;
   startEndtime: ITimeValue;

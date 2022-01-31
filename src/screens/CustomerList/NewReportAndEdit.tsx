@@ -59,13 +59,13 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const customerIdRedux = useAppSelector(state => state.customer?.selectedCustomer.id);
 
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
-  const [appointmentItemInfo, setAppointmentItemInfo] = useState<ICustomerReport | undefined>();
   const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
   const [date, setDate] = useState<IDateValue>({
     year: dayjs().format('YYYY'),
     month: dayjs().format('MM'),
     date: dayjs().format('DD'),
+    dateString: dayjs().format('YYYY-MM-DD'),
   });
   const [startEndtime, setStartEndtime] = useState<ITimeValue>({
     startTime: '00:00',
@@ -77,19 +77,21 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const [memo, setMemo] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const appointItem = route.params?.appointItem;
+
   useLayoutEffect(() => {
-    const appointItem = route.params?.appointItem;
     const titleStr = appointItem ? 'Edit Report' : 'New Report';
+    let photoUrlsArr: IReportPhoto[] = [];
     if (appointItem) {
-      setAppointmentItemInfo(appointItem);
       setDate(appointItem.date);
       setStartEndtime(appointItem.startEndtime);
       setSelectedMenuItems(appointItem.selectedMenuItems);
       setTips(appointItem.tips);
       setPayment(appointItem.payment);
       setReportPhotos(appointItem.photoUrls);
+      photoUrlsArr = appointItem.photoUrls;
     }
-    _makePhotoArray(); // Create Initial photo Array
+    _makePhotoArray(photoUrlsArr); // Create Initial photo Array
     navigation.setOptions({
       title: titleStr,
     });
@@ -100,12 +102,12 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     setSelectedMenuItems(menuItems);
   }, [route.params?.selectedMenuItems]);
 
-  const _makePhotoArray = useCallback(() => {
+  const _makePhotoArray = useCallback((photoUrls: IReportPhoto[]) => {
     let newReportPhoto: IReportPhoto[] = [];
     for (let i = 0; i < 4; i++) {
       const reportPhoto = {
-        id: reportPhotos[i] ? reportPhotos[i].id : i,
-        url: reportPhotos[i] ? reportPhotos[i].url : null,
+        id: photoUrls && photoUrls[i] ? photoUrls[i].id : i,
+        url: photoUrls && photoUrls[i] ? photoUrls[i].url : null,
       };
       newReportPhoto.push(reportPhoto);
     }
@@ -143,26 +145,51 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
   const _onPressSaveButton = async () => {
     setIsLoading(true);
 
-    // Get new Report key on firebase
-    const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
+    if (appointItem && appointItem.id) {
+      // Update report
+      // Check if report photo is needed update on fire storage
+      const needUpdatePhoto = reportPhotos.some(photo => {
+        return photo.url !== null && !photo.url?.startsWith('http');
+      });
 
-    // Upload photo and get url from firebase storage
-    const photoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
-      userRedux,
-      customerIdRedux,
-      reportPhotos,
-      reportId,
-    );
+      let updatePhotoUrls = [...reportPhotos];
+      if (needUpdatePhoto) {
+        // Upload photo and get url from firebase storage
+        updatePhotoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
+          userRedux,
+          customerIdRedux,
+          reportPhotos,
+          appointItem.id,
+        );
+      }
+      _saveReport(appointItem.id, updatePhotoUrls);
+    } else {
+      // New report create
+      // Get new Report key on firebase
+      const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
+      // Upload photo and get url from firebase storage
+      const photoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
+        userRedux,
+        customerIdRedux,
+        reportPhotos,
+        reportId,
+      );
+      _saveReport(reportId, photoUrls);
+    }
+  };
 
-    const saveData = {
+  // To save report to firebase DB either new report or update
+  const _saveReport = async (reportId: string, updatePhotoUrls: IReportPhoto[]) => {
+    const saveData: ICustomerReport = {
       id: reportId,
-      photoUrls,
+      photoUrls: updatePhotoUrls,
       date,
       startEndtime,
       selectedMenuItems,
       tips,
       payment,
       memo,
+      customerId: customerIdRedux,
     };
 
     // save to firebase
@@ -303,25 +330,6 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     </SafeAreaView>
   );
 };
-
-// const DEFAULTPHOTOS = [
-//   {
-//     id: '1',
-//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-//   },
-//   {
-//     id: '2',
-//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-//   },
-//   {
-//     id: '3',
-//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-//   },
-//   {
-//     id: '4',
-//     url: 'https://storage.googleapis.com/nailish-firebase.appspot.com/temp/imagePlaceholder.png',
-//   },
-// ];
 
 const PAYMENT: IPickerItem[] = [
   { id: 1, label: 'Credit Card', value: 'creditCard' },
