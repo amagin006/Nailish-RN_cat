@@ -16,32 +16,31 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 
 // util
 import { dateFormate, getWeeksInMonth } from '~/util/timeUtil';
+import { CalenderServices } from '~/modules/Calender/CalenderServices';
+import { useAppSelector } from '~/redux/hooks';
+import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
 
 var nextDay = [
-  '2020-03-01',
-  '2020-03-05',
-  '2020-03-08',
-  '2020-03-07',
-  '2020-03-18',
-  '2020-03-17',
-  '2020-03-28',
-  '2020-03-29',
+  '2022-01-01',
+  '2022-02-05',
+  '2022-02-08',
+  '2022-02-07',
+  '2022-02-18',
+  '2022-02-17',
+  '2022-02-28',
+  '2022-02-29',
 ];
 
-function makeMarked(appointDates) {
-  const markedApp = appointDates.reduce(
-    (c, v) =>
-      Object.assign(c, {
-        [v]: {
-          dots: [
-            { key: 'hello', color: 'red' },
-            { key: 'massage', color: 'blue' },
-          ],
-          marked: true,
-        },
-      }),
-    {},
-  );
+function makeMarked(appointDates: ICustomerReport[]): { [time: string]: object } {
+  const markedApp = appointDates.reduce((c, v) => {
+    return Object.assign(c, {
+      [v.date.dateString]: {
+        dots: [{ key: 'appointment', color: 'red' }],
+        marked: true,
+      },
+    });
+  }, {});
+  console.log('markedApp', markedApp);
   return markedApp;
 }
 
@@ -62,6 +61,8 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
   const [selectedDay, setSelectedDay] = useState<string>(today);
   const [markedDates, setMarkedDates] = useState({});
   const [weeks, setWeeks] = useState<number>();
+  const [calenderItems, setCalenderItems] = useState<ICustomerReport[]>([]);
+  const userRedux = useAppSelector(state => state.user);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -76,14 +77,20 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const markedAppointment = makeMarked(nextDay);
-    console.log('markedAppointment', markedAppointment);
-    markedAppointment[selectedDay] = {
-      ...markedAppointment[selectedDay],
-      selected: true,
-      disableTouchEvent: true,
+    const _getCalenderItem = async () => {
+      const calenderItems = await CalenderServices.getCalenderItems(userRedux);
+      const markedAppointment = makeMarked(calenderItems);
+      markedAppointment[selectedDay] = {
+        ...markedAppointment[selectedDay],
+        selected: true,
+        disableTouchEvent: true,
+      }; // initail selected item (today)
+
+      setMarkedDates(markedAppointment); // mark red dot on calender
+      setCalenderItems(calenderItems);
     };
-    setMarkedDates(markedAppointment);
+
+    _getCalenderItem();
   }, [selectedDay]);
 
   const _addCustomerReport = () => {
