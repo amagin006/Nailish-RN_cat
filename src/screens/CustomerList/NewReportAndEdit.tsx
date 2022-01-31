@@ -56,7 +56,7 @@ const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }) => {
   // Redux
   const userRedux = useAppSelector(state => state.user);
-  const customerIdRedux = useAppSelector(state => state.customer?.selectedCustomer.id);
+  const customerRedux = useAppSelector(state => state.customer?.selectedCustomer);
 
   const [hasPermissionCameraRoll, setHasPermissionCameraRoll] = useState<boolean>(false);
   const [reportPhotos, setReportPhotos] = useState<IReportPhoto[]>([]);
@@ -157,7 +157,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
         // Upload photo and get url from firebase storage
         updatePhotoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
           userRedux,
-          customerIdRedux,
+          customerRedux.id,
           reportPhotos,
           appointItem.id,
         );
@@ -166,11 +166,11 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     } else {
       // New report create
       // Get new Report key on firebase
-      const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerIdRedux);
+      const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerRedux.id);
       // Upload photo and get url from firebase storage
       const photoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
         userRedux,
-        customerIdRedux,
+        customerRedux.id,
         reportPhotos,
         reportId,
       );
@@ -189,13 +189,15 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       tips,
       payment,
       memo,
-      customerId: customerIdRedux,
+      customerId: customerRedux.id,
+      customerFirstName: customerRedux.firstName,
+      customerLastName: customerRedux.lastName,
     };
 
     // save to firebase
     const resNewReport = await CustomerListPresenter.setNewReport(
       userRedux,
-      customerIdRedux,
+      customerRedux.id,
       reportId,
       saveData,
     );

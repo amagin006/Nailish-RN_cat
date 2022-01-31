@@ -90,7 +90,6 @@ export interface IReportListItem {
 
 export interface ICustomerReport {
   id?: string;
-  customerId: string;
   photoUrls: IReportPhoto[];
   date: IDateValue;
   startEndtime: ITimeValue;
@@ -98,4 +97,7 @@ export interface ICustomerReport {
   tips: string;
   payment: IPickerItem;
   memo: string;
+  customerId: string;
+  customerFirstName: string;
+  customerLastName: string;
 }

@@ -133,7 +133,6 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
         markedDates={markedDates}
         onVisibleMonthsChange={_swipeMonth}
         style={{ height: 350 }}
-        // style={height}
         theme={{
           'stylesheet.calendar.header': {
             week: {
@@ -197,7 +196,7 @@ export default CalenderHome;
 const FAKEDATA = [
   {
     id: '1',
-    appointmentDate: '2020-03-12',
+    appointmentDate: '2022-01-12',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
@@ -217,7 +216,7 @@ const FAKEDATA = [
   },
   {
     id: '2',
-    appointmentDate: '2020-03-29',
+    appointmentDate: '2022-02-29',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
@@ -237,7 +236,7 @@ const FAKEDATA = [
   },
   {
     id: '3',
-    appointmentDate: '2020-03-12',
+    appointmentDate: '2022-03-12',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
@@ -257,7 +256,7 @@ const FAKEDATA = [
   },
   {
     id: '4',
-    appointmentDate: '2020-04-12',
+    appointmentDate: '2022-02-12',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
@@ -278,7 +277,7 @@ const FAKEDATA = [
 
   {
     id: '5',
-    appointmentDate: '2020-03-12',
+    appointmentDate: '2022-02-12',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
@@ -298,7 +297,7 @@ const FAKEDATA = [
   },
   {
     id: '6',
-    appointmentDate: '2020-03-02',
+    appointmentDate: '2022-03-02',
     appointmentStart: '18:00',
     appointmentEnd: '20:00',
     user: {
