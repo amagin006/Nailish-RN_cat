@@ -248,8 +248,6 @@ export const CustomerListRepository: CustomerListRepository = {
       await db
         .collection('users')
         .doc(`${user.uid}`)
-        .collection('customer')
-        .doc(`${customerId}`)
         .collection('report')
         .doc(`${reportId}`)
         .delete();
