@@ -20,16 +20,14 @@ import { LoadingIndicator } from '~/components/atoms';
 // util, style
 import { db } from '~/config/Firebase';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralNavStyles } from '~/styles/ViewStyle';
+import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 
 interface CustomerEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
   route: RouteProp<MainStackNavParamList, 'CustomerEdit'>;
 }
-
-const customerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const { navigation } = props;
@@ -129,7 +127,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       Alert.alert('Something goes wrong. try it later');
       return;
     }
-    const isSuccess = await customerListPresenter.deleteCustomer(userRedux, customer.id);
+    const isSuccess = await CustmerListServices.deleteCustomer(userRedux, customer.id);
     if (!isSuccess) {
       Alert.alert('Sorry, something goes wrong. try again');
     }
@@ -140,7 +138,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const _upLoadImagePhoto = async (customerId: string): Promise<string | null> => {
     if (imageUrl) {
       setIsLoading(true);
-      return await customerListPresenter.upLoadImagePhoto(userRedux, customerId, imageUrl);
+      return await CustmerListServices.upLoadImagePhoto(userRedux, customerId, imageUrl);
     }
     return null;
   };
@@ -186,7 +184,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       updateCustomer.profileImg = await _upLoadImagePhoto(customer.id);
       updateCustomer.id = customer.id;
     }
-    await customerListPresenter.updateCustomer(userRedux, updateCustomer);
+    await CustmerListServices.updateCustomer(userRedux, updateCustomer);
     props.navigation.pop();
   }
 

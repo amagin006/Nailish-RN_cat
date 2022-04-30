@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,6 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import dayjs from 'dayjs';
 
@@ -42,16 +41,15 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 // Services
-import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
+import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 
 // Redux
 import { useAppSelector } from '~/redux/hooks';
+
 interface NewReportAndEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'NewReportAndEdit'>;
   route: RouteProp<MainStackNavParamList, 'NewReportAndEdit'>;
 }
-
-const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }) => {
   // Redux
@@ -155,7 +153,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       let updatePhotoUrls = [...reportPhotos];
       if (needUpdatePhoto) {
         // Upload photo and get url from firebase storage
-        updatePhotoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
+        updatePhotoUrls = await CustmerListServices.getUploadReportPhotoUrls(
           userRedux,
           customerRedux.id,
           reportPhotos,
@@ -166,9 +164,9 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     } else {
       // New report create
       // Get new Report key on firebase
-      const reportId = await CustomerListPresenter.getNewReportKey(userRedux, customerRedux.id);
+      const reportId = await CustmerListServices.getNewReportKey(userRedux, customerRedux.id);
       // Upload photo and get url from firebase storage
-      const photoUrls = await CustomerListPresenter.getUploadReportPhotoUrls(
+      const photoUrls = await CustmerListServices.getUploadReportPhotoUrls(
         userRedux,
         customerRedux.id,
         reportPhotos,
@@ -195,7 +193,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     };
 
     // save to firebase
-    const resNewReport = await CustomerListPresenter.setNewReport(
+    const resNewReport = await CustmerListServices.setNewReport(
       userRedux,
       customerRedux.id,
       reportId,

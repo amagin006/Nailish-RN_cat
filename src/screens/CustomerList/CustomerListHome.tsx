@@ -29,18 +29,16 @@ import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton
 
 // util
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
+import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 
 interface ICustomerListItem {
   initial?: string;
   data: CustomerModel[];
 }
-
-const customerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 type CustomerListNavProps = CompositeNavigationProp<
   StackNavigationProp<MainStackNavParamList, 'BottomNav'>,
@@ -78,7 +76,7 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
    * to get customerList from firebase
    */
   const getCustomerList = useCallback(async () => {
-    const newCustomerList = await customerListPresenter.getCustomerList(userRedux);
+    const newCustomerList = await CustmerListServices.getCustomerList(userRedux);
     setCustomerList(newCustomerList);
 
     dispatch(saveCustomerList(newCustomerList));

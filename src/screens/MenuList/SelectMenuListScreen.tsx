@@ -28,20 +28,18 @@ import { generalTextStyles } from '~/styles/TextStyle';
 import { GeneralNavStyles } from '~/styles/ViewStyle';
 
 // util
-import MenuFactory from '~/modules/Menu/services/MenuFactory';
 import {
   ChnageItemAmount,
   InitializeItemAmount,
   UpdateMenuList,
 } from './helper/SelectMenuListHelper';
 import { useCallback } from 'react';
+import { MenuServices } from '~/modules/Menu/services/MenuServices';
 
 interface SelectMenuListScreenProp {
   navigation: StackNavigationProp<MainStackNavParamList, 'SelectMenuListScreen'>;
   route: RouteProp<MainStackNavParamList, 'SelectMenuListScreen'>;
 }
-
-const MenuPresenter = MenuFactory.getMenuPresenter();
 
 const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   const [menuItems, setMenuItems] = useState<IMenuListItem[]>([]);
@@ -70,7 +68,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   useEffect(() => {
     const getListItems = async () => {
       setIsLoading(true);
-      const items = await MenuPresenter.getMenuItemList(userRedux);
+      const items = await MenuServices.getMenuItemList(userRedux);
       // Initalize Item amount
       const listItems = InitializeItemAmount(items);
       setMenuItems(listItems);
@@ -82,7 +80,7 @@ const SelectMenuListScreen: React.FC<SelectMenuListScreenProp> = props => {
   // Fetch Menu List item and update with holding amount
   const _fetchToUpdateMenuList = useCallback(async () => {
     setIsLoading(true);
-    const items = await MenuPresenter.getMenuItemList(userRedux);
+    const items = await MenuServices.getMenuItemList(userRedux);
     const newItems = UpdateMenuList(items, menuItems);
     setMenuItems(newItems);
     props.navigation.setParams({ updateItems: false });

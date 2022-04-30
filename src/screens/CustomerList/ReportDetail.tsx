@@ -38,14 +38,12 @@ import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 // Services
-import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
+import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 
 interface ReportDetailProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportDetail'>;
   route: RouteProp<MainStackNavParamList, 'ReportDetail'>;
 }
-
-const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   const { appointItem } = route.params;
@@ -107,7 +105,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
       Alert.alert('Something goes wrong. Try it later');
       return;
     }
-    const isSuccess = await CustomerListPresenter.deleteReport(
+    const isSuccess = await CustmerListServices.deleteReport(
       userRedux,
       selectedCustomer.id,
       appointItem.id,

@@ -1,16 +1,17 @@
-import BaseRepository from '~/modules/bases/models/BaseRepository';
-import { IMenuItem, MenuRepositoryInterface } from '~/modules/Menu/MenuInterfaces';
+import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
 
 import { db } from '~/config/Firebase';
 import { UserInterface } from '~/redux/user/types';
 
-export default class MenuRepository extends BaseRepository implements MenuRepositoryInterface {
-  // constructor
-  constructor() {
-    super();
-  }
+interface MenuRepository {
+  addMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<boolean>;
+  deleteMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  updateMenuItem: (user: UserInterface, menuItem: IMenuItem) => Promise<void>;
+  getMenuItemList: (user: UserInterface) => Promise<IMenuItem[]>;
+}
 
-  addMenuItem = async (user: UserInterface, menuItem: IMenuItem) => {
+export const MenuRepository = {
+  addMenuItem: async (user: UserInterface, menuItem: IMenuItem) => {
     try {
       const res = await db.collection('users').doc(`${user.uid}`).collection('menu').add(menuItem);
       if (!res) {
@@ -21,10 +22,10 @@ export default class MenuRepository extends BaseRepository implements MenuReposi
       console.log('Error MenuRepository update image: ', err);
       return false;
     }
-  };
-  deleteMenuItem = async () => {};
-  updateMenuItem = async () => {};
-  getMenuItemList = async (user: UserInterface) => {
+  },
+  deleteMenuItem: async () => {},
+  updateMenuItem: async () => {},
+  getMenuItemList: async (user: UserInterface) => {
     let items: IMenuItem[] = [];
     try {
       const res = await db.collection('users').doc(`${user.uid}`).collection('menu').get();
@@ -44,5 +45,5 @@ export default class MenuRepository extends BaseRepository implements MenuReposi
       console.log('Error MenuRepository getMenuItmeList: ', err);
       return items;
     }
-  };
-}
+  },
+};

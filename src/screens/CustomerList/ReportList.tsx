@@ -20,16 +20,14 @@ import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
 import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
-import CustomerListFactory from '~/modules/CustomerList/services/CustomerListFactory';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { RouteProp } from '@react-navigation/native';
+import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportList'>;
   route: RouteProp<MainStackNavParamList, 'ReportList'>;
 }
-
-const CustomerListPresenter = CustomerListFactory.getCustomerListPresenter();
 
 const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
   const isNeedReload = route.params?.reload;
@@ -54,7 +52,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
   const _fetchRepoert = useCallback(async () => {
     setIsFetching(true);
     try {
-      const reportList = await CustomerListPresenter.getCustomerReportList(userRedux, customer.id);
+      const reportList = await CustmerListServices.getCustomerReportList(userRedux, customer.id);
       setReportList(reportList);
     } catch (err) {
       console.log('Error getCustomerReportList', err);

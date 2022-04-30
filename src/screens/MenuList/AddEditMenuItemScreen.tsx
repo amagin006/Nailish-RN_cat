@@ -21,18 +21,16 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 
 // util
 import { MENU_ITME_COLORS } from '~/util/Consts/MenuItemColorConst';
-import MenuFactory from '~/modules/Menu/services/MenuFactory';
 import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
 
 // type
 import { MainStackNavParamList } from '~/route/types';
+import { MenuServices } from '~/modules/Menu/services/MenuServices';
 
 interface AddEditMenuItemScreenProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'AddEditMenuItemScreen'>;
   route: RouteProp<MainStackNavParamList, 'AddEditMenuItemScreen'>;
 }
-
-const MenuPresenter = MenuFactory.getMenuPresenter();
 
 const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
   const [selectedColor, setSelectedColor] = useState<string>(MENU_ITME_COLORS[0]);
@@ -93,7 +91,7 @@ const AddEditMenuItemScreen: React.FC<AddEditMenuItemScreenProps> = props => {
       color: selectedColor,
       price: tips,
     };
-    const isSuccess = await MenuPresenter.addMenuItem(userRedux, itemBody);
+    const isSuccess = await MenuServices.addMenuItem(userRedux, itemBody);
     console.log('_onPressAddNewItem ,isSuccess', isSuccess);
 
     if (!isSuccess) {

@@ -1,24 +1,65 @@
-import BaseRepository from '~/modules/bases/models/BaseRepository';
-import {
-  CustomerListRepositoryInterface,
-  ICustomerReport,
-  ICustomerListItem,
-} from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport, ICustomerListItem } from '~/modules/CustomerList/CustomerListInterfaces';
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
 import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
 import { UserInterface } from '~/redux/user/types';
 
-export default class CustomerListRepository
-  extends BaseRepository
-  implements CustomerListRepositoryInterface
-{
-  constructor() {
-    super();
-  }
+interface CustomerListRepository {
+  fetchCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
+  getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
+  /**
+   * upLoadImagePhoto
+   */
+  upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
+  /**
+   * updateCustomer
+   */
+  updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
+  /**
+   * deleteCustomer
+   */
+  deleteCustomer(user: UserInterface, customerId: string): Promise<boolean>;
+  /**
+   * create Custom Report
+   */
+  setNewReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report?: ICustomerReport,
+  ): Promise<boolean>;
+  /**
+   * Update cutomer report
+   */
+  updateReport(
+    user: UserInterface,
+    customerId: string,
+    reportId: string,
+    report: ICustomerReport,
+  ): Promise<boolean>;
+  /**
+   * Delete customer report
+   */
+  deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
+  /**
+   * upLoadImagePhoto
+   */
+  upLoadReportPhoto(
+    user: UserInterface,
+    customerId: string,
+    imageUrl: string,
+    reportId: string,
+    photoIndex: number,
+  ): Promise<string>;
+  /**
+   * To get customer uniqu report key for firebase collection
+   */
+  getNewReportKey(user: UserInterface, customerId: string): Promise<any>;
+}
 
-  public async fetchCustomerList(user: UserInterface) {
+export const CustomerListRepository: CustomerListRepository = {
+  fetchCustomerList: async (user: UserInterface) => {
     try {
       const data = await db
         .collection('users')
@@ -52,9 +93,8 @@ export default class CustomerListRepository
       console.log('Error fetchCustomerList: ', err);
       throw new Error('Error fetchCustomerList on CustomerListRepository');
     }
-  }
-
-  public async getCustomerReportList(user: UserInterface, customerId: string) {
+  },
+  getCustomerReportList: async (user: UserInterface, customerId: string) => {
     try {
       const dataRef = db
         .collection('users')
@@ -75,12 +115,8 @@ export default class CustomerListRepository
       console.log('Error fetchCustomerReportList: ', err);
       throw new Error('Error fetchCustomerReportList on CustomerListRepository');
     }
-  }
-
-  /**
-   * upLoadImagePhoto
-   */
-  public async upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string) {
+  },
+  upLoadImagePhoto: async (user: UserInterface, customerId?: string, imageUrl?: string) => {
     const metadata = {
       contentType: 'image/jpeg',
     };
@@ -126,12 +162,8 @@ export default class CustomerListRepository
       );
     });
     return uploadProsess;
-  }
-
-  /**
-   * updateCustomer
-   */
-  public async updateCustomer(user: UserInterface, updateCustomer: ICustomer) {
+  },
+  updateCustomer: async (user: UserInterface, updateCustomer: ICustomer) => {
     const customerRef = db
       .collection('users')
       .doc(`${user.uid}`)
@@ -142,12 +174,8 @@ export default class CustomerListRepository
     } catch (err) {
       console.log('Error update image', err);
     }
-  }
-
-  /**
-   * deleteCustomer
-   */
-  public async deleteCustomer(user: UserInterface, customerId: string) {
+  },
+  deleteCustomer: async (user: UserInterface, customerId: string) => {
     if (!customerId) {
       console.log('Error delete customer is undifined');
       return false;
@@ -165,17 +193,13 @@ export default class CustomerListRepository
       console.log('Error deleteCustomer on CustomerListRepository ', err);
       return false;
     }
-  }
-
-  /**
-   * create Custom Report
-   */
-  public async setNewReport(
+  },
+  setNewReport: async (
     user: UserInterface,
     customerId: string,
     reportId: string,
     report: ICustomerReport,
-  ) {
+  ) => {
     if (!report) {
       console.log('Error customer Report is undifined');
       return false;
@@ -193,17 +217,13 @@ export default class CustomerListRepository
       console.log('Error Document fali set New Report: ', err);
       return false;
     }
-  }
-
-  /**
-   * Update cutomer report
-   */
-  public async updateReport(
+  },
+  updateReport: async (
     user: UserInterface,
     customerId: string,
     reportId: string,
     report: ICustomerReport,
-  ): Promise<boolean> {
+  ): Promise<boolean> => {
     try {
       const reportRef = db
         .collection('users')
@@ -217,16 +237,12 @@ export default class CustomerListRepository
       console.log('Error deleteReport - firebase database on CustomerListRepository ', err);
       return false;
     }
-  }
-
-  /**
-   * Delete customer report
-   */
-  public async deleteReport(
+  },
+  deleteReport: async (
     user: UserInterface,
     customerId: string,
     reportId: string,
-  ): Promise<boolean> {
+  ): Promise<boolean> => {
     // delete report from firebase database
     try {
       await db
@@ -260,18 +276,14 @@ export default class CustomerListRepository
 
     console.log('deleteReport --- Report successfully deleted!');
     return true;
-  }
-
-  /**
-   * upLoadImagePhoto
-   */
-  public async upLoadReportPhoto(
+  },
+  upLoadReportPhoto: async (
     user: UserInterface,
     customerId: string,
     imageUrl: string,
     reportId: string,
     photoIndex: number,
-  ) {
+  ) => {
     const metadata = {
       contentType: 'image/jpeg',
     };
@@ -318,14 +330,10 @@ export default class CustomerListRepository
       );
     });
     return uploadProsess;
-  }
-
-  /**
-   * To get customer uniqu report key for firebase collection
-   */
-  public async getNewReportKey(user: UserInterface, customerId?: string) {
+  },
+  getNewReportKey: async (user: UserInterface, customerId?: string) => {
     const newPostKey = firebase.database().ref(`${user.uid}/report/`).push().key;
     console.log('newPostKey', newPostKey);
     return newPostKey;
-  }
-}
+  },
+};
