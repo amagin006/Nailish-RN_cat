@@ -20,7 +20,6 @@ import { LoadingIndicator } from '~/components/atoms';
 // util, style
 import { db } from '~/config/Firebase';
 import CustomerModel from '~/modules/Customer/services/CusomerModels';
-import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralNavStyles } from '~/styles/ViewStyle';
 import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
 

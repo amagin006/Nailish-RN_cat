@@ -1,5 +1,4 @@
 import { db } from '~/config/Firebase';
-import firebase from '~/config/Firebase';
 import { UserInterface } from '~/redux/user/types';
 import { ICustomerReport } from '../CustomerList/CustomerListInterfaces';
 

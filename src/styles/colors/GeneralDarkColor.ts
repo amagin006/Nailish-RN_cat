@@ -56,6 +56,7 @@ export const GeneralDarkColor = {
 
   Calender: {
     listSeparator: '#e6e6e6',
+    listHeaderBackground: '#fff',
   },
   SelectMenuList: {
     listSeparator: '#e6e6e6',

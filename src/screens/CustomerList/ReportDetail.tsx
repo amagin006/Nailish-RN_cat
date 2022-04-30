@@ -12,7 +12,6 @@ import {
   ViewToken,
   Alert,
 } from 'react-native';
-import dayjs from 'dayjs';
 
 // redux
 import { useAppSelector } from '~/redux/hooks';
@@ -39,6 +38,7 @@ import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 // Services
 import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { DEFAULT_PHOTO } from '~/util/Consts/ImageConst';
 
 interface ReportDetailProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportDetail'>;
@@ -72,14 +72,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
   }, [navigation]);
 
   const _renderPhoto = ({ item }: { item: IReportPhoto }) => {
-    return (
-      <Image
-        source={
-          item.url ? { uri: item?.url } : require('../../../assets/images/imagePlaceholder.png')
-        }
-        style={styles.photo}
-      />
-    );
+    return <Image source={item.url ? { uri: item?.url } : DEFAULT_PHOTO} style={styles.photo} />;
   };
 
   const _keyExtractor = (item: IReportPhoto) => {
