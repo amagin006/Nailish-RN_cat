@@ -1,8 +1,7 @@
-import BaseModel from '~/modules/bases/models/BaseModel';
 /**
  * Customer Model
  */
-export default class CustomerModel extends BaseModel {
+export default class CustomerModel {
   public id: string = '';
   public firstLetter: string = '';
   public firstName: string = '';
@@ -26,8 +25,6 @@ export default class CustomerModel extends BaseModel {
   };
 
   constructor(init?: Partial<CustomerModel>) {
-    super();
-
     if (init === undefined || init === null) return;
 
     Object.assign(this, init);
