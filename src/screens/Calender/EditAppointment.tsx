@@ -15,28 +15,25 @@ import { RouteProp } from '@react-navigation/native';
 import { MainStackNavParamList } from '~/route/types';
 
 // Redux
-import { selectedCustomer } from '~/redux/customer/actions';
-import { useAppDispatch } from '~/redux/hooks';
+import { useAppDispatch, useAppSelector } from '~/redux/hooks';
 
 // component
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
-import {
-  EditDateMolecules,
-  IDateValue,
-} from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
-import {
-  EditTimeMolecules,
-  ITimeValue,
-} from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
+import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 
 // style
-import { AppGeneralColor } from '~/styles/ColorStyle';
 import { GeneralViewStyle } from '~/styles/ViewStyle';
-import { IMenuItem } from '~/modules/Menu/MenuInterfaces';
+import { CustomerServices } from '~/modules/Customer/services/services/CustomerServices';
+import { DEFAULT_PROFILE_PHOTO } from '~/util/Consts/ImageConst';
+import dayjs from 'dayjs';
+import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
+import { selectedCustomer } from '~/redux/customer/actions';
+import { CustomerListModalOrganisms } from '~/components/organisms/CustomerListModalOrganisms';
 
 interface EditAppointmentProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'EditAppointment'>;
@@ -44,23 +41,46 @@ interface EditAppointmentProps {
 }
 
 const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) => {
+  const item = route.params?.item;
+  const userRedux = useAppSelector(state => state.user);
   const [memo, setMemo] = useState<string>('');
-  const [startEndTime, setStartEndTime] = useState<ITimeValue>({
-    startTime: '00:00',
-    endTime: '00:00',
-  });
-  const [user, setUser] = useState<CustomerModel>(route.params?.item?.user);
+  const [startEndTime, setStartEndTime] = useState<ITimeValue>(
+    item?.startEndtime || {
+      startTime: '00:00',
+      endTime: '00:00',
+    },
+  );
+  const [date, setDate] = useState<IDateValue>(
+    item?.date || {
+      year: dayjs().format('YYYY'),
+      month: dayjs().format('MM'),
+      date: dayjs().format('DD'),
+      dateString: dayjs().format('YYYY-MM-DD'),
+    },
+  );
+  const [user, setUser] = useState<CustomerModel | null>(null);
+  const [selectMenu, setSelectMenu] = useState<IMenuListItem[]>(
+    item?.selectedMenuItems ? item.selectedMenuItems : [],
+  );
+  const [isVisibleCustomerList, setIsVisibleCustomerList] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setUser(user);
+    const getSelectUser = async (customerId?: string) => {
+      if (customerId) {
+        const selectedUser = await CustomerServices.getCustomer(userRedux, customerId);
+        if (selectedUser) {
+          dispatch(selectedCustomer(selectedUser));
+          setUser(selectedUser);
+        }
+      }
+    };
+    getSelectUser(item?.customerId);
   }, []);
 
   const _onPressSelectClient = () => {
-    console.log('_onPressSelectClient', user);
-    dispatch(selectedCustomer(user));
-    navigation.navigate('CustomerEdit');
+    setIsVisibleCustomerList(true);
   };
 
   const _onPressSelectMenu = () => {
@@ -84,13 +104,27 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
     console.log('dateValues', dateValues);
   };
 
+  const _onCloseCustomerList = () => {
+    setIsVisibleCustomerList(false);
+  };
+
+  const _onSelectCustomer = (item: CustomerModel) => {
+    setUser(item);
+  };
+
+  console.log('item', item);
+  console.log('user', user);
+
   return (
     <ScrollView>
       <View style={GeneralViewStyle.bodyWrapper}>
         <TouchableOpacity style={styles.card} onPress={_onPressSelectClient}>
           {user ? (
             <>
-              <Image source={{ uri: `${user.profileImg}` }} style={styles.userIcon} />
+              <Image
+                source={user.profileImg ? { uri: `${user.profileImg}` } : DEFAULT_PROFILE_PHOTO}
+                style={styles.userIcon}
+              />
               <Text style={styles.selectClientText}>{`${user.firstName} ${user.lastName}`}</Text>
             </>
           ) : (
@@ -105,24 +139,30 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
           container={styles.editDateTimeContiner}
           onConfirmDate={_onConfirmDatePicker}
           onConfirmTime={_onConfirmTimePicker}
+          appointmentDate={date}
           startEndTime={startEndTime}
         />
 
-        <ReportMenuList menuList={FAKE_MENU} />
+        <ReportMenuList menuList={selectMenu} />
         <RoundButton onPress={_onPressSelectMenu} text={'Select Menu'} />
         <View style={styles.memo}>
           <TextLeftAtom>Memo</TextLeftAtom>
           <TextInput multiline style={styles.memoInput} onChangeText={_onChageMemo} value={memo} />
         </View>
-        {user && (
+        {user ? (
           <RoundButton
             onPress={_onPressDelete}
             text={'Delete Appointment'}
             style={styles.deleteButton}
             buttonColorType={IButtonColorType.Alert}
           />
-        )}
+        ) : null}
       </View>
+      <CustomerListModalOrganisms
+        isVisible={isVisibleCustomerList}
+        onClose={_onCloseCustomerList}
+        onSelect={_onSelectCustomer}
+      />
     </ScrollView>
   );
 };

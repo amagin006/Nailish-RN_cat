@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 
 interface snsButtonProps {
   customer: CustomerModel;

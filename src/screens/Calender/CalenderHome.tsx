@@ -154,6 +154,7 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
   };
 
   const _onPressList = (item: ICustomerReport) => {
+    console.log('item', item);
     navigation.navigate('EditAppointment', { item: item });
   };
 
@@ -173,7 +174,8 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
 
   const _onListHeaderToday = () => {
     const today = dayjs().format('YYYY-MM-DD');
-    // @ts-ignore - first parms type is XDate but I down't won't install another library. It works date as new Date() for now.
+    // @ts-ignore - first parms type is XDate but I down't won't install another library.
+    // It works date as new Date() for now.
     calendarRef.current?.scrollToDay(new Date(), undefined, true);
   };
 

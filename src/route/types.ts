@@ -27,7 +27,7 @@ export type MainStackNavParamList = {
     | { selectedMenuItems?: IMenuListItem[]; appointItem?: ICustomerReport }
     | undefined;
 
-  EditAppointment: { item: any } | undefined;
+  EditAppointment: { item: ICustomerReport } | undefined;
   SelectMenuListScreen: { updateItems: boolean } | undefined;
   AddEditMenuItemScreen: { menuItem: IMenuItem } | undefined;
 };

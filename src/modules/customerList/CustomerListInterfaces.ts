@@ -1,4 +1,4 @@
-import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/services/CustomerModels';
 
 import { IMenuListItem } from '../Menu/MenuInterfaces';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';

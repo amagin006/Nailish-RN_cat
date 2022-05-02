@@ -1,4 +1,4 @@
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 import {
   SELECTED_CUSTOMER,
   SAVE_CUSTOMERLIST,

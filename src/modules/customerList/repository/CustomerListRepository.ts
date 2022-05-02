@@ -2,64 +2,68 @@ import { ICustomerReport, ICustomerListItem } from '~/modules/CustomerList/Custo
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
-import CustomerModel, { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/services/CustomerModels';
 import { UserInterface } from '~/redux/user/types';
 
 interface CustomerListRepository {
-  fetchCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
-  getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
+  fetchCustomerList: (user: UserInterface) => Promise<ICustomerListItem[]>;
+  getCustomerReportList: (user: UserInterface, customerId: string) => Promise<any[]>;
   /**
    * upLoadImagePhoto
    */
-  upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
+  upLoadImagePhoto: (
+    user: UserInterface,
+    customerId?: string,
+    imageUrl?: string,
+  ) => Promise<string>;
   /**
    * updateCustomer
    */
-  updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
+  updateCustomer: (user: UserInterface, customer: ICustomer) => Promise<void>;
   /**
    * deleteCustomer
    */
-  deleteCustomer(user: UserInterface, customerId: string): Promise<boolean>;
+  deleteCustomer: (user: UserInterface, customerId: string) => Promise<boolean>;
   /**
    * create Custom Report
    */
-  setNewReport(
+  setNewReport: (
     user: UserInterface,
     customerId: string,
     reportId: string,
     report?: ICustomerReport,
-  ): Promise<boolean>;
+  ) => Promise<boolean>;
   /**
    * Update cutomer report
    */
-  updateReport(
+  updateReport: (
     user: UserInterface,
     customerId: string,
     reportId: string,
     report: ICustomerReport,
-  ): Promise<boolean>;
+  ) => Promise<boolean>;
   /**
    * Delete customer report
    */
-  deleteReport(user: UserInterface, customerId: string, reportId: string): Promise<boolean>;
+  deleteReport: (user: UserInterface, customerId: string, reportId: string) => Promise<boolean>;
   /**
    * upLoadImagePhoto
    */
-  upLoadReportPhoto(
+  upLoadReportPhoto: (
     user: UserInterface,
     customerId: string,
     imageUrl: string,
     reportId: string,
     photoIndex: number,
-  ): Promise<string>;
+  ) => Promise<string>;
   /**
    * To get customer uniqu report key for firebase collection
    */
-  getNewReportKey(user: UserInterface, customerId: string): Promise<any>;
+  getNewReportKey: (user: UserInterface, customerId: string) => Promise<any>;
 }
 
 export const CustomerListRepository: CustomerListRepository = {
-  fetchCustomerList: async (user: UserInterface) => {
+  fetchCustomerList: async user => {
     try {
       const data = await db
         .collection('users')
@@ -94,7 +98,7 @@ export const CustomerListRepository: CustomerListRepository = {
       throw new Error('Error fetchCustomerList on CustomerListRepository');
     }
   },
-  getCustomerReportList: async (user: UserInterface, customerId: string) => {
+  getCustomerReportList: async (user, customerId) => {
     try {
       const dataRef = db
         .collection('users')
@@ -116,7 +120,7 @@ export const CustomerListRepository: CustomerListRepository = {
       throw new Error('Error fetchCustomerReportList on CustomerListRepository');
     }
   },
-  upLoadImagePhoto: async (user: UserInterface, customerId?: string, imageUrl?: string) => {
+  upLoadImagePhoto: async (user, customerId, imageUrl) => {
     const metadata = {
       contentType: 'image/jpeg',
     };
@@ -163,7 +167,7 @@ export const CustomerListRepository: CustomerListRepository = {
     });
     return uploadProsess;
   },
-  updateCustomer: async (user: UserInterface, updateCustomer: ICustomer) => {
+  updateCustomer: async (user, updateCustomer) => {
     const customerRef = db
       .collection('users')
       .doc(`${user.uid}`)
@@ -175,7 +179,7 @@ export const CustomerListRepository: CustomerListRepository = {
       console.log('Error update image', err);
     }
   },
-  deleteCustomer: async (user: UserInterface, customerId: string) => {
+  deleteCustomer: async (user, customerId) => {
     if (!customerId) {
       console.log('Error delete customer is undifined');
       return false;
@@ -194,12 +198,7 @@ export const CustomerListRepository: CustomerListRepository = {
       return false;
     }
   },
-  setNewReport: async (
-    user: UserInterface,
-    customerId: string,
-    reportId: string,
-    report: ICustomerReport,
-  ) => {
+  setNewReport: async (user, customerId, reportId, report) => {
     if (!report) {
       console.log('Error customer Report is undifined');
       return false;
@@ -218,12 +217,7 @@ export const CustomerListRepository: CustomerListRepository = {
       return false;
     }
   },
-  updateReport: async (
-    user: UserInterface,
-    customerId: string,
-    reportId: string,
-    report: ICustomerReport,
-  ): Promise<boolean> => {
+  updateReport: async (user, customerId, reportId, report): Promise<boolean> => {
     try {
       const reportRef = db
         .collection('users')
@@ -275,13 +269,7 @@ export const CustomerListRepository: CustomerListRepository = {
     console.log('deleteReport --- Report successfully deleted!');
     return true;
   },
-  upLoadReportPhoto: async (
-    user: UserInterface,
-    customerId: string,
-    imageUrl: string,
-    reportId: string,
-    photoIndex: number,
-  ) => {
+  upLoadReportPhoto: async (user, customerId, imageUrl, reportId, photoIndex) => {
     const metadata = {
       contentType: 'image/jpeg',
     };
@@ -329,7 +317,7 @@ export const CustomerListRepository: CustomerListRepository = {
     });
     return uploadProsess;
   },
-  getNewReportKey: async (user: UserInterface, customerId?: string) => {
+  getNewReportKey: async (user, customerId) => {
     const newPostKey = firebase.database().ref(`${user.uid}/report/`).push().key;
     console.log('newPostKey', newPostKey);
     return newPostKey;

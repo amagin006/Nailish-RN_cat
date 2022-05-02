@@ -1,4 +1,4 @@
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 import { ICustomerListItem } from '~/modules/CustomerList/CustomerListInterfaces';
 
 export const SELECTED_CUSTOMER = 'SELECTED_CUSTOMER';

@@ -37,6 +37,7 @@ export const GeneralDarkColor = {
   Modal: {
     BaseBackground: 'rgba(0, 0, 0, 0.4)',
     BaseInner: '#ffffff',
+    SubBackgound: '#e3e3e3',
   },
   Button: {
     Primary: '#96CEB4',

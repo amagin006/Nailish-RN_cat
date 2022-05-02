@@ -33,7 +33,7 @@ import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 
 // Type
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
 
 // Services

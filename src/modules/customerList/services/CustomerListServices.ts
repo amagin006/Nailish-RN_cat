@@ -1,4 +1,4 @@
-import { ICustomer } from '~/modules/Customer/services/CusomerModels';
+import { ICustomer } from '~/modules/Customer/services/CustomerModels';
 import { UserInterface } from '~/redux/user/types';
 import { ICustomerListItem, ICustomerReport, IReportPhoto } from '../CustomerListInterfaces';
 import { CustomerListRepository } from '../repository/CustomerListRepository';
@@ -7,23 +7,27 @@ interface CustmerListServices {
   /**
    * get customerList
    */
-  getCustomerList(user: UserInterface): Promise<ICustomerListItem[]>;
+  getCustomerList: (user: UserInterface) => Promise<ICustomerListItem[]>;
   /**
    * get Customer report list
    */
-  getCustomerReportList(user: UserInterface, customerId: string): Promise<any[]>;
+  getCustomerReportList: (user: UserInterface, customerId: string) => Promise<any[]>;
   /**
    * upLoadImagePhoto
    */
-  upLoadImagePhoto(user: UserInterface, customerId?: string, imageUrl?: string): Promise<string>;
+  upLoadImagePhoto: (
+    user: UserInterface,
+    customerId?: string,
+    imageUrl?: string,
+  ) => Promise<string>;
   /**
    * updateCustomer
    */
-  updateCustomer(user: UserInterface, customer: ICustomer): Promise<void>;
+  updateCustomer: (user: UserInterface, customer: ICustomer) => Promise<void>;
   /**
    * deleteCustomer
    */
-  deleteCustomer(user: UserInterface, customerId: string): Promise<boolean>;
+  deleteCustomer: (user: UserInterface, customerId: string) => Promise<boolean>;
   /**
    * create Custom Report
    */
@@ -66,7 +70,7 @@ interface CustmerListServices {
 }
 
 export const CustmerListServices: CustmerListServices = {
-  getCustomerList: async (user: UserInterface) => {
+  getCustomerList: async user => {
     try {
       return await CustomerListRepository.fetchCustomerList(user);
     } catch (err) {
@@ -74,7 +78,7 @@ export const CustmerListServices: CustmerListServices = {
       return [];
     }
   },
-  getCustomerReportList: async (user: UserInterface, customerId: string) => {
+  getCustomerReportList: async (user, customerId) => {
     try {
       return await CustomerListRepository.getCustomerReportList(user, customerId);
     } catch (err) {
@@ -82,46 +86,26 @@ export const CustmerListServices: CustmerListServices = {
       return [];
     }
   },
-  upLoadImagePhoto: async (user: UserInterface, customerId?: string, imageUrl?: string) => {
+  upLoadImagePhoto: async (user, customerId, imageUrl) => {
     const downloadURL = await CustomerListRepository.upLoadImagePhoto(user, customerId, imageUrl);
     return downloadURL;
   },
-  updateCustomer: async (user: UserInterface, updateCustomer: ICustomer) => {
+  updateCustomer: async (user, updateCustomer) => {
     await CustomerListRepository.updateCustomer(user, updateCustomer);
   },
-  deleteCustomer: async (user: UserInterface, customerId: string) => {
+  deleteCustomer: async (user, customerId) => {
     return await CustomerListRepository.deleteCustomer(user, customerId);
   },
-  setNewReport: async (
-    user: UserInterface,
-    customerId: string,
-    reportId: string,
-    report?: ICustomerReport,
-  ) => {
+  setNewReport: async (user, customerId, reportId, report) => {
     return await CustomerListRepository.setNewReport(user, customerId, reportId, report);
   },
-  updateReport: async (
-    user: UserInterface,
-    customerId: string,
-    reportId: string,
-    report: ICustomerReport,
-  ) => {
+  updateReport: async (user, customerId, reportId, report) => {
     return await CustomerListRepository.updateReport(user, customerId, reportId, report);
   },
-  deleteReport: async (
-    user: UserInterface,
-    customerId: string,
-    reportId: string,
-  ): Promise<boolean> => {
+  deleteReport: async (user, customerId, reportId) => {
     return await CustomerListRepository.deleteReport(user, customerId, reportId);
   },
-  upLoadReportPhoto: async (
-    user: UserInterface,
-    customerId: string,
-    imageUrl: string,
-    reportId: string,
-    photoIndex: number,
-  ) => {
+  upLoadReportPhoto: async (user, customerId, imageUrl, reportId, photoIndex) => {
     const downloadURL = await CustomerListRepository.upLoadReportPhoto(
       user,
       customerId,
@@ -131,12 +115,7 @@ export const CustmerListServices: CustmerListServices = {
     );
     return downloadURL;
   },
-  getUploadReportPhotoUrls: async (
-    user: UserInterface,
-    customerId: string,
-    reportPhotos: IReportPhoto[],
-    reportId: string,
-  ) => {
+  getUploadReportPhotoUrls: async (user, customerId, reportPhotos, reportId) => {
     // Upload firebase storage and Get photo url from firebase storage
     const photoUrls: IReportPhoto[] = await Promise.all(
       reportPhotos.map(async (photo, index) => {
@@ -169,7 +148,7 @@ export const CustmerListServices: CustmerListServices = {
     );
     return photoUrls;
   },
-  getNewReportKey: async (user: UserInterface, customerId: string) => {
+  getNewReportKey: async (user, customerId) => {
     return await CustomerListRepository.getNewReportKey(user, customerId);
   },
 };

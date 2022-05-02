@@ -18,7 +18,7 @@ import { GeneralNavStyles } from '~/styles/ViewStyle';
 import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
-import CustomerModel from '~/modules/Customer/services/CusomerModels';
+import CustomerModel from '~/modules/Customer/services/CustomerModels';
 import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { RouteProp } from '@react-navigation/native';

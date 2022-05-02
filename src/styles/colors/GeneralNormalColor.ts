@@ -37,6 +37,7 @@ export const GeneralNormalColor = {
   Modal: {
     BaseBackground: 'rgba(0, 0, 0, 0.4)',
     BaseInner: '#ffffff',
+    SubBackgound: '#ededed',
   },
   Button: {
     Primary: '#96CEB4',
