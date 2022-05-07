@@ -18,7 +18,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { dateFormate, getWeeksInMonth } from '~/util/timeUtil';
 import { CalenderServices } from '~/modules/Calender/CalenderServices';
 import { useAppSelector } from '~/redux/hooks';
-import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport } from '~/modules/Customer/CustomerListInterfaces';
 import dayjs from 'dayjs';
 import { DateData } from 'react-native-calendars/src/types';
 

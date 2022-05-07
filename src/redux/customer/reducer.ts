@@ -1,4 +1,4 @@
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
+import CustomerModel from '~/modules/Customer/CustomerModels';
 import {
   SELECTED_CUSTOMER,
   SAVE_CUSTOMERLIST,
@@ -12,7 +12,7 @@ const initialState: ICustomerStore = {
   selectedCustomer: undefined,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SELECTED_CUSTOMER:
       return {

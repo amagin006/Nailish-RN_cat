@@ -33,7 +33,7 @@ import { LoadingIndicator } from '~/components/atoms';
 // Type
 import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
-import { ICustomerReport, IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport, IReportPhoto } from '~/modules/Customer/CustomerListInterfaces';
 
 // styles
 import { GeneralViewStyle } from '~/styles/ViewStyle';
@@ -41,7 +41,7 @@ import { AppGeneralColor } from '~/styles/ColorStyle';
 import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 // Services
-import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 
 // Redux
 import { useAppSelector } from '~/redux/hooks';
@@ -153,7 +153,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
       let updatePhotoUrls = [...reportPhotos];
       if (needUpdatePhoto) {
         // Upload photo and get url from firebase storage
-        updatePhotoUrls = await CustmerListServices.getUploadReportPhotoUrls(
+        updatePhotoUrls = await CustomerServices.getUploadReportPhotoUrls(
           userRedux,
           customerRedux.id,
           reportPhotos,
@@ -164,9 +164,9 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     } else {
       // New report create
       // Get new Report key on firebase
-      const reportId = await CustmerListServices.getNewReportKey(userRedux, customerRedux.id);
+      const reportId = await CustomerServices.getNewReportKey(userRedux, customerRedux.id);
       // Upload photo and get url from firebase storage
-      const photoUrls = await CustmerListServices.getUploadReportPhotoUrls(
+      const photoUrls = await CustomerServices.getUploadReportPhotoUrls(
         userRedux,
         customerRedux.id,
         reportPhotos,
@@ -193,7 +193,7 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     };
 
     // save to firebase
-    const resNewReport = await CustmerListServices.setNewReport(
+    const resNewReport = await CustomerServices.setNewReport(
       userRedux,
       customerRedux.id,
       reportId,

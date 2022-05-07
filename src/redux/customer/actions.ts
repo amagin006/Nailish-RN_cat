@@ -1,4 +1,5 @@
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
+import { ICustomerListItem } from '~/modules/Customer/CustomerListInterfaces';
+import CustomerModel from '~/modules/Customer/CustomerModels';
 import {
   SELECTED_CUSTOMER,
   SAVE_CUSTOMERLIST,
@@ -13,21 +14,21 @@ export const selectedCustomer = (customer?: CustomerModel) => {
   };
 };
 
-export const saveCustomerList = customerList => {
+export const saveCustomerList = (customerList: ICustomerListItem[]) => {
   return {
     type: SAVE_CUSTOMERLIST,
     payload: customerList,
   };
 };
 
-export const addCustomerToList = customer => {
+export const addCustomerToList = (customer: CustomerModel) => {
   return {
     type: ADD_CUSTOMER_TO_LIST,
     payload: customer,
   };
 };
 
-export const deleteCustomer = customer => {
+export const deleteCustomer = (customer: CustomerModel) => {
   return {
     type: DELETE_CUSTOMER,
     payload: customer,

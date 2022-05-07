@@ -33,11 +33,11 @@ import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { GeneralNavStyles, GeneralViewStyle } from '~/styles/ViewStyle';
 
 // Type
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
-import { IReportPhoto } from '~/modules/CustomerList/CustomerListInterfaces';
+import CustomerModel from '~/modules/Customer/CustomerModels';
+import { IReportPhoto } from '~/modules/Customer/CustomerListInterfaces';
 
 // Services
-import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 import { DEFAULT_PHOTO } from '~/util/Consts/ImageConst';
 
 interface ReportDetailProps {
@@ -98,7 +98,7 @@ const ReportDetail: React.FC<ReportDetailProps> = ({ navigation, route }) => {
       Alert.alert('Something goes wrong. Try it later');
       return;
     }
-    const isSuccess = await CustmerListServices.deleteReport(
+    const isSuccess = await CustomerServices.deleteReport(
       userRedux,
       selectedCustomer.id,
       appointItem.id,

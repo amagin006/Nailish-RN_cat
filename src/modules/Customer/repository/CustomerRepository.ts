@@ -1,11 +1,12 @@
-import { ICustomerReport, ICustomerListItem } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerReport, ICustomerListItem } from '~/modules/Customer/CustomerListInterfaces';
 
 import { db } from '~/config/Firebase';
 import firebase from '~/config/Firebase';
-import CustomerModel, { ICustomer } from '~/modules/Customer/services/CustomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/CustomerModels';
 import { UserInterface } from '~/redux/user/types';
 
-interface CustomerListRepository {
+interface CustomerRepository {
+  getCustomer: (user: UserInterface, customerId: string) => Promise<CustomerModel | null>;
   fetchCustomerList: (user: UserInterface) => Promise<ICustomerListItem[]>;
   getCustomerReportList: (user: UserInterface, customerId: string) => Promise<any[]>;
   /**
@@ -62,7 +63,25 @@ interface CustomerListRepository {
   getNewReportKey: (user: UserInterface, customerId: string) => Promise<any>;
 }
 
-export const CustomerListRepository: CustomerListRepository = {
+export const CustomerRepository: CustomerRepository = {
+  getCustomer: async (user, customerId) => {
+    const data = await db
+      .collection('users')
+      .doc(`${user.uid}`)
+      .collection('customer')
+      .doc(`${customerId}`)
+      .get();
+
+    console.log('data======>>>>', data, data.exists);
+    // let newCustomer: UserInterfaceCustomer;
+    if (data.exists) {
+      const id = data.id;
+      const newCustomer = new CustomerModel({ id, ...data.data() });
+      console.log('newCustomer======>>>>', newCustomer);
+      return newCustomer;
+    }
+    return null;
+  },
   fetchCustomerList: async user => {
     try {
       const data = await db

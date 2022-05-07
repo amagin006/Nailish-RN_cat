@@ -1,6 +1,6 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 // Type
-import { ICustomerListItem, ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
+import { ICustomerListItem, ICustomerReport } from '~/modules/Customer/CustomerListInterfaces';
 import { IMenuItem, IMenuListItem } from '~/modules/Menu/MenuInterfaces';
 
 export type RootStackParamList = {

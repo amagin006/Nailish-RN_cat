@@ -28,12 +28,12 @@ import { saveCustomerList, selectedCustomer } from '~/redux/customer/actions';
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
 
 // util
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
+import CustomerModel from '~/modules/Customer/CustomerModels';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { generalTextStyles } from '~/styles/TextStyle';
 import { AppGeneralColor } from '~/styles/ColorStyle';
-import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 
 interface ICustomerListItem {
   initial?: string;
@@ -76,7 +76,7 @@ const CustomerListHome: React.FC<CustomerListHomeProps> = ({ navigation }) => {
    * to get customerList from firebase
    */
   const getCustomerList = useCallback(async () => {
-    const newCustomerList = await CustmerListServices.getCustomerList(userRedux);
+    const newCustomerList = await CustomerServices.getCustomerList(userRedux);
     setCustomerList(newCustomerList);
 
     dispatch(saveCustomerList(newCustomerList));

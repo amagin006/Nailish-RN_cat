@@ -17,17 +17,15 @@ const initialState: AuthState = {
   loginFailedMessage: '',
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case CREATE_USER:
-      // console.log('CREATE_USER--Reducer', action);
       return {
         ...state,
         isLogin: true,
         isLoadingLogin: false,
       };
     case CREATE_USER_FAILED:
-      // console.log('CREATE_USER_FAILED', action.payload);
       return {
         ...state,
         isLoadingLogin: false,

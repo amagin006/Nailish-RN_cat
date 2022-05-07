@@ -22,13 +22,13 @@ import { IButtonColorType, RoundButton } from '~/components/atoms/button/button'
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import { IDateValue } from '~/components/molecules/EditDateTimeMolecules/EditDateMolecules';
 import { ITimeValue } from '~/components/molecules/EditDateTimeMolecules/EditTimeMolecules';
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
+import CustomerModel from '~/modules/Customer/CustomerModels';
 import { TextLeftAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 
 // style
 import { GeneralViewStyle } from '~/styles/ViewStyle';
-import { CustomerServices } from '~/modules/Customer/services/services/CustomerServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 import { DEFAULT_PROFILE_PHOTO } from '~/util/Consts/ImageConst';
 import dayjs from 'dayjs';
 import { IMenuListItem } from '~/modules/Menu/MenuInterfaces';
@@ -84,6 +84,7 @@ const EditAppointment: React.FC<EditAppointmentProps> = ({ navigation, route }) 
   };
 
   const _onPressSelectMenu = () => {
+    navigation.navigate('SelectMenuListScreen');
     console.log('onPressSelectMenu');
   };
 

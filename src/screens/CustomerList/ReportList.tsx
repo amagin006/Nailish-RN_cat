@@ -18,11 +18,11 @@ import { GeneralNavStyles } from '~/styles/ViewStyle';
 import SnsButtons from '~/components/atoms/button/snsButtons';
 import { BioIcon } from '~/components/atoms/photoIcon/BioIcon';
 import { useAppSelector } from '~/redux/hooks';
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
-import { ICustomerReport } from '~/modules/CustomerList/CustomerListInterfaces';
+import CustomerModel from '~/modules/Customer/CustomerModels';
+import { ICustomerReport } from '~/modules/Customer/CustomerListInterfaces';
 import { ActivityIndicatorAtom } from '~/components/atoms';
 import { RouteProp } from '@react-navigation/native';
-import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 
 interface ReportListProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'ReportList'>;
@@ -52,7 +52,7 @@ const ReportList: React.FC<ReportListProps> = ({ navigation, route }) => {
   const _fetchRepoert = useCallback(async () => {
     setIsFetching(true);
     try {
-      const reportList = await CustmerListServices.getCustomerReportList(userRedux, customer.id);
+      const reportList = await CustomerServices.getCustomerReportList(userRedux, customer.id);
       setReportList(reportList);
     } catch (err) {
       console.log('Error getCustomerReportList', err);

@@ -19,9 +19,9 @@ import { LoadingIndicator } from '~/components/atoms';
 
 // util, style
 import { db } from '~/config/Firebase';
-import CustomerModel from '~/modules/Customer/services/CustomerModels';
+import CustomerModel from '~/modules/Customer/CustomerModels';
 import { GeneralNavStyles } from '~/styles/ViewStyle';
-import { CustmerListServices } from '~/modules/CustomerList/services/CustomerListServices';
+import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 
 interface CustomerEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'CustomerEdit'>;
@@ -126,7 +126,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       Alert.alert('Something goes wrong. try it later');
       return;
     }
-    const isSuccess = await CustmerListServices.deleteCustomer(userRedux, customer.id);
+    const isSuccess = await CustomerServices.deleteCustomer(userRedux, customer.id);
     if (!isSuccess) {
       Alert.alert('Sorry, something goes wrong. try again');
     }
@@ -137,7 +137,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
   const _upLoadImagePhoto = async (customerId: string): Promise<string | null> => {
     if (imageUrl) {
       setIsLoading(true);
-      return await CustmerListServices.upLoadImagePhoto(userRedux, customerId, imageUrl);
+      return await CustomerServices.upLoadImagePhoto(userRedux, customerId, imageUrl);
     }
     return null;
   };
@@ -183,7 +183,7 @@ const CustomerEdit: React.FC<CustomerEditProps> = props => {
       updateCustomer.profileImg = await _upLoadImagePhoto(customer.id);
       updateCustomer.id = customer.id;
     }
-    await CustmerListServices.updateCustomer(userRedux, updateCustomer);
+    await CustomerServices.updateCustomer(userRedux, updateCustomer);
     props.navigation.pop();
   }
 

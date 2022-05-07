@@ -1,6 +1,6 @@
 import { db } from '~/config/Firebase';
 import { UserInterface } from '~/redux/user/types';
-import { ICustomerReport } from '../CustomerList/CustomerListInterfaces';
+import { ICustomerReport } from '../Customer/CustomerListInterfaces';
 
 interface CalenderRepository {
   getCalenderItems: (user: UserInterface) => Promise<ICustomerReport[]>;

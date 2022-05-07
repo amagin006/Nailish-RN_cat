@@ -1,5 +1,5 @@
 import { UserInterface } from '~/redux/user/types';
-import { ICustomerReport } from '../CustomerList/CustomerListInterfaces';
+import { ICustomerReport } from '../Customer/CustomerListInterfaces';
 import { CalenderRepository } from './CalenderRepository';
 
 interface CalenderServices {

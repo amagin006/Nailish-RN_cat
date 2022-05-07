@@ -1,9 +1,13 @@
-import { ICustomer } from '~/modules/Customer/services/CustomerModels';
+import CustomerModel, { ICustomer } from '~/modules/Customer/CustomerModels';
 import { UserInterface } from '~/redux/user/types';
 import { ICustomerListItem, ICustomerReport, IReportPhoto } from '../CustomerListInterfaces';
-import { CustomerListRepository } from '../repository/CustomerListRepository';
+import { CustomerRepository } from '../repository/CustomerRepository';
 
-interface CustmerListServices {
+interface CustomerServices {
+  /**
+   * get customer info
+   */
+  getCustomer: (user: UserInterface, customerId: string) => Promise<CustomerModel | null>;
   /**
    * get customerList
    */
@@ -69,10 +73,13 @@ interface CustmerListServices {
   ): Promise<IReportPhoto[]>;
 }
 
-export const CustmerListServices: CustmerListServices = {
+export const CustomerServices: CustomerServices = {
+  getCustomer: async (user, customerId) => {
+    return await CustomerRepository.getCustomer(user, customerId);
+  },
   getCustomerList: async user => {
     try {
-      return await CustomerListRepository.fetchCustomerList(user);
+      return await CustomerRepository.fetchCustomerList(user);
     } catch (err) {
       console.log('Error firebase: ', err);
       return [];
@@ -80,33 +87,33 @@ export const CustmerListServices: CustmerListServices = {
   },
   getCustomerReportList: async (user, customerId) => {
     try {
-      return await CustomerListRepository.getCustomerReportList(user, customerId);
+      return await CustomerRepository.getCustomerReportList(user, customerId);
     } catch (err) {
       console.log('Error Firebase getCustomerReportList', err);
       return [];
     }
   },
   upLoadImagePhoto: async (user, customerId, imageUrl) => {
-    const downloadURL = await CustomerListRepository.upLoadImagePhoto(user, customerId, imageUrl);
+    const downloadURL = await CustomerRepository.upLoadImagePhoto(user, customerId, imageUrl);
     return downloadURL;
   },
   updateCustomer: async (user, updateCustomer) => {
-    await CustomerListRepository.updateCustomer(user, updateCustomer);
+    await CustomerRepository.updateCustomer(user, updateCustomer);
   },
   deleteCustomer: async (user, customerId) => {
-    return await CustomerListRepository.deleteCustomer(user, customerId);
+    return await CustomerRepository.deleteCustomer(user, customerId);
   },
   setNewReport: async (user, customerId, reportId, report) => {
-    return await CustomerListRepository.setNewReport(user, customerId, reportId, report);
+    return await CustomerRepository.setNewReport(user, customerId, reportId, report);
   },
   updateReport: async (user, customerId, reportId, report) => {
-    return await CustomerListRepository.updateReport(user, customerId, reportId, report);
+    return await CustomerRepository.updateReport(user, customerId, reportId, report);
   },
   deleteReport: async (user, customerId, reportId) => {
-    return await CustomerListRepository.deleteReport(user, customerId, reportId);
+    return await CustomerRepository.deleteReport(user, customerId, reportId);
   },
   upLoadReportPhoto: async (user, customerId, imageUrl, reportId, photoIndex) => {
-    const downloadURL = await CustomerListRepository.upLoadReportPhoto(
+    const downloadURL = await CustomerRepository.upLoadReportPhoto(
       user,
       customerId,
       imageUrl,
@@ -124,7 +131,7 @@ export const CustmerListServices: CustmerListServices = {
           return photo;
         } else if ((photo.id || photo.id === 0) && !!photo.url) {
           // need to upload fire storage
-          const photoRes = await CustomerListRepository.upLoadReportPhoto(
+          const photoRes = await CustomerRepository.upLoadReportPhoto(
             user,
             customerId,
             photo.url,
@@ -149,6 +156,6 @@ export const CustmerListServices: CustmerListServices = {
     return photoUrls;
   },
   getNewReportKey: async (user, customerId) => {
-    return await CustomerListRepository.getNewReportKey(user, customerId);
+    return await CustomerRepository.getNewReportKey(user, customerId);
   },
 };
