@@ -24,7 +24,7 @@ import { RouteProp } from '@react-navigation/core';
 import { IButtonColorType, RoundButton } from '~/components/atoms/button/button';
 import ReportMenuList from '~/components/organisms/ReportDetailOrganisms/ReportMenuList';
 import { ListAddFloatButton } from '~/components/atoms/button/ListAddFloatButton';
-import { TextLeftAtom } from '~/components/atoms/TextAtom';
+import { TextLeftAtom, TextAtom } from '~/components/atoms/TextAtom';
 import { EditDateTimeOrganisms } from '~/components/organisms/EditDateTimeOrganisms/EditDateTimeOrganisms';
 import { PaymentCoulmnMolecules } from '~/components/molecules/ColumnMolecules/PaymentCoulmnMolecules';
 import { IPickerItem } from '~/components/atoms/PickerModalAtom';
@@ -45,6 +45,8 @@ import { CustomerServices } from '~/modules/Customer/services/CustomerServices';
 
 // Redux
 import { useAppSelector } from '~/redux/hooks';
+import { generalTextStyles } from '~/styles/TextStyle';
+import { inputPriceConvert, priceFormat } from '~/util/numberUtil';
 
 interface NewReportAndEditProps {
   navigation: StackNavigationProp<MainStackNavParamList, 'NewReportAndEdit'>;
@@ -112,12 +114,14 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     setReportPhotos(newReportPhoto);
   }, []);
 
+  // go to select Menu screen
   const _onPressSelectMenu = () => {
     navigation.navigate('SelectMenuListScreen');
   };
 
   const _onChangeTips = (text: string) => {
-    setTips(text);
+    console.log('text tip', text);
+    setTips(inputPriceConvert(text));
   };
 
   const _onChageMemo = (text: string) => {
@@ -238,6 +242,10 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
     }
   };
 
+  const priceArr: number[] = selectedMenuItems.map(item => Number(item.price));
+  const menuTotalPrice: number = priceArr.reduce((prev, curr) => prev + curr, 0);
+  const totalPrice = priceFormat(menuTotalPrice + Number(tips));
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {isLoading && <LoadingIndicator isLoading={isLoading} />}
@@ -288,8 +296,12 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
             appointmentDate={date}
           />
 
+          <RoundButton
+            onPress={_onPressSelectMenu}
+            text={'Add Menu'}
+            containerStyle={styles.selectButton}
+          />
           <ReportMenuList menuList={selectedMenuItems} />
-          <RoundButton onPress={_onPressSelectMenu} text={'Add Menu'} style={styles.selectButton} />
           <View style={styles.columnWrapper}>
             <TextLeftAtom>Tips</TextLeftAtom>
             <View style={styles.tips}>
@@ -300,8 +312,13 @@ const NewReportAndEdit: React.FC<NewReportAndEditProps> = ({ navigation, route }
                 style={styles.tipTextInput}
                 value={tips}
                 onChangeText={_onChangeTips}
+                maxLength={8}
               />
             </View>
+          </View>
+          <View style={styles.columnWrapper}>
+            <TextLeftAtom>Total</TextLeftAtom>
+            <Text style={styles.Total}>{`$ ${totalPrice}`}</Text>
           </View>
 
           <PaymentCoulmnMolecules
@@ -382,7 +399,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   selectButton: {
-    marginVertical: 10,
+    alignSelf: 'flex-end',
+    width: 120,
   },
   tips: {
     flexDirection: 'row',
@@ -397,6 +415,9 @@ const styles = StyleSheet.create({
   },
   dollerMark: {
     marginRight: 10,
+  },
+  Total: {
+    ...generalTextStyles.boldLittleMediumText,
   },
   paymentSelct: {
     width: 130,
@@ -436,9 +457,3 @@ const styles = StyleSheet.create({
 });
 
 export default NewReportAndEdit;
-
-const FAKE_MENU: IMenuListItem[] = [
-  { id: '1', menuName: 'jel', price: '20', color: '#FF9F9F', amount: 2 },
-  { id: '2', menuName: 'off', price: '30', color: '#87D1AA', amount: 1 },
-  { id: '3', menuName: 'Design', price: '40', color: '#AC71D1', amount: 20 },
-];

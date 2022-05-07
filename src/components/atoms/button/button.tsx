@@ -76,7 +76,7 @@ export const RoundButton: React.FC<RoundButtonProps> = props => {
       <TouchableOpacity
         onPress={props.onPress}
         disabled={props.disabled}
-        style={[styles.roundButtonWrapper, color]}>
+        style={[styles.roundButtonWrapper, color, props.style]}>
         {props.iconLeft && <>{props.iconLeft}</>}
         {props.text && <Text style={[styles.text, props.textStyle]}>{props.text}</Text>}
       </TouchableOpacity>
@@ -107,9 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#96CEB4',
     flexDirection: 'row',
-    marginTop: 10,
     borderRadius: 18,
-    marginHorizontal: 20,
   },
   buttonPrimary: {
     backgroundColor: AppGeneralColor.Button.Primary,
