@@ -91,19 +91,18 @@ const CalenderHome: React.FC<CalenderHomeProps> = ({ navigation }) => {
 
   useEffect(() => {
     const _getCalenderItem = async () => {
-      const calenderItems = await CalenderServices.getCalenderItems(userRedux);
-      const today = dayjs().format('YYYY-MM-DD');
-      const todayItemList = getSelectedDateList(calenderItems, today);
-      const markedAppointment = makeMarked(calenderItems);
-      markedAppointment[today] = {
-        ...markedAppointment[today],
-        selected: true,
-        disableTouchEvent: true,
-      }; // initail selected item (today)
-
-      setMarkedDates(markedAppointment); // mark red dot on calender
-      setCalenderItems(calenderItems);
-      setSelectedDateItems(todayItemList); // item list for selected date items
+      // const calenderItems = await CalenderServices.getCalenderItems(userRedux);
+      // const today = dayjs().format('YYYY-MM-DD');
+      // const todayItemList = getSelectedDateList(calenderItems, today);
+      // const markedAppointment = makeMarked(calenderItems);
+      // markedAppointment[today] = {
+      //   ...markedAppointment[today],
+      //   selected: true,
+      //   disableTouchEvent: true,
+      // }; // initail selected item (today)
+      // setMarkedDates(markedAppointment); // mark red dot on calender
+      // setCalenderItems(calenderItems);
+      // setSelectedDateItems(todayItemList); // item list for selected date items
     };
 
     _getCalenderItem();
